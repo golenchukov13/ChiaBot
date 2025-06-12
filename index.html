@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-консультант Чеки из Аптеки</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #EA3B90;
+            --primary-gradient: linear-gradient(38.98deg, #4667D9 -2.6%, #EA3B90 52.19%, #F4AB68 102.6%);
+            --primary-light: #FCE4EC;
+            --accent: #F4AB68;
+            --blue: #4667D9;
+            --text-primary: #EA3B90;
+            --text-secondary: #757575;
+            --background: #fff;
+            --surface: #fff;
+            --surface-light: #fff;
+            --surface-bot: #F8F8FA;
+            --surface-user: #fff;
+            --surface-user-border: #EA3B90;
+            --shadow-sm: 0 2px 8px rgba(234,59,144,0.07);
+            --shadow-md: 0 6px 18px rgba(234,59,144,0.10);
+            --shadow-lg: 0 16px 32px rgba(234,59,144,0.13);
+            --radius-sm: 16px;
+            --radius-md: 22px;
+            --radius-lg: 32px;
+            --radius-full: 9999px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            transition: var(--transition);
+            line-height: 1.5;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #app {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            min-height: 100vh;
+            width: 100vw;
+            padding: 0;
+        }
+
+        .chat-container {
+            width: 100vw;
+            max-width: 100vw;
+            height: 100vh;
+            max-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--surface);
+            border-radius: 0;
+            box-shadow: none;
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            border: none;
+        }
+
+        .chat-header {
+            padding: 18px 18px 12px 18px;
+            background: var(--surface);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+            box-shadow: none;
+            border-bottom: 1.5px solid #F8F8FA;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: 0 2px 8px rgba(234,59,144,0.10);
+            padding: 3px;
+            margin-bottom: 0;
+            transition: box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo img, .logo svg {
+            width: 90%;
+            height: 90%;
+            display: block;
+            margin: auto;
+        }
+
+        .chat-header h2 {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+
+        .header-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 18px 10px 12px 10px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: var(--surface);
+            margin-top: 0 !important;
+            width: 100vw;
+            box-sizing: border-box;
+        }
+
+        .message {
+            max-width: 92vw;
+            padding: 16px 18px;
+            border-radius: var(--radius-md);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.3s forwards;
+            position: relative;
+            transition: var(--transition);
+            word-break: break-word;
+            line-height: 1.5;
+            font-size: 1.08rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bot-message {
+            background: #EA3B90 !important;
+            color: #fff !important;
+            align-self: flex-start;
+            border-radius: var(--radius-md) var(--radius-md) var(--radius-sm) var(--radius-md);
+            margin-right: auto;
+            margin-left: 0;
+            border: none;
+        }
+        .user-message {
+            background: #EA3B90 !important;
+            color: #fff !important;
+            align-self: flex-end;
+            border-radius: var(--radius-md) var(--radius-md) var(--radius-md) var(--radius-sm);
+            margin-left: auto;
+            margin-right: 0;
+            border: 2px solid #fff;
+        }
+
+        .message-time {
+            display: block;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 8px;
+            text-align: right;
+            color: inherit;
+        }
+
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px 10px 18px 10px;
+            background: var(--surface);
+            border-top: 1.5px solid #F8F8FA;
+            transition: var(--transition);
+            position: relative;
+            z-index: 10;
+            width: 100vw;
+            box-sizing: border-box;
+        }
+
+        .option-button {
+            padding: 16px 0;
+            border: none;
+            border-radius: var(--radius-md);
+            background: var(--primary-gradient);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            font-size: 1.13rem;
+            flex-grow: 1;
+            min-width: 100%;
+            margin-bottom: 8px;
+            letter-spacing: 0.02em;
+        }
+
+        .option-button:hover {
+            transform: scale(1.03);
+            box-shadow: var(--shadow-lg);
+            filter: brightness(1.07);
+        }
+
+        .option-button:disabled {
+            background: var(--primary-gradient);
+            color: #fff;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: var(--shadow-md);
+            opacity: 0.6;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 12px 10px;
+            background: var(--surface);
+            border-top: 1.5px solid #F8F8FA;
+            transition: var(--transition);
+            position: relative;
+            z-index: 10;
+            margin-bottom: 0;
+            width: 100vw;
+            box-sizing: border-box;
+            align-items: center;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 16px 14px;
+            border: 2px solid #EA3B90;
+            border-radius: var(--radius-md);
+            background: #fff;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            color: #757575; /* Серый текст */
+            margin-left: 0;
+        }
+
+        #user-input:focus {
+            border-color: #EA3B90;
+            box-shadow: none;
+        }
+
+        #send-button {
+            margin-left: 10px;
+            width: 52px;
+            height: 52px;
+            border: none;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #send-button:hover {
+            transform: scale(1.07);
+            box-shadow: var(--shadow-lg);
+            filter: brightness(1.08);
+        }
+
+        .typing-indicator {
+            display: flex;
+            padding: 12px;
+            gap: 6px;
+            align-self: flex-start;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            animation: typingAnimation 1.6s infinite ease-in-out;
+        }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+            30% { transform: translateY(-4px); opacity: 1; }
+        }
+
+        .quick-replies {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quick-reply {
+            padding: 10px 18px;
+            background: #F8F8FA;
+            border-radius: var(--radius-full);
+            font-size: 1rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1.5px solid #EA3B90;
+            font-weight: 600;
+        }
+
+        .quick-reply:hover {
+            background: #F4AB68;
+            color: #fff;
+        }
+
+        /* Кастомный скроллбар для мобильных */
+        ::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+
+        /* Микроинтеракции */
+        .micro-interaction {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .micro-interaction:active {
+            transform: scale(0.97);
+        }
+
+        /* Таймер */
+        .timer-display {
+            font-size: 0.95rem;
+            color: var(--primary);
+            text-align: center;
+            margin-top: 8px;
+            opacity: 0.8;
+            width: 100%;
+        }
+
+        /* Мобильная адаптивность */
+        @media (max-width: 500px) {
+            html, body, #app, .chat-container {
+                width: 100vw !important;
+                max-width: 100vw !important;
+                min-width: 0 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+            }
+            .chat-messages, .options-container, .input-area, .knowledge-base-container, .knowledge-base-handle {
+                width: 100vw !important;
+                max-width: 100vw !important;
+                min-width: 0 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+            .message {
+                max-width: 96vw !important;
+                font-size: 1.13rem !important;
+            }
+            .option-button {
+                min-width: 100% !important;
+                font-size: 1.18rem !important;
+                padding: 18px 0 !important;
+            }
+            .quick-reply {
+                font-size: 1.08rem !important;
+                padding: 12px 20px !important;
+            }
+        }
+
+        /* === МОДАЛЬНАЯ БАЗА ЗНАНИЙ === */
+        .knowledge-base-modal {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
+            background: #fff;
+            z-index: 1002;
+            display: flex;
+            flex-direction: column;
+            border-radius: 0 !important;
+            box-shadow: 0 0 0 9999px rgba(0,0,0,0.45);
+            transition: opacity 0.3s;
+            opacity: 1;
+            overflow-y: auto;
+        }
+        .knowledge-base-modal.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .knowledge-base-modal .knowledge-base-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            padding: 18px 24px 0 24px;
+            background: #fff;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .knowledge-base-modal .knowledge-base-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0;
+            letter-spacing: 0.01em;
+            line-height: 1.1;
+        }
+        .knowledge-base-modal .knowledge-base-desc {
+            font-size: 1.01rem;
+            color: var(--text-secondary);
+            margin-bottom: 0;
+            font-weight: 500;
+            opacity: 0.85;
+            line-height: 1.4;
+        }
+        .knowledge-base-modal .close-modal-btn {
+            position: absolute;
+            top: 18px;
+            right: 24px;
+            font-size: 2rem;
+            color: #EA3B90 !important;
+            background: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            opacity: 1 !important;
+            transition: none !important;
+            cursor: pointer;
+        }
+        .knowledge-base-modal .close-modal-btn:active,
+        .knowledge-base-modal .close-modal-btn:focus {
+            color: #EA3B90 !important;
+            background: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            opacity: 1 !important;
+        }
+        .knowledge-base-modal .knowledge-categories {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 18px;
+            padding: 24px 0 18px 0;
+        }
+        .knowledge-base-modal .knowledge-category {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            background: #F8F8FA;
+            border-radius: 18px;
+            box-shadow: var(--shadow-sm);
+            padding: 0;
+            margin-bottom: 0;
+            transition: box-shadow 0.18s, transform 0.18s;
+            border: 1px solid #ececec;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        .knowledge-base-modal .knowledge-category:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px) scale(1.01);
+        }
+        .knowledge-base-modal .knowledge-category-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 1.13rem;
+            font-weight: 700;
+            color: var(--primary);
+            padding: 18px 18px 10px 18px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 0;
+            transition: background 0.2s;
+            width: 100%;
+            text-align: center;
+        }
+        .knowledge-base-modal .knowledge-category-icon {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            min-height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35em;
+            color: var(--primary);
+            background: none;
+            border-radius: 50%;
+            margin-right: 8px;
+            margin-left: 0;
+            box-shadow: none;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .knowledge-base-modal .knowledge-category-content {
+            display: none;
+            padding: 0 18px 12px 18px;
+        }
+        .knowledge-base-modal .knowledge-category.active .knowledge-category-content {
+            display: block;
+        }
+        .knowledge-base-modal .knowledge-item {
+            padding: 12px 0 0 0;
+            border-bottom: none;
+            cursor: pointer;
+            border-radius: 10px;
+            margin-bottom: 2px;
+            background: none;
+            transition: background 0.14s;
+        }
+        .knowledge-base-modal .knowledge-item-question {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.01rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .knowledge-base-modal .knowledge-item-answer {
+            display: none;
+            padding: 8px 0 0 0;
+            color: var(--text-secondary);
+            font-size: 0.97rem;
+        }
+        .knowledge-base-modal .knowledge-item.active .knowledge-item-answer {
+            display: block;
+        }
+        .knowledge-base-modal .knowledge-item.active {
+            background: none;
+        }
+        .knowledge-base-modal .knowledge-item-arrow {
+            margin-left: 6px;
+            color: var(--primary);
+            font-size: 1em;
+            transition: transform 0.2s;
+        }
+        @media (max-width: 900px) {
+            .knowledge-base-modal .knowledge-categories {
+                grid-template-columns: 1fr;
+                padding: 12px 4px 8px 4px;
+            }
+        }
+
+        /* Стили для скрепки и input file */
+        .attach-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #fff; /* теперь фон как у input */
+            cursor: pointer;
+            transition: none;
+            box-shadow: none;
+            border: 2px solid #EA3B90; /* рамка как у input */
+            position: relative;
+        }
+        /* Убираем эффект наведения */
+        .attach-label:hover {
+            background: #fff;
+        }
+        .attach-label svg {
+            display: block;
+        }
+        .file-input {
+            display: none;
+        }
+
+        /* Системное сообщение по центру */
+        .system-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #757575;
+            background: none;
+            font-size: 1rem;
+            margin: 12px 0 8px 0;
+            text-align: center;
+            opacity: 0.85;
+            font-style: italic;
+            pointer-events: none;
+        }
+
+        /* Стили для последних чеков */
+        .last-checks-list {
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            background: #F8F8FA;
+            box-shadow: var(--shadow-sm);
+        }
+        .last-checks-list .check-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            padding: 10px 0;
+            border-bottom: 1px solid #ececec;
+            gap: 16px;
+        }
+        .last-checks-list .check-row:last-child {
+            border-bottom: none;
+        }
+        .check-info {
+            flex: 1 1 0;
+            min-width: 0;
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+        .check-info-title {
+            font-size: 1.05em;
+            font-weight: 500;
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+        .check-info-details {
+            font-size: 0.97em;
+            color: #757575;
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+        .check-status {
+            flex-shrink: 0;
+            min-width: 90px;
+            max-width: 110px;
+            font-size: 0.97em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            text-align: right;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Стили для последних выплат */
+        .last-payouts-list {
+            margin-top: 12px;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            background: #F8F8FA;
+            box-shadow: var(--shadow-sm);
+        }
+        .last-payouts-list .payout-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            padding: 10px 0;
+            border-bottom: 1px solid #ececec;
+            gap: 16px;
+        }
+        .last-payouts-list .payout-row:last-child {
+            border-bottom: none;
+        }
+        .payout-info {
+            flex: 1 1 0;
+            min-width: 0;
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .payout-info-title {
+            font-size: 1.05em;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .payout-info-details {
+            font-size: 0.97em;
+            color: #757575;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .payout-status {
+            flex-shrink: 0;
+            min-width: 90px;
+            max-width: 110px;
+            font-size: 0.97em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            text-align: right;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 600px) {
+            .last-checks-list .check-info, .last-payouts-list .payout-info {
+                max-width: 60%;
+            }
+            .last-checks-list .check-status, .last-payouts-list .payout-status {
+                min-width: 60px;
+                max-width: 80px;
+                font-size: 0.93em;
+            }
+        }
+
+        /* --- Стилизация мультивыбора чеков и кнопки --- */
+        .send-checks-btn {
+            width: 100%;
+            margin-top: 18px;
+            padding: 15px 0;
+            border-radius: 16px;
+            background: #EA3B90;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.13em;
+            border: none;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s, background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(234,59,144,0.10);
+            letter-spacing: 0.01em;
+            outline: none;
+            display: block;
+        }
+        .send-checks-btn.active {
+            opacity: 1;
+            background: #EA3B90;
+            box-shadow: 0 4px 16px rgba(234,59,144,0.13);
+        }
+        .selectable-check-row {
+            border: 2px solid transparent;
+            margin-bottom: 0;
+        }
+        /* --- ВЫРАВНИВАНИЕ СТАТУСОВ, НОМЕРОВ И ДАТ ЧЕКОВ/ВЫПЛАТ --- */
+        .check-row, .payout-row {
+            align-items: center !important;
+        }
+        .check-info, .payout-info {
+            flex: 1 1 0;
+            min-width: 0;
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+        .check-info-title, .payout-info-title {
+            font-size: 1.05em;
+            font-weight: 500;
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+        .check-info-details, .payout-info-details {
+            font-size: 0.97em;
+            color: #757575;
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+        .check-status, .payout-status {
+            flex-shrink: 0;
+            min-width: 90px;
+            max-width: 110px;
+            font-size: 0.97em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            text-align: right;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        @media (max-width: 600px) {
+            .check-status, .payout-status {
+                /* width убираем, оставляем только min/max-width */
+                width: auto;
+                min-width: 60px;
+                max-width: 80px;
+                font-size: 0.93em;
+                padding: 0 2px;
+                box-sizing: border-box;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .check-info, .payout-info {
+                max-width: calc(100% - 90px);
+            }
+        }
+        /* --- END ВЫРАВНИВАНИЕ --- */
+
+        /* --- АНИМАЦИЯ ДЛЯ КНОПКИ БАЗЫ ЗНАНИЙ --- */
+        .kb-animate {
+            animation: kbPulse 1.8s infinite cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 0 0 0 rgba(234,59,144,0.18);
+        }
+        @keyframes kbPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(234,59,144,0.18);
+            }
+            60% {
+                transform: scale(1.07);
+                box-shadow: 0 0 0 10px rgba(234,59,144,0.10);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(234,59,144,0.18);
+            }
+        }
+
+        /* CSS для горизонтального скролла карточек чеков */
+        .horizontal-checks-list {
+            background: none !important;
+            box-shadow: none !important;
+            border: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .check-card::-webkit-scrollbar { display: none; }
+        @media (max-width: 700px) {
+            .check-card { min-width: 80vw !important; max-width: 90vw !important; }
+        }
+
+        /* CSS для горизонтального скролла карточек выплат */
+        .horizontal-payouts-list {
+            margin-bottom: 8px;
+        }
+        .payouts-horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 18px;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: #EA3B90 #f5f5f5;
+        }
+        .payouts-horizontal-scroll::-webkit-scrollbar {
+            height: 7px;
+        }
+        .payouts-horizontal-scroll::-webkit-scrollbar-thumb {
+            background: #EA3B90;
+            border-radius: 6px;
+        }
+        .payout-card {
+            min-width: 210px;
+            max-width: 220px;
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 4px 18px rgba(234,59,144,0.10);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            padding: 20px 18px 16px 18px;
+            transition: transform 0.18s, box-shadow 0.18s;
+            cursor: pointer;
+        }
+        .payout-card:hover {
+            transform: scale(1.035);
+            box-shadow: 0 8px 32px rgba(234,59,144,0.16);
+        }
+        .payout-card .fa {
+            vertical-align: middle;
+        }
+        @media (max-width: 600px) {
+            .payout-card {
+                min-width: 170px;
+                max-width: 180px;
+                padding: 14px 8px 12px 10px;
+            }
+        }
+
+        /* CSS для аватарки бота */
+        .bot-message-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .bot-avatar {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            min-height: 38px;
+            border-radius: 50%;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+        .bot-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Стили для блока оценки в базе знаний */
+        .kb-rate-block {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .kb-rate-btn {
+            background: #F8F8FA;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.25em;
+            cursor: pointer;
+            color: #EA3B90;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+            margin-left: 0;
+            transition: none;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="logo-container">
+                    <div class="logo">
+                        <img src="chia.png" alt="Логотип" />
+                    </div>
+                    <h2>AI-консультант</h2>
+                </div>
+                <div class="header-actions">
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <!-- Сообщения будут добавляться здесь -->
+            </div>
+            
+            <div class="options-container" id="options-container">
+                <!-- Кнопки выбора будут добавляться здесь -->
+            </div>
+            
+            <div class="input-area">
+                <label for="file-attach" class="attach-label micro-interaction" title="Прикрепить файл">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.5 13.5V7.75C17.5 5.12665 15.3734 3 12.75 3C10.1266 3 8 5.12665 8 7.75V16.25C8 18.0449 9.45507 19.5 11.25 19.5C13.0449 19.5 14.5 18.0449 14.5 16.25V8.5" stroke="#EA3B90" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <input type="file" id="file-attach" class="file-input" multiple accept="image/*,video/*,application/pdf,.doc,.docx,.xls,.xlsx,.txt">
+                </label>
+                <input type="text" id="user-input" placeholder="Напишите сообщение..." class="micro-interaction">
+                <button id="send-button" class="micro-interaction" onclick="sendMessage()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- === HTML: модальное окно базы знаний === -->
+    <div class="knowledge-base-modal hide" id="knowledge-base-modal">
+        <div class="knowledge-base-header">
+            <button class="close-modal-btn" id="close-modal-btn" title="Закрыть">&times;</button>
+        </div>
+        <div class="knowledge-categories">
+            <!-- Категории и вопросы будут добавляться здесь JS -->
+        </div>
+    </div>
+
+    <script>
+        
+        // База знаний
+        const knowledgeBase = [
+            {
+                title: "Общие вопросы",
+                items: [
+                    {
+                        question: "Как работает кэшбэк?",
+                        answer: "Кэшбэк начисляется за покупки в аптеках-партнерах. Размер кэшбэка зависит от аптеки и может составлять от 1% до 30% от суммы покупки. Для получения кэшбэка необходимо зарегистрироваться в приложении, совершить покупку в аптеке-партнере и загрузить чек в приложение."
+                    },
+                    {
+                        question: "Какие аптеки участвуют в программе?",
+                        answer: "Список аптек-партнеров доступен в приложении в разделе 'Аптеки'. Мы постоянно расширяем сеть партнеров, поэтому рекомендуем проверять актуальный список перед покупкой."
+                    },
+                    {
+                        question: "Как зарегистрироваться в приложении?",
+                        answer: "Для регистрации скачайте приложение 'Чеки из Аптеки', введите ваш номер телефона, подтвердите его с помощью SMS-кода и заполните необходимые данные. После этого вы сможете начать пользоваться всеми функциями приложения."
+                    }
+                ]
+            },
+            {
+                title: "Работа с чеками",
+                items: [
+                    {
+                        question: "Как правильно фотографировать чек?",
+                        answer: "Чек должен быть четким, все данные должны быть читаемы. Убедитесь, что на фото видно дату, сумму, номер чека и список товаров. Фотографируйте при хорошем освещении, держите камеру параллельно чеку, чтобы избежать искажений."
+                    },
+                    {
+                        question: "Почему чек может быть отклонен?",
+                        answer: "Чек может быть отклонен по нескольким причинам: нечеткое фото, отсутствие необходимых данных, истекший срок действия чека (более 3 дней с момента покупки), чек не из аптеки-партнера, чек уже был загружен ранее или другие нарушения правил."
+                    },
+                    {
+                        question: "Сколько времени занимает проверка чека?",
+                        answer: "Обычно проверка чека занимает от 1 до 24 часов. В редких случаях при высокой нагрузке проверка может занять до 3 рабочих дней. Вы получите уведомление, когда чек будет проверен."
+                    }
+                ]
+            },
+            {
+                title: "Выплаты и бонусы",
+                items: [
+                    {
+                        question: "Как и когда я получу выплату?",
+                        answer: "Выплаты обрабатываются в течение 1-3 рабочих дней после проверки чека. Вы можете выбрать способ выплаты: на банковскую карту или мобильный телефон. Минимальная сумма для выплаты - 100 рублей."
+                    },
+                    {
+                        question: "Какие есть способы вывода средств?",
+                        answer: "Вы можете вывести средства на банковскую карту (Visa, Mastercard, МИР) или на мобильный телефон (для операторов МТС, Билайн, Мегафон, Теле2). Комиссия за вывод не взимается."
+                    },
+                    {
+                        question: "Почему выплата задерживается?",
+                        answer: "Выплата может задерживаться по техническим причинам, из-за проверки безопасности или проблем с платежной системой. Если выплата задерживается более чем на 3 рабочих дня, пожалуйста, обратитесь в поддержку."
+                    }
+                ]
+            },
+            {
+                title: "Технические вопросы",
+                items: [
+                    {
+                        question: "Что делать, если приложение не работает?",
+                        answer: "Попробуйте следующие шаги: 1) Перезагрузите приложение 2) Проверьте интернет-соединение 3) Обновите приложение до последней версии 4) Переустановите приложение. Если проблема не решена, обратитесь в поддержку."
+                    },
+                    {
+                        question: "Как изменить данные в профиле?",
+                        answer: "Для изменения данных перейдите в раздел 'Профиль' в приложении, нажмите 'Редактировать', внесите необходимые изменения и сохраните их. Некоторые данные (например, номер телефона) можно изменить только через поддержку."
+                    },
+                    {
+                        question: "Как восстановить доступ к аккаунту?",
+                        answer: "Если вы забыли пароль, нажмите 'Забыли пароль?' на экране входа и следуйте инструкциям. Если у вас нет доступа к номеру телефона, привязанному к аккаунту, обратитесь в поддержку с подтверждающими документами."
+                    }
+                ]
+            },
+            // Новые категории
+            {
+                title: "Безопасность и конфиденциальность",
+                items: [
+                    {
+                        question: "Как защищаются мои персональные данные?",
+                        answer: "Ваши данные хранятся в зашифрованном виде и не передаются третьим лицам. Мы соблюдаем все требования законодательства о защите персональных данных."
+                    },
+                    {
+                        question: "Можно ли удалить свой аккаунт?",
+                        answer: "Да, вы можете удалить свой аккаунт через поддержку. После удаления все ваши данные будут безвозвратно удалены."
+                    }
+                ]
+            },
+            {
+                title: "Партнерская программа",
+                items: [
+                    {
+                        question: "Как стать партнером сервиса?",
+                        answer: "Для подключения вашей аптеки к сервису заполните форму на сайте или свяжитесь с нами по электронной почте partner@чеки-из-аптеки.рф."
+                    },
+                    {
+                        question: "Есть ли бонусы для партнеров?",
+                        answer: "Партнеры получают доступ к расширенной аналитике и специальным условиям по кэшбэку для своих клиентов."
+                    }
+                ]
+            },
+            {
+                title: "Мобильное приложение",
+                items: [
+                    {
+                        question: "Где скачать мобильное приложение?",
+                        answer: "Приложение доступно в App Store и Google Play. Просто введите в поиске 'Чеки из Аптеки'."
+                    },
+                    {
+                        question: "Что делать, если приложение не устанавливается?",
+                        answer: "Проверьте, достаточно ли свободного места на устройстве и обновите операционную систему до актуальной версии. Если проблема сохраняется — обратитесь в поддержку." 
+                    }
+                ]
+            }
+        ];
+
+        // === ОСТАВЛЯЕМ ТОЛЬКО ТРИ СЦЕНАРИИ: ЧЕК, ВЫПЛАТА, ДРУГОЙ ВОПРОС ===
+        let currentMenu = 'main';
+        let isBotTyping = false;
+        let isFirstMessage = true;
+        let isManagerConnecting = false;
+
+        // Инициализация чата
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('user-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendMessage();
+            });
+
+            // Кнопка для открытия базы знаний
+            const headerActions = document.querySelector('.header-actions');
+            const kbBtn = document.createElement('button');
+            kbBtn.className = 'option-button micro-interaction kb-animate';
+            kbBtn.style = 'padding:8px 18px;font-size:1.05em;background:#fff;color:#EA3B90;border:1.5px solid #EA3B90;box-shadow:none;min-width:auto;';
+            kbBtn.textContent = 'База знаний';
+            kbBtn.onclick = () => {
+                document.getElementById('knowledge-base-modal').classList.remove('hide');
+                initKnowledgeBaseModal();
+                const closeBtn = document.getElementById('close-modal-btn');
+                closeBtn.classList.add('active');
+                closeBtn.disabled = false;
+            };
+            headerActions.appendChild(kbBtn);
+            setTimeout(() => kbBtn.classList.remove('kb-animate'), 7000);
+            // Исправленный обработчик для крестика
+            const closeBtn = document.getElementById('close-modal-btn');
+            closeBtn.onclick = function() {
+                document.getElementById('knowledge-base-modal').classList.add('hide');
+                this.classList.remove('active');
+                this.disabled = true;
+                // Сбросить активные категории и ответы при закрытии
+                const container = document.querySelector('#knowledge-base-modal .knowledge-categories');
+                if (container) {
+                    container.querySelectorAll('.knowledge-category').forEach(cat => cat.classList.remove('active'));
+                    container.querySelectorAll('.knowledge-item').forEach(item => item.classList.remove('active'));
+                }
+            };
+
+            // Приветствие и сценарии
+            if (isFirstMessage) {
+                addBotMessage('Здравствуйте! Я ваш виртуальный помощник сервиса "Чеки из Аптеки". Чем могу помочь?');
+                showOptions(['Вопрос по чеку', 'Вопрос по выплате', 'Другой вопрос']);
+                isFirstMessage = false;
+            }
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            if (message) {
+                addUserMessage(message);
+                input.value = '';
+                processUserMessage(message);
+            }
+        }
+
+        function selectOption(option = '') {
+            addUserMessage(option);
+            processUserMessage(option);
+        }
+
+        function processUserMessage(message) {
+            if (isManagerConnecting) {
+                // Если уже идет подключение менеджера, бот не отвечает
+                return;
+            }
+            showTypingIndicator();
+            setTimeout(() => {
+                hideTypingIndicator();
+                const normalized = message.toLowerCase().trim();
+                if (currentMenu === 'main') {
+                    if (message === 'Вопрос по чеку') {
+                        currentMenu = 'check';
+                        document.getElementById('options-container').innerHTML = '';
+                        addBotMessage('Уточните, пожалуйста, номер чека или дату и сумму, указанные в нем.');
+                        showLastChecks();
+                        return;
+                    } else if (message === 'Вопрос по выплате') {
+                        currentMenu = 'payout';
+                        document.getElementById('options-container').innerHTML = '';
+                        addBotMessage('Уточните, пожалуйста, номер выплаты или дату и сумму перевода.');
+                        showLastPayouts();
+                        return;
+                    } else if (message === 'Другой вопрос') {
+                        currentMenu = 'other';
+                        document.getElementById('options-container').innerHTML = '';
+                        addBotMessage('Пожалуйста, опишите ваш вопрос. Менеджер подключится для уточнения деталей.');
+                        setTimeout(() => {
+                            const chat = document.getElementById('chat-messages');
+                            const botMessages = chat.querySelectorAll('.bot-message');
+                            const lastBotMsg = botMessages[botMessages.length - 1];
+                            const hintDiv = document.createElement('div');
+                            hintDiv.innerHTML = '<div style="margin:14px auto 0 auto;display:flex;justify-content:center;">' +
+                                '<span id="kb-hint-btn" style="background:linear-gradient(38.98deg,#4667D9 -2.6%,#EA3B90 52.19%,#F4AB68 102.6%);color:#fff;padding:10px 22px;border-radius:22px;font-weight:600;font-size:1.07em;box-shadow:0 2px 8px rgba(234,59,144,0.10);display:flex;align-items:center;gap:10px;cursor:pointer;animation:kbHintPulse 1.8s infinite cubic-bezier(0.4,0,0.2,1);border:none;outline:none;">' +
+                                        '<i class="fa fa-lightbulb" style="color:#F4AB68;font-size:1.25em;"></i>' +
+                                        'Совет: <span style="text-decoration:underline dotted;">База знаний</span>' +
+                                        '<span style="margin-left:6px;font-size:1.2em;">↗</span>' +
+                                '</span>' +
+                                '<style>@keyframes kbHintPulse{0%{box-shadow:0 0 0 0 rgba(234,59,144,0.18);}60%{box-shadow:0 0 0 10px rgba(234,59,144,0.10);}100%{box-shadow:0 0 0 0 rgba(234,59,144,0.18);}}</style>' +
+                            '</div>';
+                            if (lastBotMsg && lastBotMsg.nextSibling) {
+                                chat.insertBefore(hintDiv, lastBotMsg.nextSibling);
+                            } else {
+                                chat.appendChild(hintDiv);
+                            }
+                            scrollToBottom();
+                            // Клик по совету открывает базу знаний
+                            const btn = document.getElementById('kb-hint-btn');
+                            if (btn) btn.onclick = () => {
+                                document.getElementById('knowledge-base-modal').classList.remove('hide');
+                                initKnowledgeBaseModal();
+                                const closeBtn = document.getElementById('close-modal-btn');
+                                closeBtn.classList.add('active');
+                                closeBtn.disabled = false;
+                            };
+                        }, 100);
+                        return;
+                    }
+                }
+                if (currentMenu === 'check') {
+                    if (/\d{5,}/.test(message)) {
+                        handleCheckSelected(message.match(/\d{5,}/)[0], false);
+                        return;
+                    }
+                    addBotMessage('Вопрос передан менеджеру, ожидайте');
+                    setTimeout(() => sendManagerMessage(), 600);
+                    isManagerConnecting = true;
+                    return;
+                }
+                if (currentMenu === 'payout') {
+                    if (/([A-ZА-Я]\d{3,}|\d{5,})/i.test(message)) {
+                        handlePayoutSelected(message.match(/([A-ZА-Я]\d{3,}|\d{5,})/i)[0], false);
+                        return;
+                    }
+                    addBotMessage('Вопрос передан менеджеру, ожидайте');
+                    setTimeout(() => sendManagerMessage(), 600);
+                    isManagerConnecting = true;
+                    return;
+                }
+                if (currentMenu === 'other') {
+                    addBotMessage('Вопрос передан менеджеру, ожидайте');
+                    setTimeout(() => {
+                        addSystemMessage('Переключаем ваш диалог на сотрудника. Мы уже занимаемся вашим вопросом, ответим в ближайшее время.');
+                    }, 3000);
+                    isManagerConnecting = true;
+                    return;
+                }
+                addBotMessage('Я не совсем понял ваш вопрос, зову менеджера.');
+                setTimeout(() => {
+                    addSystemMessage('Переключаем ваш диалог на сотрудника. Мы уже занимаемся вашим вопросом, ответим в ближайшее время.');
+                    document.getElementById('options-container').innerHTML = '';
+                }, 3000);
+                isManagerConnecting = true;
+            }, 800);
+        }
+
+        function showOptions(options) {
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-button micro-interaction';
+                button.textContent = option;
+                button.onclick = () => selectOption(option);
+                container.appendChild(button);
+            });
+        }
+
+        function addBotMessage(text) {
+            const chat = document.getElementById('chat-messages');
+            // Создаём контейнер для строки с аватаркой и сообщением
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'bot-message-row';
+            // Аватарка
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'bot-avatar';
+            const img = document.createElement('img');
+            img.src = 'chia.png';
+            img.alt = 'Бот';
+            avatarDiv.appendChild(img);
+            // Сообщение
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot-message new-message';
+            messageDiv.innerHTML = `${text}<span class="message-time">${getCurrentTime()}</span>`;
+            messageDiv.addEventListener('animationend', function() {
+                messageDiv.classList.remove('new-message');
+                messageDiv.style.opacity = '1';
+                messageDiv.style.transform = 'none';
+            });
+            // Добавляем в строку
+            rowDiv.appendChild(avatarDiv);
+            rowDiv.appendChild(messageDiv);
+            chat.appendChild(rowDiv);
+            scrollToBottom();
+        }
+        function addUserMessage(text) {
+            const chat = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user-message new-message';
+            messageDiv.innerHTML = `${text}<span class="message-time">${getCurrentTime()}</span>`;
+            messageDiv.addEventListener('animationend', function() {
+                messageDiv.classList.remove('new-message');
+                messageDiv.style.opacity = '1';
+                messageDiv.style.transform = 'none';
+            });
+            chat.appendChild(messageDiv);
+            scrollToBottom();
+        }
+        function addSystemMessage(text) {
+            const chat = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'system-message';
+            messageDiv.textContent = text;
+            chat.appendChild(messageDiv);
+            scrollToBottom();
+        }
+        function showTypingIndicator() {
+            if (isBotTyping) return;
+            isBotTyping = true;
+            const chat = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'typing-dot';
+                dot.style.animationDelay = `${i * 0.2}s`;
+                typingDiv.appendChild(dot);
+            }
+            chat.appendChild(typingDiv);
+            scrollToBottom();
+        }
+        function hideTypingIndicator() {
+            isBotTyping = false;
+            const typingDiv = document.getElementById('typing-indicator');
+            if (typingDiv) typingDiv.remove();
+        }
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        function scrollToBottom() {
+            const chat = document.getElementById('chat-messages');
+            setTimeout(() => { chat.scrollTop = chat.scrollHeight + 100; }, 50);
+        }
+
+        // Показать последние 5 чеков пользователя (заглушка)
+        function showLastChecks() {
+            const chat = document.getElementById('chat-messages');
+            // Пример 5 последних чеков (заглушка)
+            const checks = [
+                { id: 'CHK001', date: '03.06.2025', sum: '1200 ₽', status: 'Проверен' },
+                { id: 'CHK002', date: '02.06.2025', sum: '850 ₽', status: 'Поврежден' },
+                { id: 'CHK003', date: '01.06.2025', sum: '430 ₽', status: 'На проверке' },
+                { id: 'CHK004', date: '31.05.2025', sum: '2100 ₽', status: 'Проверен' },
+                { id: 'CHK005', date: '30.05.2025', sum: '670 ₽', status: 'Проверен' },
+            ];
+            // Удаляем предыдущий список чеков, если есть
+            const oldList = document.getElementById('last-checks-list');
+            if (oldList) oldList.remove();
+            // Контейнер для горизонтального скролла
+            const listDiv = document.createElement('div');
+            listDiv.className = 'last-checks-list horizontal-checks-list';
+            listDiv.id = 'last-checks-list';
+            // Заголовок
+            const title = document.createElement('div');
+            title.style.fontWeight = '600';
+            title.style.color = '#EA3B90';
+            title.style.margin = '12px 0 8px 0';
+            title.textContent = 'Ваши последние чеки:';
+            listDiv.appendChild(title);
+            // Горизонтальный скролл
+            const scrollDiv = document.createElement('div');
+            scrollDiv.className = 'checks-horizontal-scroll';
+            scrollDiv.style.display = 'flex';
+            scrollDiv.style.overflowX = 'auto';
+            scrollDiv.style.gap = '18px';
+            scrollDiv.style.padding = '8px 0 8px 0';
+            // Карточки чеков с чекбоксами
+            checks.forEach((check, idx) => {
+                const card = document.createElement('div');
+                card.className = 'check-row check-card';
+                card.style.minWidth = '240px';
+                card.style.maxWidth = '260px';
+                card.style.background = '#fff';
+                card.style.borderRadius = '22px';
+                card.style.boxShadow = '0 4px 18px rgba(234,59,144,0.10)';
+                card.style.display = 'flex';
+                card.style.flexDirection = 'column';
+                card.style.justifyContent = 'space-between';
+                card.style.position = 'relative';
+                card.style.padding = '20px 18px 16px 18px';
+                card.style.transition = 'transform 0.18s, box-shadow 0.18s';
+                card.style.cursor = 'pointer';
+                card.onmouseenter = () => { card.style.transform = 'scale(1.035)'; card.style.boxShadow = '0 8px 32px rgba(234,59,144,0.16)'; };
+                card.onmouseleave = () => { card.style.transform = 'scale(1)'; card.style.boxShadow = '0 4px 18px rgba(234,59,144,0.10)'; };
+                // Чекбокс в углу
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'check-select';
+                checkbox.value = check.id;
+                checkbox.dataset.idx = idx;
+                checkbox.style.position = 'absolute';
+                checkbox.style.top = '14px';
+                checkbox.style.right = '18px';
+                checkbox.style.width = '22px';
+                checkbox.style.height = '22px';
+                checkbox.style.accentColor = '#EA3B90';
+                card.appendChild(checkbox);
+                // Информация о чеке
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'check-info';
+                infoDiv.style.marginBottom = '18px';
+                infoDiv.innerHTML = `<div class="check-info-title" style="font-size:1.13em;font-weight:600;">Чек №${check.id}</div>`;
+                card.appendChild(infoDiv);
+                // Дата и сумма
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'check-info-details';
+                detailsDiv.style.fontSize = '0.97em';
+                detailsDiv.style.color = '#757575';
+                detailsDiv.style.opacity = '0.8';
+                detailsDiv.textContent = `${check.date}`;
+                card.appendChild(detailsDiv);
+                // Сумма
+                const sumDiv = document.createElement('div');
+                sumDiv.style.fontSize = '1.09em';
+                sumDiv.style.fontWeight = '700';
+                sumDiv.style.color = '#EA3B90';
+                sumDiv.style.marginTop = '2px';
+                sumDiv.textContent = check.sum;
+                card.appendChild(sumDiv);
+                // Статус
+                let statusColor = '#757575';
+                let statusIcon = '';
+                if (check.status === 'Проверен') {
+                    statusColor = '#4CAF50';
+                    statusIcon = '<i class="fa fa-check-circle" style="color:#4CAF50;font-size:1.15em;min-width:1.3em;text-align:center;margin-right:5px;"></i>';
+                } else if (check.status === 'Поврежден' || check.status === 'Повреждён') {
+                    statusColor = '#EA3B90';
+                    statusIcon = '<i class="fa fa-times-circle" style="color:#EA3B90;font-size:1.15em;min-width:1.3em;text-align:center;margin-right:5px;"></i>';
+                } else if (check.status === 'На проверке') {
+                    statusColor = '#B0B0B0';
+                    statusIcon = '<i class="fa fa-clock" style="color:#B0B0B0;font-size:1.15em;min-width:1.3em;text-align:center;margin-right:5px;"></i>';
+                }
+                const statusDiv = document.createElement('div');
+                statusDiv.className = 'check-status';
+                statusDiv.style.position = 'absolute';
+                statusDiv.style.top = '14px';
+                statusDiv.style.left = '18px';
+                statusDiv.style.fontSize = '0.98em';
+                statusDiv.style.fontWeight = '700';
+                statusDiv.style.color = statusColor;
+                statusDiv.style.opacity = '0.92';
+                statusDiv.style.display = 'flex';
+                statusDiv.style.alignItems = 'center';
+                statusDiv.style.gap = '3px';
+                statusDiv.style.maxWidth = '140px';
+                statusDiv.style.minWidth = '0';
+                statusDiv.style.whiteSpace = 'nowrap';
+                statusDiv.innerHTML = `${statusIcon}<span style='white-space:nowrap;display:inline-block;vertical-align:middle;'>${check.status}</span>`;
+                card.appendChild(statusDiv);
+                // --- Новый код: выбор по клику на карточку ---
+                card.addEventListener('click', function(e) {
+                    if (e.target === checkbox) return; // не переключать при клике на сам чекбокс
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change'));
+                });
+                // --- Конец нового кода ---
+                scrollDiv.appendChild(card);
+            });
+            listDiv.appendChild(scrollDiv);
+            // Кнопка отправки выбранных чеков
+            const sendBtn = document.createElement('button');
+            sendBtn.className = 'send-checks-btn';
+            sendBtn.textContent = 'Отправить выбранные чеки';
+            sendBtn.disabled = true;
+            listDiv.appendChild(sendBtn);
+            chat.appendChild(listDiv);
+            scrollToBottom();
+            // Логика выбора чеков
+            const checkboxes = listDiv.querySelectorAll('.check-select');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const anyChecked = Array.from(checkboxes).some(c => c.checked);
+                    sendBtn.disabled = !anyChecked;
+                    if (anyChecked) sendBtn.classList.add('active');
+                    else sendBtn.classList.remove('active');
+                });
+            });
+            // Обработка отправки выбранных чеков
+            sendBtn.onclick = function() {
+                const selected = Array.from(checkboxes).filter(c => c.checked).map(c => checks[c.dataset.idx]);
+                if (selected.length === 0) return;
+                addUserMessage('Выбрал чеки: ' + selected.map(c => `№${c.id}`).join(', '));
+                addBotMessage('Вопрос по выбранным чекам передан менеджеру, ожидайте.');
+                setTimeout(() => addSystemMessage('Переключаем ваш диалог на сотрудника. Мы уже занимаемся вашим вопросом, ответим в ближайшее время.'), 3000);
+                isManagerConnecting = true;
+                // Очищаем список чеков и кнопки
+                listDiv.remove();
+                document.getElementById('options-container').innerHTML = '';
+            };
+        }
+
+        // Показать последние 5 выплат пользователя (заглушка)
+        function showLastPayouts() {
+            const chat = document.getElementById('chat-messages');
+            // Заглушка: массив выплат
+            const payouts = [
+                {date: '03.06.2025', sum: '1 000 ₽', number: 'P-001', status: 'Отправлен'},
+                {date: '29.05.2025', sum: '2 500 ₽', number: 'P-002', status: 'Отправлен'},
+                {date: '22.05.2025', sum: '700 ₽', number: 'P-003', status: 'На проверке'},
+                {date: '18.05.2025', sum: '1 800 ₽', number: 'P-004', status: 'Отправлен'},
+                {date: '12.05.2025', sum: '1 200 ₽', number: 'P-005', status: 'Отправлен'}
+            ];
+            const payoutsDiv = document.createElement('div');
+            payoutsDiv.className = 'last-payouts-list horizontal-payouts-list';
+            payoutsDiv.innerHTML = `
+                <div style="font-weight:600;color:#EA3B90;margin:12px 0 8px 0;">Ваши последние выплаты:</div>
+                <div id="payouts-list-items" class="payouts-horizontal-scroll"></div>
+            `;
+            chat.appendChild(payoutsDiv);
+            const list = payoutsDiv.querySelector('#payouts-list-items');
+            list.style.display = 'flex';
+            list.style.overflowX = 'auto';
+            list.style.gap = '18px';
+            list.style.padding = '8px 0 8px 0';
+            payouts.forEach((p, idx) => {
+                const item = document.createElement('div');
+                item.className = 'payout-row payout-card';
+                item.style.minWidth = '210px';
+                item.style.maxWidth = '220px';
+                item.style.background = '#fff';
+                item.style.borderRadius = '22px';
+                item.style.boxShadow = '0 4px 18px rgba(234,59,144,0.10)';
+                item.style.display = 'flex';
+                item.style.flexDirection = 'column';
+                item.style.justifyContent = 'space-between';
+                item.style.position = 'relative';
+                item.style.padding = '20px 18px 16px 18px';
+                item.style.transition = 'transform 0.18s, box-shadow 0.18s';
+                item.style.cursor = 'pointer';
+                item.onmouseenter = () => { item.style.transform = 'scale(1.035)'; item.style.boxShadow = '0 8px 32px rgba(234,59,144,0.16)'; };
+                item.onmouseleave = () => { item.style.transform = 'scale(1)'; item.style.boxShadow = '0 4px 18px rgba(234,59,144,0.10)'; };
+                // Статус и иконка
+                let statusColor = '#757575';
+                let statusIcon = '';
+                if (p.status === 'Отправлен') {
+                    statusColor = '#4CAF50';
+                    statusIcon = '<i class="fa fa-check-circle" style="color:#4CAF50;font-size:1.15em;min-width:1.3em;text-align:center;margin-right:5px;"></i>';
+                } else if (p.status === 'На проверке') {
+                    statusColor = '#B0B0B0';
+                    statusIcon = '<i class="fa fa-clock" style="color:#B0B0B0;font-size:1.15em;min-width:1.3em;text-align:center;margin-right:5px;"></i>';
+                }
+                item.innerHTML = `
+                    <div style="position:absolute;top:14px;right:18px;font-size:0.98em;font-weight:700;color:${statusColor};opacity:0.92;display:flex;align-items:center;gap:3px;">${statusIcon}${p.status}</div>
+                    <div class="payout-info" style="margin-bottom:18px;">
+                        <div class="payout-info-title" style="font-size:1.13em;font-weight:600;">Выплата №${p.number}</div>
+                    </div>
+                    <div style="margin-top:auto;display:flex;flex-direction:column;align-items:flex-start;">
+                        <div class="payout-info-details" style="font-size:0.97em;color:#757575;opacity:0.8;">${p.date}</div>
+                        <div style="font-size:1.09em;font-weight:700;color:#EA3B90;margin-top:2px;">${p.sum}</div>
+                    </div>
+                `;
+                item.onclick = function() {
+                    handlePayoutSelected(p.number);
+                };
+                list.appendChild(item);
+            });
+            scrollToBottom();
+        }
+
+        // Обработка выбора чека или ввода номера чека
+        function handleCheckSelected(checkNumber, showUserMessage = true) {
+            if (showUserMessage) addUserMessage('Чек №' + checkNumber);
+            addBotMessage('Вопрос передан менеджеру, ожидайте');
+            setTimeout(() => {
+                addSystemMessage('Переключаем ваш диалог на сотрудника. Мы уже занимаемся вашим вопросом, ответим в ближайшее время.');
+            }, 3000);
+            isManagerConnecting = true;
+        }
+
+        // Обработка выбора выплаты или ввода номера выплаты
+        function handlePayoutSelected(payoutNumber, showUserMessage = true) {
+            if (showUserMessage) addUserMessage('Выплата №' + payoutNumber);
+            addBotMessage('Вопрос передан менеджеру, ожидайте');
+            setTimeout(() => {
+                addSystemMessage('Переключаем ваш диалог на сотрудника. Мы уже занимаемся вашим вопросом, ответим в ближайшее время.');
+            }, 3000);
+            currentMenu = '';
+            isManagerConnecting = true;
+        }
+
+        
+
+        // Инициализация модального окна базы знаний
+        function initKnowledgeBaseModal() {
+            const categoryIcons = [
+                '<span style="color:#EA3B90;font-size:1.25em;">💡</span>', // Общие вопросы
+                '<span style="color:#EA3B90;font-size:1.25em;">🧾</span>', // Работа с чеками
+                '<span style="color:#EA3B90;font-size:1.25em;">💰</span>', // Выплаты и бонусы
+                '<span style="color:#EA3B90;font-size:1.25em;">🛠️</span>', // Технические вопросы
+                '<span style="color:#EA3B90;font-size:1.25em;">🔒</span>', // Безопасность и конфиденциальность
+                '<span style="color:#EA3B90;font-size:1.25em;">🤝</span>', // Партнерская программа
+                '<span style="color:#EA3B90;font-size:1.25em;">📱</span>'  // Мобильное приложение
+            ];
+            const container = document.querySelector('#knowledge-base-modal .knowledge-categories');
+            container.innerHTML = '';
+            knowledgeBase.forEach((cat, catIdx) => {
+                const catDiv = document.createElement('div');
+                catDiv.className = 'knowledge-category';
+                // Заголовок категории с иконкой
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'knowledge-category-title';
+                // Иконка
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'knowledge-category-icon';
+                iconSpan.innerHTML = categoryIcons[catIdx] || '<span style="color:#EA3B90;font-size:1.25em;">❓</span>';
+                titleDiv.appendChild(iconSpan);
+                // Текст
+                const titleText = document.createElement('span');
+                titleText.textContent = cat.title;
+                titleDiv.appendChild(titleText);
+                titleDiv.onclick = function() {
+                    container.querySelectorAll('.knowledge-category').forEach(function(c) {
+                        if (c !== catDiv) c.classList.remove('active');
+                    });
+                    catDiv.classList.toggle('active');
+                };
+                catDiv.appendChild(titleDiv);
+                // Контент категории
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'knowledge-category-content';
+                cat.items.forEach((item, itemIdx) => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'knowledge-item';
+                    // Вопрос (без аватарки)
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'knowledge-item-question';
+                    qDiv.textContent = item.question;
+                    // Стрелка
+                    const arrow = document.createElement('span');
+                    arrow.className = 'knowledge-item-arrow';
+                    arrow.innerHTML = '&#9654;';
+                    qDiv.appendChild(arrow);
+                    // Клик по вопросу
+                    qDiv.onclick = function(e) {
+                        e.stopPropagation();
+                        contentDiv.querySelectorAll('.knowledge-item').forEach(function(it) {
+                            if (it !== itemDiv) {
+                                it.classList.remove('active');
+                                if (it.querySelector('.knowledge-item-answer'))
+                                    it.querySelector('.knowledge-item-answer').style.display = 'none';
+                                if (it.querySelector('.kb-rate-block'))
+                                    it.querySelector('.kb-rate-block').remove();
+                                if (it.querySelector('.knowledge-item-arrow'))
+                                    it.querySelector('.knowledge-item-arrow').style.transform = 'rotate(0deg)';
+                            }
+                        });
+                        const isActive = itemDiv.classList.toggle('active');
+                        const answerDiv = itemDiv.querySelector('.knowledge-item-answer');
+                        if (answerDiv) answerDiv.style.display = isActive ? 'block' : 'none';
+                        arrow.style.transform = isActive ? 'rotate(90deg)' : 'rotate(0deg)';
+                        // Показываем блок оценки только при раскрытии
+                        if (isActive && !itemDiv.querySelector('.kb-rate-block')) {
+                            answerDiv.appendChild(rateDiv);
+                        } else if (!isActive && itemDiv.querySelector('.kb-rate-block')) {
+                            itemDiv.querySelector('.kb-rate-block').remove();
+                        }
+                    };
+                    itemDiv.appendChild(qDiv);
+                    // Ответ
+                    const aDiv = document.createElement('div');
+                    aDiv.className = 'knowledge-item-answer';
+                    aDiv.style.display = 'none';
+                    aDiv.textContent = item.answer;
+                    // === Оценка полезности ===
+                    const rateDiv = document.createElement('div');
+                    rateDiv.className = 'kb-rate-block';
+                    rateDiv.style = 'margin-top:10px;display:flex;align-items:center;gap:12px;';
+                    const rateText = document.createElement('span');
+                    rateText.textContent = 'Была ли полезна эта статья?';
+                    rateDiv.appendChild(rateText);
+                    // Палец вверх
+                    const upBtn = document.createElement('button');
+                    upBtn.className = 'kb-rate-btn';
+                    upBtn.innerHTML = '👍';
+                    upBtn.title = 'Полезно';
+                    upBtn.onclick = function(e) {
+                        e.stopPropagation();
+                        rateDiv.innerHTML = '<span style="color:#4CAF50;font-weight:600;">Рады помочь!</span>';
+                    };
+                    // Палец вниз
+                    const downBtn = document.createElement('button');
+                    downBtn.className = 'kb-rate-btn';
+                    downBtn.innerHTML = '👎';
+                    downBtn.title = 'Не полезно';
+                    downBtn.onclick = function(e) {
+                        e.stopPropagation();
+                        rateDiv.innerHTML = '';
+                        const askBtn = document.createElement('button');
+                        askBtn.className = 'option-button micro-interaction';
+                        askBtn.style = 'padding:8px 18px;font-size:1em;background:#EA3B90;color:#fff;border:none;box-shadow:none;min-width:auto;';
+                        askBtn.textContent = 'Спросить в чате';
+                        askBtn.onclick = function() {
+                            document.getElementById('knowledge-base-modal').classList.add('hide');
+                            setTimeout(() => {
+                                document.getElementById('user-input').focus();
+                            }, 300);
+                        };
+                        rateDiv.appendChild(askBtn);
+                    };
+                    rateDiv.appendChild(upBtn);
+                    rateDiv.appendChild(downBtn);
+                    // rateDiv добавляем только при раскрытии вопроса
+                    itemDiv.appendChild(qDiv);
+                    itemDiv.appendChild(aDiv);
+                    contentDiv.appendChild(itemDiv);
+                });
+                catDiv.appendChild(contentDiv);
+                container.appendChild(catDiv);
+            });
+            
+        }
+
+    </script>
+</body>
+</html>
+
