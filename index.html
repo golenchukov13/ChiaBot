@@ -625,6 +625,13 @@
                 max-width: 90vw;
             }
         }
+
+        .check-card.selected {
+            border: 2px solid #EA3B90;
+            box-shadow: none;
+            background: #fff;
+            transition: border 0.15s, background 0.15s;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -1019,18 +1026,17 @@
                 { id: 'CHK004', date: '31.05.2025', sum: '2100 ₽', status: 'Проверен' },
                 { id: 'CHK005', date: '30.05.2025', sum: '670 ₽', status: 'Проверен' },
             ];
-            
             const listDiv = document.createElement('div');
             listDiv.className = 'last-checks-list';
             listDiv.innerHTML = '<div style="font-weight:600;color:#EA3B90;margin-bottom:8px;">Ваши последние чеки:</div>';
-            
             const scrollDiv = document.createElement('div');
             scrollDiv.className = 'horizontal-scroll';
-            
-            checks.forEach((check, idx) => {
+            let selected = [];
+            checks.forEach((check) => {
                 const card = document.createElement('div');
                 card.className = 'check-card';
-                
+                card.style.cursor = 'pointer';
+                card.setAttribute('data-id', check.id);
                 let statusColor = '#757575';
                 let statusIcon = '';
                 if (check.status === 'Проверен') {
@@ -1043,7 +1049,6 @@
                     statusColor = '#B0B0B0';
                     statusIcon = '<i class="fa fa-clock" style="color:#B0B0B0;margin-right:5px;"></i>';
                 }
-                
                 card.innerHTML = `
                     <div style="position:absolute;top:10px;right:10px;font-size:0.9rem;font-weight:700;color:${statusColor};">
                         ${statusIcon}${check.status}
@@ -1054,15 +1059,43 @@
                     </div>
                     <div style="font-size:1.1rem;font-weight:700;color:#EA3B90;">${check.sum}</div>
                 `;
-                
                 card.onclick = function() {
-                    handleCheckSelected(check.id);
+                    const idx = selected.indexOf(check.id);
+                    if (idx === -1) {
+                        selected.push(check.id);
+                        card.classList.add('selected');
+                    } else {
+                        selected.splice(idx, 1);
+                        card.classList.remove('selected');
+                    }
+                    if (selected.length > 0) {
+                        sendBtn.classList.add('active');
+                        sendBtn.disabled = false;
+                    } else {
+                        sendBtn.classList.remove('active');
+                        sendBtn.disabled = true;
+                    }
                 };
-                
                 scrollDiv.appendChild(card);
             });
-            
+            const sendBtn = document.createElement('button');
+            sendBtn.type = 'button';
+            sendBtn.className = 'send-checks-btn';
+            sendBtn.textContent = 'Отправить выбранные чеки';
+            sendBtn.disabled = true;
+            sendBtn.onclick = function() {
+                if (selected.length === 0) return;
+                listDiv.remove();
+                addUserMessage('Выбранные чеки: ' + selected.map(id => '№' + id).join(', '));
+                addBotMessage('Вопрос по выбранным чекам передан менеджеру, ожидайте.');
+                setTimeout(() => {
+                    addSystemMessage('Переключаем ваш диалог на сотрудника. Мы уже занимаемся вашим вопросом, ответим в ближайшее время.');
+                }, 3000);
+                isManagerConnecting = true;
+                currentMenu = '';
+            };
             listDiv.appendChild(scrollDiv);
+            listDiv.appendChild(sendBtn);
             document.getElementById('chat-messages').appendChild(listDiv);
             scrollToBottom();
         }
