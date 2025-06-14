@@ -7,631 +7,707 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #EA3B90;
-            --primary-gradient: linear-gradient(38.98deg, #4667D9 -2.6%, #EA3B90 52.19%, #F4AB68 102.6%);
-            --text-primary: #EA3B90;
-            --text-secondary: #757575;
-            --background: #fff;
-            --surface: #fff;
-            --surface-bot: #F8F8FA;
-            --surface-user: #fff;
-            --surface-user-border: #EA3B90;
-            --shadow-sm: 0 2px 8px rgba(234,59,144,0.07);
-            --shadow-md: 0 6px 18px rgba(234,59,144,0.10);
-            --shadow-lg: 0 16px 32px rgba(234,59,144,0.13);
-            --radius-sm: 12px;
-            --radius-md: 16px;
-            --radius-lg: 20px;
-            --radius-full: 9999px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: var(--background);
-            color: var(--text-primary);
-            line-height: 1.5;
-            overflow-x: hidden;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
-
-        #app {
-            display: flex;
-            justify-content: center;
-            align-items: stretch;
-            min-height: 100vh;
-            width: 100vw;
-            padding: 0;
-        }
-
-        .chat-container {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: var(--surface);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .chat-header {
-            padding: 14px 16px;
-            background: var(--surface);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-            z-index: 2;
-            border-bottom: 1px solid #F8F8FA;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .logo {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: transparent;
-            padding: 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .chat-header h2 {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--primary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 12px 8px;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            background: var(--surface);
-            width: 100%;
-        }
-
-        .message {
-            max-width: 88%;
-            padding: 12px 14px;
-            border-radius: var(--radius-md);
-            opacity: 0;
-            transform: translateY(10px);
-            animation: fadeIn 0.3s forwards;
-            word-break: break-word;
-            line-height: 1.5;
-            font-size: 1rem;
-            box-shadow: var(--shadow-sm);
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .bot-message {
-            background: #EA3B90 !important;
-            color: #fff !important;
-            align-self: flex-start;
-            border-radius: var(--radius-md) var(--radius-md) var(--radius-sm) var(--radius-md);
-            margin-right: auto;
-        }
-
-        .user-message {
-            background: #EA3B90 !important;
-            color: #fff !important;
-            align-self: flex-end;
-            border-radius: var(--radius-md) var(--radius-md) var(--radius-md) var(--radius-sm);
-            margin-left: auto;
-            border: 1px solid #fff;
-        }
-
-        .message-time {
-            display: block;
-            font-size: 0.75rem;
-            opacity: 0.7;
-            margin-top: 6px;
-            text-align: right;
-            color: inherit;
-        }
-
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 12px 8px;
-            background: var(--surface);
-            border-top: 1px solid #F8F8FA;
-            position: relative;
-            z-index: 10;
-            width: 100%;
-        }
-
-        .option-button {
-            padding: 14px 0;
-            border: none;
-            border-radius: var(--radius-md);
-            background: var(--primary-gradient);
-            color: #fff;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
-            box-shadow: var(--shadow-md);
-            font-size: 1.1rem;
-            width: 100%;
-            letter-spacing: 0.02em;
-        }
-
-        .option-button:active {
-            transform: scale(0.98);
-            opacity: 0.9;
-        }
-
-        .option-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .input-area {
-            display: flex;
-            padding: 10px 8px;
-            background: var(--surface);
-            border-top: 1px solid #F8F8FA;
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            align-items: center;
-        }
-
-        #user-input {
-            flex: 1;
-            padding: 12px 14px;
-            border: 1.5px solid #EA3B90;
-            border-radius: var(--radius-md);
-            background: #fff;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-            outline: none;
-            font-family: 'Inter', sans-serif;
-            color: #757575;
-        }
-
-        #user-input:focus {
-            border-color: #EA3B90;
-        }
-
-        #send-button {
-            margin-left: 8px;
-            width: 48px;
-            height: 48px;
-            border: none;
-            border-radius: 50%;
-            background: var(--primary-gradient);
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: var(--shadow-md);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #send-button:active {
-            transform: scale(0.95);
-        }
-
-        .typing-indicator {
-            display: flex;
-            padding: 10px;
-            gap: 5px;
-            align-self: flex-start;
-        }
-
-        .typing-dot {
-            width: 7px;
-            height: 7px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            animation: typingAnimation 1.6s infinite ease-in-out;
-        }
-
-        @keyframes typingAnimation {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
-            30% { transform: translateY(-3px); opacity: 1; }
-        }
-
-        .quick-replies {
-            display: flex;
-            gap: 6px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-
-        .quick-reply {
-            padding: 8px 14px;
-            background: #F8F8FA;
-            border-radius: var(--radius-full);
-            font-size: 0.95rem;
-            color: var(--primary);
-            cursor: pointer;
-            transition: background 0.2s;
-            border: 1.5px solid #EA3B90;
-            font-weight: 600;
-        }
-
-        .quick-reply:active {
-            background: #F4AB68;
-            color: #fff;
-        }
-
-        /* Кастомный скроллбар */
-        .chat-messages::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background-color: rgba(234,59,144,0.3);
-            border-radius: 2px;
-        }
-
-        /* Микроинтеракции */
-        .micro-interaction {
-            transition: transform 0.1s ease;
-        }
-
-        .micro-interaction:active {
-            transform: scale(0.96);
-        }
-
-        /* Модальное окно базы знаний */
-        .knowledge-base-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-        }
-
-        .knowledge-base-modal.show {
-            transform: translateY(0);
-        }
-
-        .knowledge-base-header {
-            padding: 16px;
-            position: sticky;
-            top: 0;
-            background: #fff;
-            z-index: 1;
-            border-bottom: 1px solid #F8F8FA;
-        }
-
-        .close-modal-btn {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            font-size: 1.8rem;
-            color: #EA3B90;
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .knowledge-categories {
-            padding: 0 12px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .knowledge-category {
-            background: #F8F8FA;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            border: 1px solid #ececec;
-        }
-
-        .knowledge-category-title {
-            padding: 14px 16px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .knowledge-category-icon {
-            font-size: 1.2rem;
-        }
-
-        .knowledge-category-content {
-            display: none;
-            padding: 0 16px 12px;
-        }
-
-        .knowledge-category.active .knowledge-category-content {
-            display: block;
-        }
-
-        .knowledge-item {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(234,59,144,0.1);
-        }
-
-        .knowledge-item:last-child {
-            border-bottom: none;
-        }
-
-        .knowledge-item-question {
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .knowledge-item-answer {
-            display: none;
-            padding-top: 8px;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .knowledge-item.active .knowledge-item-answer {
-            display: block;
-        }
-
-        .knowledge-item-arrow {
-            transition: transform 0.2s;
-        }
-
-        .knowledge-item.active .knowledge-item-arrow {
-            transform: rotate(90deg);
-        }
-
-        /* Стили для скрепки и input file */
-        .attach-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 8px;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #fff;
-            cursor: pointer;
-            border: 1.5px solid #EA3B90;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        /* Системное сообщение */
-        .system-message {
-            text-align: center;
-            color: #757575;
-            font-size: 0.95rem;
-            margin: 10px 0;
-            opacity: 0.85;
-            font-style: italic;
-        }
-
-        /* Стили для чеков и выплат */
-        .last-checks-list, .last-payouts-list {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: var(--radius-md);
-            background: #F8F8FA;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .check-row, .payout-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #ececec;
-        }
-
-        .check-row:last-child, .payout-row:last-child {
-            border-bottom: none;
-        }
-
-        .check-info, .payout-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .check-info-title, .payout-info-title {
-            font-weight: 500;
-            font-size: 1rem;
-            white-space: normal;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .check-info-details, .payout-info-details {
-            font-size: 0.9rem;
-            color: #757575;
-            margin-top: 2px;
-        }
-
-        .check-status, .payout-status {
-            font-size: 0.9rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Горизонтальные списки */
-        .horizontal-scroll {
-            display: flex;
-            overflow-x: auto;
-            gap: 12px;
-            padding-bottom: 8px;
-            scroll-snap-type: x mandatory;
-        }
-
-        .horizontal-scroll::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .horizontal-scroll::-webkit-scrollbar-thumb {
-            background-color: rgba(234,59,144,0.3);
-            border-radius: 2px;
-        }
-
-        .check-card, .payout-card {
-            min-width: 75vw;
-            max-width: 85vw;
-            background: #fff;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-            padding: 14px;
-            scroll-snap-align: start;
-            position: relative;
-        }
-
-        .send-checks-btn {
-            width: 100%;
-            margin-top: 12px;
-            padding: 14px 0;
-            border-radius: var(--radius-md);
-            background: #EA3B90;
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.1rem;
-            border: none;
-            cursor: pointer;
-            opacity: 0.6;
-        }
-
-        .send-checks-btn.active {
-            opacity: 1;
-        }
-
-        /* Бот аватар */
-        .bot-message-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-        }
-
-       .bot-avatar {
+    --primary: #EA3B90;
+    --primary-light: rgba(234, 59, 144, 0.1);
+    --primary-gradient: linear-gradient(38.98deg, #4667D9 -2.6%, #EA3B90 52.19%, #F4AB68 102.6%);
+    --text-primary: #EA3B90;
+    --text-secondary: #757575;
+    --background: #fff;
+    --surface: #fff;
+    --surface-bot: #F8F8FA;
+    --surface-user: #fff;
+    --surface-user-border: #EA3B90;
+    --shadow-sm: 0 1px 4px rgba(234,59,144,0.07);
+    --shadow-md: 0 3px 9px rgba(234,59,144,0.10);
+    --shadow-lg: 0 8px 16px rgba(234,59,144,0.13);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--background);
+    color: var(--text-primary);
+    line-height: 1.4;
+    overflow-x: hidden;
+    min-height: 100vh;
+    touch-action: manipulation;
+    font-size: 15px;
+}
+
+#app {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    min-height: 100vh;
+    width: 100vw;
+    padding: 0;
+}
+
+.chat-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    overflow: hidden;
+    position: relative;
+}
+
+.chat-header {
+    padding: 12px 14px;
+    background: var(--surface);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 2;
+    border-bottom: 1px solid #F8F8FA;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+}
+
+.logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: transparent;
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.chat-header h2 {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 10px 8px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--surface);
+    width: 100%;
+}
+
+.message {
+    max-width: 80%;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.3s forwards;
+    word-break: break-word;
+    line-height: 1.4;
+    font-size: 0.95rem;
+    box-shadow: var(--shadow-sm);
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.bot-message {
+    background: var(--primary) !important;
+    color: #fff !important;
+    align-self: flex-start;
+    border-radius: var(--radius-md) var(--radius-md) var(--radius-md) var(--radius-sm);
+    margin-right: auto;
+}
+
+.user-message {
+    background: var(--primary) !important;
+    color: #fff !important;
+    align-self: flex-end;
+    border-radius: var(--radius-md) var(--radius-md) var(--radius-sm) var(--radius-md);
+    margin-left: auto;
+    border: 1px solid #fff;
+}
+
+.message-time {
+    display: block;
+    font-size: 0.7rem;
+    opacity: 0.8;
+    margin-top: 4px;
+    text-align: right;
+    color: inherit;
+}
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 8px;
+    background: var(--surface);
+    border-top: 1px solid #F8F8FA;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+}
+
+.option-button {
+    padding: 12px 0;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--primary-gradient);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+    box-shadow: var(--shadow-md);
+    font-size: 1rem;
+    width: 100%;
+    letter-spacing: 0.02em;
+}
+
+.option-button:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+.option-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.input-area {
+    display: flex;
+    padding: 8px;
+    background: var(--surface);
+    border-top: 1px solid #F8F8FA;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    align-items: center;
+    gap: 6px;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: #fff;
+    border: 1.5px solid #EA3B90;
+    border-radius: var(--radius-md);
+    padding: 4px;
+}
+
+#user-input {
+    border: none !important;
+    padding: 10px 8px !important;
+    flex: 1;
+    box-shadow: none !important;
+}
+
+#user-input:focus {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.attach-label {
+    margin: 0 4px 0 6px;
+    width: 20px;
+    height: 20px;
+    background: none;
+    border: none;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    transition: background 0.15s;
+    padding: 0;
+}
+.attach-label:active, .attach-label:hover {
+    background: none;
+}
+
+#send-button {
+    width: 36px;
+    height: 36px;
+    margin: 0 2px;
+    background: var(--primary-gradient);
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: 0 2px 8px rgba(234,59,144,0.10);
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+#send-button.show {
+    opacity: 1;
+    transform: scale(1);
+    display: flex;
+}
+#send-button:active {
+    box-shadow: 0 4px 16px rgba(234,59,144,0.18);
+    transform: scale(0.96);
+}
+#send-button svg {
+    display: block;
+    margin: 0 auto;
+}
+
+.typing-indicator {
+    display: flex;
+    padding: 8px;
+    gap: 4px;
+    align-self: flex-start;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    animation: typingAnimation 1.6s infinite ease-in-out;
+}
+
+@keyframes typingAnimation {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+    30% { transform: translateY(-2px); opacity: 1; }
+}
+
+.quick-replies {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+.quick-reply {
+    padding: 6px 12px;
+    background: #F8F8FA;
+    border-radius: var(--radius-full);
+    font-size: 0.9rem;
+    color: var(--primary);
+    cursor: pointer;
+    transition: background 0.2s;
+    border: 1.5px solid #EA3B90;
+    font-weight: 500;
+}
+
+.quick-reply:active {
+    background: #F4AB68;
+    color: #fff;
+}
+
+/* Кастомный скроллбар */
+.chat-messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 2px;
+}
+
+/* Микроинтеракции */
+.micro-interaction {
+    transition: transform 0.1s ease;
+}
+
+.micro-interaction:active {
+    transform: scale(0.96);
+}
+
+/* Модальное окно базы знаний */
+.knowledge-base-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.knowledge-base-modal.show {
+    transform: translateY(0);
+}
+
+.knowledge-base-header {
+    padding: 14px;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 1;
+    border-bottom: 1px solid #F8F8FA;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 1.6rem;
+    color: #EA3B90;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.knowledge-categories {
+    padding: 0 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.knowledge-category {
+    background: #F8F8FA;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    border: 1px solid #ececec;
+}
+
+.knowledge-category-title {
+    padding: 12px 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.knowledge-category-icon {
+    font-size: 1.1rem;
+}
+
+.knowledge-category-content {
+    display: none;
+    padding: 0 14px 10px;
+}
+
+.knowledge-category.active .knowledge-category-content {
+    display: block;
+}
+
+.knowledge-item {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(234,59,144,0.1);
+}
+
+.knowledge-item:last-child {
+    border-bottom: none;
+}
+
+.knowledge-item-question {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.knowledge-item-answer {
+    display: none;
+    padding-top: 6px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.knowledge-item.active .knowledge-item-answer {
+    display: block;
+}
+
+.knowledge-item-arrow {
+    transition: transform 0.2s;
+}
+
+.knowledge-item.active .knowledge-item-arrow {
+    transform: rotate(90deg);
+}
+
+/* Стили для скрепки и input file */
+.file-input {
+    display: none;
+}
+
+/* Системное сообщение */
+.system-message {
+    text-align: center;
+    color: #757575;
+    font-size: 0.9rem;
+    margin: 8px 0;
+    opacity: 0.85;
+    font-style: italic;
+}
+
+/* Стили для чеков и выплат */
+.last-checks-list, .last-payouts-list {
+    margin: 8px 0;
+    padding: 8px;
+    border-radius: var(--radius-md);
+    background: #F8F8FA;
+    box-shadow: var(--shadow-sm);
+}
+
+.check-row, .payout-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #ececec;
+}
+
+.check-row:last-child, .payout-row:last-child {
+    border-bottom: none;
+}
+
+.check-info, .payout-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.check-info-title, .payout-info-title {
+    font-weight: 500;
+    font-size: 0.95rem;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.check-info-details, .payout-info-details {
+    font-size: 0.85rem;
+    color: #757575;
+    margin-top: 2px;
+}
+
+.check-status, .payout-status {
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+/* Горизонтальные списки */
+.horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    height: 4px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 2px;
+}
+
+.check-card, .payout-card {
+    min-width: 75vw;
+    max-width: 85vw;
+    background: #fff;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 12px;
+    scroll-snap-align: start;
+    position: relative;
+}
+
+.send-checks-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px 0;
+    border-radius: var(--radius-md);
+    background: #EA3B90;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.send-checks-btn.active {
+    opacity: 1;
+}
+
+/* Бот аватар */
+.bot-message-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    max-width: 80%;
+}
+
+.bot-avatar {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    flex-shrink: 0;
+    border: 1.5px solid #EA3B90;
+    padding: 2px;
+}
+
+.bot-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+/* Анимация базы знаний */
+.kb-animate {
+    animation: kbPulse 1.8s infinite;
+}
+
+@keyframes kbPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.check-card.selected {
+    border: 2px solid #EA3B90;
+    box-shadow: none;
+    background: #fff;
+    transition: border 0.15s, background 0.15s;
+}
+
+/* --- Улучшение блока оценки в базе знаний --- */
+.kb-rate-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(234,59,144,0.1);
+}
+.kb-rate-btn {
+    font-size: 1.5rem !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+.kb-rate-btn:hover {
+    transform: scale(1.1);
+}
+.kb-rate-btn:nth-child(2) {
+    color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+}
+.kb-rate-btn:nth-child(3) {
+    color: #EA3B90;
+    background: rgba(234, 59, 144, 0.1);
+}
+
+/* Адаптация для очень маленьких экранов */
+@media (max-width: 360px) {
+    .chat-header {
+        padding: 10px 12px;
+    }
+    
+    .logo {
         width: 32px;
         height: 32px;
-        min-width: 32px;
-        min-height: 32px;
-        border-radius: 50%;
-        background: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 2px;
-        flex-shrink: 0;
-        border: 1.5px solid #EA3B90;
-        padding: 2px;
     }
-
-    .bot-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        border-radius: 50%;
+    
+    .chat-header h2 {
+        font-size: 0.95rem;
     }
-
-
-        /* Анимация базы знаний */
-        .kb-animate {
-            animation: kbPulse 1.8s infinite;
-        }
-
-        @keyframes kbPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* Адаптация для очень маленьких экранов */
-        @media (max-width: 360px) {
-            .chat-header {
-                padding: 12px;
-            }
-            
-            .logo {
-                width: 36px;
-                height: 36px;
-            }
-            
-            .chat-header h2 {
-                font-size: 1rem;
-            }
-            
-            .option-button {
-                font-size: 1rem;
-                padding: 12px 0;
-            }
-            
-            .check-card, .payout-card {
-                min-width: 85vw;
-                max-width: 90vw;
-            }
-        }
-
-        .check-card.selected {
-            border: 2px solid #EA3B90;
-            box-shadow: none;
-            background: #fff;
-            transition: border 0.15s, background 0.15s;
-        }
+    
+    .option-button {
+        font-size: 0.95rem;
+        padding: 10px 0;
+    }
+    
+    .check-card, .payout-card {
+        min-width: 85vw;
+        max-width: 90vw;
+    }
+    
+    .message {
+        max-width: 85%;
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    
+    #user-input {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    
+    #send-button, .attach-label {
+        width: 40px;
+        height: 40px;
+    }
+}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -661,19 +737,21 @@
             </div>
             
             <div class="input-area">
-                <label for="file-attach" class="attach-label micro-interaction" title="Прикрепить файл">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17.5 13.5V7.75C17.5 5.12665 15.3734 3 12.75 3C10.1266 3 8 5.12665 8 7.75V16.25C8 18.0449 9.45507 19.5 11.25 19.5C13.0449 19.5 14.5 18.0449 14.5 16.25V8.5" stroke="#EA3B90" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <input type="file" id="file-attach" class="file-input" multiple accept="image/*,video/*,application/pdf,.doc,.docx,.xls,.xlsx,.txt">
-                </label>
-                <input type="text" id="user-input" placeholder="Напишите сообщение..." class="micro-interaction">
-                <button id="send-button" class="micro-interaction" onclick="sendMessage()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
+                <div class="input-wrapper">
+                    <label for="file-attach" class="attach-label micro-interaction" title="Прикрепить файл">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.5 13.5V7.75C17.5 5.12665 15.3734 3 12.75 3C10.1266 3 8 5.12665 8 7.75V16.25C8 18.0449 9.45507 19.5 11.25 19.5C13.0449 19.5 14.5 18.0449 14.5 16.25V8.5" stroke="#EA3B90" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <input type="file" id="file-attach" class="file-input" multiple accept="image/*,video/*,application/pdf,.doc,.docx,.xls,.xlsx,.txt">
+                    </label>
+                    <input type="text" id="user-input" placeholder="Напишите сообщение..." class="micro-interaction">
+                    <button id="send-button" class="micro-interaction">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -815,6 +893,14 @@
                 if (e.key === 'Enter') sendMessage();
             });
 
+            // Кнопка отправки сообщения по клику
+            document.getElementById('send-button').addEventListener('click', function() {
+                const userInput = document.getElementById('user-input');
+                if (userInput.value.trim().length > 0) {
+                    sendMessage();
+                }
+            });
+
             // Кнопка базы знаний
             document.getElementById('kb-btn').addEventListener('click', function() {
                 document.getElementById('knowledge-base-modal').classList.add('show');
@@ -824,6 +910,29 @@
             // Закрытие модального окна
             document.getElementById('close-modal-btn').addEventListener('click', function() {
                 document.getElementById('knowledge-base-modal').classList.remove('show');
+            });
+
+            // --- Показ кнопки отправки только при вводе текста с анимацией ---
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-button');
+            userInput.addEventListener('input', function(e) {
+                const hasText = e.target.value.trim().length > 0;
+                if (hasText) {
+                    sendBtn.style.display = 'flex';
+                    setTimeout(() => sendBtn.classList.add('show'), 10);
+                } else {
+                    sendBtn.classList.remove('show');
+                    setTimeout(() => {
+                        if (!sendBtn.classList.contains('show')) {
+                            sendBtn.style.display = 'none';
+                        }
+                    }, 200);
+                }
+            });
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value.trim().length > 0) {
+                    sendMessage();
+                }
             });
 
             // Приветственное сообщение
@@ -1233,8 +1342,8 @@
                     rateDiv.className = 'kb-rate-block';
                     rateDiv.innerHTML = `
                         <span style="font-size:0.9rem;">Была ли полезна эта статья?</span>
-                        <button class="kb-rate-btn" style="color:#4CAF50;">👍</button>
-                        <button class="kb-rate-btn" style="color:#EA3B90;">👎</button>
+                        <button class="kb-rate-btn" type="button">👍</button>
+                        <button class="kb-rate-btn" type="button">👎</button>
                     `;
                     
                     // Обработчики оценок
