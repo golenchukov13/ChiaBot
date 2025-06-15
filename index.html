@@ -727,6 +727,67 @@ body {
         height: 34px;
     }
 }
+/* Стили для медиа в сообщениях */
+.message.user-message img,
+.message.user-message video {
+    border: 1px solid #EA3B90 !important;
+    border-radius: 8px !important;
+    padding: 2px !important;
+    max-width: 100% !important;
+    max-height: 200px !important;
+    display: block !important;
+    background: white;
+}
+
+.message.user-message .file-placeholder {
+    border: 1px solid #EA3B90;
+    border-radius: 8px;
+    padding: 8px;
+    display: inline-block;
+    background: white;
+}
+#media-preview {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: white;
+  border-bottom: 1px solid #F8F8FA;
+}
+
+#preview-image, #preview-video {
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 8px;
+  border: 1px solid #EA3B90;
+  object-fit: contain;
+  background: #f8f8f8;
+}
+
+#remove-media {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #EA3B90;
+  color: white;
+  border: none;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#media-caption {
+  margin-left: 10px;
+  border: 1px solid #EA3B90;
+  border-radius: 20px;
+  padding: 8px 12px;
+  flex-grow: 1;
+  outline: none;
+}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -755,6 +816,14 @@ body {
                 <!-- Кнопки выбора будут добавляться здесь -->
             </div>
             
+<div id="media-preview" style="display: none; padding: 10px; border-bottom: 1px solid #F8F8FA;">
+  <div style="position: relative; display: inline-block;">
+    <img id="preview-image" style="max-width: 120px; max-height: 120px; border-radius: 8px; border: 1px solid #EA3B90; display: none;">
+    <video id="preview-video" controls style="max-width: 120px; max-height: 120px; border-radius: 8px; border: 1px solid #EA3B90; display: none;"></video>
+    <button id="remove-media" style="position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; border-radius: 50%; background: #EA3B90; color: white; border: none; font-size: 12px; display: flex; align-items: center; justify-content: center;">×</button>
+  </div>
+  <input type="text" id="media-caption" placeholder="Добавьте сообщение..." style="margin-left: 10px; border: 1px solid #EA3B90; border-radius: 20px; padding: 8px 12px; width: calc(100% - 150px);">
+</div>
             <div class="input-area">
                 <div class="input-wrapper">
                     <label for="file-attach" class="attach-label micro-interaction" title="Прикрепить файл">
@@ -1396,6 +1465,124 @@ body {
                 container.appendChild(catDiv);
             });
         }
+      // Обработчик прикрепления файлов
+document.getElementById('file-attach').addEventListener('change', function(e) {
+  if (e.target.files.length > 0) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('media-preview');
+    const previewImg = document.getElementById('preview-image');
+    const previewVideo = document.getElementById('preview-video');
+    
+    // Показываем превью
+    preview.style.display = 'block';
+    
+    if (file.type.startsWith('image/')) {
+      previewImg.src = URL.createObjectURL(file);
+      previewImg.style.display = 'block';
+      previewVideo.style.display = 'none';
+    } 
+    else if (file.type.startsWith('video/')) {
+      previewVideo.src = URL.createObjectURL(file);
+      previewVideo.style.display = 'block';
+      previewImg.style.display = 'none';
+    }
+    
+    // Фокусируемся на поле ввода текста
+    document.getElementById('media-caption').focus();
+  }
+});
+
+// Удаление медиа
+document.getElementById('remove-media').addEventListener('click', function() {
+  const preview = document.getElementById('media-preview');
+  preview.style.display = 'none';
+  document.getElementById('preview-image').style.display = 'none';
+  document.getElementById('preview-video').style.display = 'none';
+  document.getElementById('file-attach').value = '';
+});
+
+// Модифицированная функция отправки сообщения
+function sendMessage() {
+  const input = document.getElementById('user-input');
+  const mediaCaption = document.getElementById('media-caption');
+  const previewImg = document.getElementById('preview-image');
+  const previewVideo = document.getElementById('preview-video');
+  
+  // Если есть медиа
+  if (previewImg.style.display !== 'none' || previewVideo.style.display !== 'none') {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message user-message';
+    
+    // Добавляем медиа
+    if (previewImg.style.display !== 'none') {
+      const img = document.createElement('img');
+      img.src = previewImg.src;
+      img.style.maxWidth = '200px';
+      img.style.maxHeight = '200px';
+      img.style.border = '1px solid #EA3B90';
+      img.style.borderRadius = '8px';
+      img.style.padding = '2px';
+      messageDiv.appendChild(img);
+    } 
+    else if (previewVideo.style.display !== 'none') {
+      const video = document.createElement('video');
+      video.src = previewVideo.src;
+      video.controls = true;
+      video.style.maxWidth = '200px';
+      video.style.maxHeight = '200px';
+      video.style.border = '1px solid #EA3B90';
+      video.style.borderRadius = '8px';
+      video.style.padding = '2px';
+      messageDiv.appendChild(video);
+    }
+    
+    // Добавляем текст, если есть
+    if (mediaCaption.value.trim()) {
+      const textDiv = document.createElement('div');
+      textDiv.style.marginTop = '8px';
+      textDiv.textContent = mediaCaption.value;
+      messageDiv.appendChild(textDiv);
+    }
+    
+    // Добавляем время
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'message-time';
+    timeSpan.textContent = getCurrentTime();
+    messageDiv.appendChild(timeSpan);
+    
+    // Добавляем в чат
+    document.getElementById('chat-messages').appendChild(messageDiv);
+    
+    // Сбрасываем превью
+    document.getElementById('media-preview').style.display = 'none';
+    previewImg.style.display = 'none';
+    previewVideo.style.display = 'none';
+    mediaCaption.value = '';
+    document.getElementById('file-attach').value = '';
+    
+    // Обрабатываем сообщение
+    processUserMessage(mediaCaption.value || 'Медиа-файл');
+  } 
+  // Обычное текстовое сообщение
+  else if (input.value.trim()) {
+    addUserMessage(input.value);
+    input.value = '';
+    processUserMessage(input.value);
+  }
+  
+  scrollToBottom();
+}
+
+// Обновляем обработчик кнопки отправки
+document.getElementById('send-button').addEventListener('click', sendMessage);
+
+// Обработчик Enter в обоих полях ввода
+document.getElementById('user-input').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') sendMessage();
+});
+document.getElementById('media-caption').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') sendMessage();
+});
     </script>
 </body>
 </html>
