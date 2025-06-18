@@ -127,61 +127,64 @@
             padding-top: 15px; /* Уменьшен верхний отступ */
         }
 
-        .message {
-            max-width: 90%;
-            padding: 8px 12px; /* Уменьшен padding */
-            border-radius: var(--radius-md);
-            opacity: 0;
-            transform: translateY(10px);
-            animation: fadeIn 0.3s forwards;
-            word-break: break-word;
-            line-height: 1.4;
-            font-size: 0.95rem;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 2px; /* Уменьшен отступ */
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end; /* Выравниваем время по нижнему краю */
-            gap: 10px; /* Расстояние между текстом и временем */
-        }
+       .message {
+    max-width: 90%;
+    padding: 12px 15px; /* Увеличим padding для лучшего визуального восприятия */
+    border-radius: 18px; /* Более округлые углы */
+    line-height: 1.5; /* Улучшим межстрочный интервал */
+    font-size: 0.95rem;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    display: inline-block; /* Для лучшего управления потоком */
+    word-wrap: break-word; /* Правильный перенос длинных слов */
+    overflow-wrap: anywhere; /* Разрешаем перенос в любом месте */
+  }
 
         @keyframes fadeIn {
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .bot-message {
-            background: var(--primary) !important;
-            color: #fff !important;
-            align-self: flex-start;
-            border-radius: var(--radius-md) var(--radius-md) var(--radius-md) var(--radius-sm);
-            margin-right: auto;
-        }
+         .bot-message {
+    background: var(--primary) !important;
+    color: #fff !important;
+    border-radius: 18px 18px 18px 4px; /* Сглаженные углы */
+    margin-right: auto;
+    text-align: left;
+  }
 
-        .user-message {
-            background: var(--primary) !important;
-            color: #fff !important;
-            align-self: flex-end;
-            border-radius: var(--radius-md) var(--radius-md) var(--radius-sm) var(--radius-md);
-            margin-left: auto;
-            border: 1px solid #fff;
-        }
+  .user-message {
+    background: var(--primary) !important;
+    color: #fff !important;
+    border-radius: 18px 18px 4px 18px; /* Сглаженные углы */
+    margin-left: auto;
+    text-align: right; /* Выравнивание текста по правому краю */
+  }
 
         /* Контент сообщения - занимает основное пространство */
         .message-content {
-            flex: 1;
-            padding-bottom: 2px; /* Корректировка для выравнивания */
-        }
+    display: inline;
+    padding-right: 8px; /* Отступ перед временем */
+  }
 
-        /* Стили для времени */
-        .message-time {
-            font-size: 0.7rem;
-            opacity: 0.8;
-            color: inherit;
-            line-height: 1.2;
-            white-space: nowrap; /* Не переносить время на новую строку */
-            align-self: flex-end; /* Прижимаем время к нижнему краю */
-            margin-bottom: -1px; /* Корректировка положения */
-        }
+  .message-time {
+    display: inline-block;
+    font-size: 0.65rem;
+    opacity: 0.85;
+    vertical-align: bottom; /* Выравнивание по нижнему краю */
+    position: relative;
+    bottom: -2px; /* Микро-корректировка положения */
+  }
+  /* Для сообщений пользователя выравниваем время ближе к тексту */
+  .user-message .message-time {
+    margin-left: 5px;
+    padding-left: 5px;
+  }
+
+  /* Для сообщений бота выравниваем время ближе к тексту */
+  .bot-message .message-time {
+    margin-right: 5px;
+    padding-right: 5px;
+  }
 
         .options-container {
             display: flex;
@@ -547,7 +550,7 @@
         }
 
         /* Бот аватар */
-        .bot-message-row {
+       .bot-message-row {
             display: flex;
             align-items: flex-start;
             gap: 8px;
@@ -565,7 +568,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 2px;
+            margin-top: 25px;
             flex-shrink: 0;
             border: none;
             padding: 0;
@@ -652,8 +655,8 @@
         }
 
         .check-card, .payout-card {
-            min-width: 80vw;
-            max-width: 85vw;
+            min-width: 88vw;
+            max-width: 90vw;
             background: #fff;
             border-radius: var(--radius-lg);
             box-shadow: var(--card-shadow);
@@ -826,6 +829,7 @@
             opacity: 1;
             background: #EA3B90;
         }
+        
     </style>
 </head>
 <body>
@@ -1199,35 +1203,44 @@
             });
         }
 
-        function addBotMessage(text) {
-            const chat = document.getElementById('chat-messages');
-            const rowDiv = document.createElement('div');
-            rowDiv.className = 'bot-message-row slide-in';
-            
-            const avatarDiv = document.createElement('div');
-            avatarDiv.className = 'bot-avatar';
-            avatarDiv.innerHTML = '<img src="chia.png" alt="Бот" style="width:100%;height:100%;object-fit:contain;">';
-            
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message bot-message';
-            
-            // Новая структура с разделением контента и времени
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-            contentDiv.textContent = text;
-            
-            const timeSpan = document.createElement('div');
-            timeSpan.className = 'message-time';
-            timeSpan.textContent = getCurrentTime();
-            
-            messageDiv.appendChild(contentDiv);
-            messageDiv.appendChild(timeSpan);
-            
-            rowDiv.appendChild(avatarDiv);
-            rowDiv.appendChild(messageDiv);
-            chat.appendChild(rowDiv);
-            scrollToBottom();
-        }
+       function addBotMessage(text) {
+    const chat = document.getElementById('chat-messages');
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'bot-message-row slide-in';
+    
+    const avatarDiv = document.createElement('div');
+    avatarDiv.className = 'bot-avatar';
+    avatarDiv.innerHTML = '<img src="chia.png" alt="Бот" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message bot-message';
+    
+    // Объединенный текст и время в одном блоке
+    messageDiv.innerHTML = `
+      <span class="message-content">${text}</span>
+      <span class="message-time">${getCurrentTime()}</span>
+    `;
+    
+    rowDiv.appendChild(avatarDiv);
+    rowDiv.appendChild(messageDiv);
+    chat.appendChild(rowDiv);
+    scrollToBottom();
+  }
+
+  function addUserMessage(text) {
+    const chat = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message user-message slide-in';
+    
+    // Объединенный текст и время в одном блоке
+    messageDiv.innerHTML = `
+      <span class="message-content">${text}</span>
+      <span class="message-time">${getCurrentTime()}</span>
+    `;
+    
+    chat.appendChild(messageDiv);
+    scrollToBottom();
+  }
 
         function addUserMessage(text) {
             const chat = document.getElementById('chat-messages');
