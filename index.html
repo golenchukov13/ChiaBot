@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root {
+         :root {
             --primary: #EA3B90;
             --primary-light: rgba(234, 59, 144, 0.1);
             --primary-gradient: linear-gradient(38.98deg, #4667D9 -2.6%, #EA3B90 52.19%, #F4AB68 102.6%);
@@ -73,7 +73,6 @@
             font-size: 1rem;
             color: #757575;
             cursor: pointer;
-            transition: all 0.3s;
             position: relative;
         }
 
@@ -114,55 +113,7 @@
             background: var(--surface);
             overflow: hidden;
         }
-
-        .chat-header {
-            padding: 12px 16px;
-            background: var(--surface);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-            z-index: 2;
-            border-bottom: 1px solid rgba(234, 59, 144, 0.05);
-            flex-shrink: 0;
-            box-shadow: 0 2px 8px rgba(234,59,144,0.05);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .logo {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: transparent;
-            padding: 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .chat-header h2 {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--primary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
+        
         .chat-messages {
             flex: 1;
             padding: 8px 10px;
@@ -170,14 +121,15 @@
             scroll-behavior: smooth;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px; /* Уменьшен промежуток между сообщениями */
             background: var(--surface);
             width: 100%;
+            padding-top: 15px; /* Уменьшен верхний отступ */
         }
 
         .message {
             max-width: 90%;
-            padding: 12px 14px;
+            padding: 8px 12px; /* Уменьшен padding */
             border-radius: var(--radius-md);
             opacity: 0;
             transform: translateY(10px);
@@ -186,8 +138,11 @@
             line-height: 1.4;
             font-size: 0.95rem;
             box-shadow: var(--shadow-sm);
-            margin-bottom: 4px;
-            transition: all 0.3s ease;
+            margin-bottom: 2px; /* Уменьшен отступ */
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end; /* Выравниваем время по нижнему краю */
+            gap: 10px; /* Расстояние между текстом и временем */
         }
 
         @keyframes fadeIn {
@@ -211,14 +166,21 @@
             border: 1px solid #fff;
         }
 
+        /* Контент сообщения - занимает основное пространство */
+        .message-content {
+            flex: 1;
+            padding-bottom: 2px; /* Корректировка для выравнивания */
+        }
+
+        /* Стили для времени */
         .message-time {
-            display: block;
             font-size: 0.7rem;
             opacity: 0.8;
-            margin-top: 4px;
-            text-align: right;
             color: inherit;
             line-height: 1.2;
+            white-space: nowrap; /* Не переносить время на новую строку */
+            align-self: flex-end; /* Прижимаем время к нижнему краю */
+            margin-bottom: -1px; /* Корректировка положения */
         }
 
         .options-container {
@@ -242,29 +204,12 @@
             color: #fff;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
             box-shadow: var(--shadow-md);
             font-size: 1rem;
             width: 100%;
             letter-spacing: 0.02em;
             position: relative;
             overflow: hidden;
-        }
-
-        .option-button::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 20px;
-            height: 200%;
-            background: rgba(255,255,255,0.3);
-            transform: rotate(25deg);
-            transition: all 0.6s;
-        }
-
-        .option-button:hover::after {
-            left: 120%;
         }
 
         .option-button:active {
@@ -279,7 +224,7 @@
 
         .input-area {
             display: flex;
-            padding: 8px 10px;
+            padding: 6px 8px; /* Уменьшен padding */
             background: var(--surface);
             border-top: 1px solid rgba(234, 59, 144, 0.05);
             position: relative;
@@ -299,8 +244,7 @@
             border: 1.5px solid rgba(234, 59, 144, 0.2);
             border-radius: 30px;
             padding: 4px 6px;
-            height: 48px;
-            transition: border-color 0.3s;
+            height: 42px; /* Уменьшена высота */
         }
 
         .input-wrapper:focus-within {
@@ -346,7 +290,7 @@
             justify-content: center;
             opacity: 0;
             transform: scale(0.9);
-            transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+            transition: opacity 0.2s, transform 0.2s;
             cursor: pointer;
         }
         #send-button.show {
@@ -374,12 +318,8 @@
             align-items: center;
             justify-content: center;
             border-radius: 0;
-            transition: background 0.15s;
             padding: 0;
             cursor: pointer;
-        }
-        .attach-label:active, .attach-label:hover {
-            background: none;
         }
 
         .typing-indicator {
@@ -429,14 +369,14 @@
             color: #EA3B90;
             margin-bottom: 6px;
             text-align: center;
-            padding: 0 40px; /* Для кнопки "Назад" */
+            padding: 0 40px;
         }
 
         .knowledge-base-header p {
             font-size: 1rem;
             color: #757575;
             text-align: center;
-            padding: 0 20px; /* Для кнопки "Назад" */
+            padding: 0 20px;
         }
 
         .back-button {
@@ -455,12 +395,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
             z-index: 2;
-        }
-
-        .back-button:hover {
-            background: rgba(234, 59, 144, 0.1);
         }
 
         .knowledge-categories {
@@ -479,7 +414,6 @@
             box-shadow: var(--card-shadow);
             overflow: hidden;
             border: none;
-            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
@@ -530,15 +464,9 @@
             border-radius: var(--radius-sm);
             box-shadow: var(--shadow-sm);
             cursor: pointer;
-            transition: all 0.2s;
             border-left: 3px solid transparent;
             position: relative;
             overflow: hidden;
-        }
-
-        .knowledge-question:hover {
-            background: rgba(234, 59, 144, 0.03);
-            border-left: 3px solid #EA3B90;
         }
 
         .knowledge-answer {
@@ -586,15 +514,10 @@
             font-weight: 600;
             cursor: pointer;
             flex: 1;
-            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-        }
-
-        .answer-back-button:hover {
-            background: rgba(234, 59, 144, 0.05);
         }
 
         .ask-button {
@@ -606,17 +529,11 @@
             font-weight: 600;
             cursor: pointer;
             flex: 1;
-            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             box-shadow: 0 4px 12px rgba(234, 59, 144, 0.2);
-        }
-
-        .ask-button:hover {
-            background: #d42d7f;
-            transform: translateY(-1px);
         }
 
         /* Системное сообщение */
@@ -744,12 +661,6 @@
             scroll-snap-align: start;
             position: relative;
             border: 1px solid rgba(234, 59, 144, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .check-card:hover, .payout-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(234, 59, 144, 0.12);
         }
 
         .send-checks-btn {
@@ -764,17 +675,11 @@
             border: none;
             cursor: pointer;
             opacity: 0.6;
-            transition: all 0.3s;
             box-shadow: 0 4px 12px rgba(234, 59, 144, 0.2);
         }
 
         .send-checks-btn.active {
             opacity: 1;
-        }
-        
-        .send-checks-btn.active:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(234, 59, 144, 0.25);
         }
         
         /* Стили для оценки статьи */
@@ -803,7 +708,6 @@
             border-radius: var(--radius-md);
             font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.2s;
             flex: 1;
             display: flex;
             align-items: center;
@@ -828,10 +732,6 @@
             color: white;
             border-color: transparent;
             box-shadow: 0 4px 8px rgba(234, 59, 144, 0.15);
-        }
-
-        .feedback-button:hover {
-            transform: translateY(-1px);
         }
 
         /* Анимации */
@@ -867,19 +767,6 @@
 
         /* Адаптация для маленьких экранов */
         @media (max-width: 360px) {
-            .chat-header {
-                padding: 10px 12px;
-            }
-            
-            .logo {
-                width: 32px;
-                height: 32px;
-            }
-            
-            .chat-header h2 {
-                font-size: 1rem;
-            }
-            
             .option-button {
                 font-size: 0.95rem;
                 padding: 12px 0;
@@ -887,7 +774,7 @@
             
             .message {
                 max-width: 92%;
-                padding: 10px 12px;
+                padding: 6px 10px;
                 font-size: 0.9rem;
             }
             
@@ -905,8 +792,13 @@
                 padding: 0 40px;
                 font-size: 1.1rem;
             }
+
+            .message-time {
+                font-size: 0.65rem;
+            }
         }
-      /* Упрощенное выделение для мобильных устройств */
+        
+        /* Упрощенное выделение для мобильных устройств */
         .check-card.selected {
             border: 2px solid #EA3B90;
             position: relative;
@@ -946,14 +838,7 @@
         <!-- Раздел чата -->
         <div class="tab-content active" id="chat-section">
             <div class="chat-container">
-                <div class="chat-header">
-                    <div class="logo-container">
-                        <div class="logo">
-                            <img src="chia.png" alt="Логотип" />
-                        </div>
-                        <h2>AI-консультант</h2>
-                    </div>
-                </div>
+                <!-- Шапка удалена -->
                 
                 <div class="chat-messages" id="chat-messages">
                     <!-- Сообщения будут добавляться здесь -->
@@ -999,7 +884,6 @@
             </div>
         </div>
     </div>
-
     <script>
         // База знаний с улучшенной структурой
         const knowledgeBase = [
@@ -1326,7 +1210,18 @@
             
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message bot-message';
-            messageDiv.innerHTML = `${text}<span class="message-time">${getCurrentTime()}</span>`;
+            
+            // Новая структура с разделением контента и времени
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = text;
+            
+            const timeSpan = document.createElement('div');
+            timeSpan.className = 'message-time';
+            timeSpan.textContent = getCurrentTime();
+            
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeSpan);
             
             rowDiv.appendChild(avatarDiv);
             rowDiv.appendChild(messageDiv);
@@ -1338,7 +1233,18 @@
             const chat = document.getElementById('chat-messages');
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message user-message slide-in';
-            messageDiv.innerHTML = `${text}<span class="message-time">${getCurrentTime()}</span>`;
+            
+            // Новая структура с разделением контента и времени
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = text;
+            
+            const timeSpan = document.createElement('div');
+            timeSpan.className = 'message-time';
+            timeSpan.textContent = getCurrentTime();
+            
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeSpan);
             chat.appendChild(messageDiv);
             scrollToBottom();
         }
@@ -1387,11 +1293,11 @@
 
        function showLastChecks() {
             const checks = [
-                { id: 'CHK001', date: '03.06.2025', sum: '1200 ₽', status: 'Проверен' },
-                { id: 'CHK002', date: '02.06.2025', sum: '850 ₽', status: 'Поврежден' },
-                { id: 'CHK003', date: '01.06.2025', sum: '430 ₽', status: 'На проверке' },
-                { id: 'CHK004', date: '31.05.2025', sum: '2100 ₽', status: 'Проверен' },
-                { id: 'CHK005', date: '30.05.2025', sum: '670 ₽', status: 'Проверен' },
+                { id: '26037231', date: '03.06.2025', sum: '1200 ₽', status: 'Проверен' },
+                { id: '26037199', date: '02.06.2025', sum: '850 ₽', status: 'Поврежден' },
+                { id: '26037191', date: '01.06.2025', sum: '430 ₽', status: 'На проверке' },
+                { id: '26037186', date: '31.05.2025', sum: '2100 ₽', status: 'Проверен' },
+                { id: '26037182', date: '30.05.2025', sum: '670 ₽', status: 'Проверен' },
             ];
             
             const listDiv = document.createElement('div');
@@ -1488,11 +1394,11 @@
 
         function showLastPayouts() {
             const payouts = [
-                {date: '03.06.2025', sum: '1 000 ₽', number: 'P-001', status: 'Отправлен'},
-                {date: '29.05.2025', sum: '2 500 ₽', number: 'P-002', status: 'Отправлен'},
-                {date: '22.05.2025', sum: '700 ₽', number: 'P-003', status: 'На проверке'},
-                {date: '18.05.2025', sum: '1 800 ₽', number: 'P-004', status: 'Отправлен'},
-                {date: '12.05.2025', sum: '1 200 ₽', number: 'P-005', status: 'Отправлен'}
+                {date: '03.06.2025', sum: '1 000 ₽', number: '898404', status: 'Отправлен'},
+                {date: '29.05.2025', sum: '2 500 ₽', number: '739564', status: 'Отправлен'},
+                {date: '22.05.2025', sum: '700 ₽', number: '932321', status: 'На проверке'},
+                {date: '18.05.2025', sum: '1 800 ₽', number: '365195', status: 'Отправлен'},
+                {date: '12.05.2025', sum: '1 200 ₽', number: '234164', status: 'Отправлен'}
             ];
             
             const listDiv = document.createElement('div');
