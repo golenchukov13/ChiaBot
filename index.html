@@ -1347,6 +1347,29 @@
         let currentCategory = null;
         let currentQuestion = null;
 
+        // Swipe navigation for tabs
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const swipeThreshold = 50; // Minimum distance for a swipe gesture
+
+        function handleSwipeGesture() {
+            const isChatActive = document.getElementById('chat-tab').classList.contains('active');
+            
+            // Swipe Right (с чата на базу знаний)
+            if (touchEndX - touchStartX > swipeThreshold) {
+                if (isChatActive) {
+                    switchTab('knowledge');
+                }
+            }
+
+            // Swipe Left (с базы знаний на чат)
+            if (touchStartX - touchEndX > swipeThreshold) {
+                if (!isChatActive) {
+                    switchTab('chat');
+                }
+            }
+        }
+
         // Инициализация чата
         document.addEventListener('DOMContentLoaded', function() {
             // Инициализация базы знаний
@@ -1375,20 +1398,23 @@
             });
 
             // Swipe navigation for tabs
-            let touchStartX = 0;
-            let touchEndX = 0;
-            const swipeThreshold = 50; // Minimum distance for a swipe gesture
-
             const appElement = document.getElementById('app');
 
             appElement.addEventListener('touchstart', (e) => {
                 // Ignore swipe if the touch starts on a scrollable element to avoid conflicts.
-                if (e.target.closest('.chat-messages, .knowledge-categories, .horizontal-scroll')) {
+                if (e.target.closest('.chat-messages, .knowledge-categories, .horizontal-scroll, .input-area, .options-container')) {
                     touchStartX = 0; // Reset to indicate no swipe tracking
                     return;
                 }
                 touchStartX = e.changedTouches[0].screenX;
             }, { passive: true });
+
+            appElement.addEventListener('touchmove', (e) => {
+                // Prevent default scrolling if we're tracking a swipe
+                if (touchStartX !== 0) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
 
             appElement.addEventListener('touchend', (e) => {
                 // If touchStartX is 0, it means the touch started on a scrollable element, so we ignore it.
@@ -1401,25 +1427,7 @@
 
                 // Reset touchStartX for the next swipe
                 touchStartX = 0;
-            });
-
-            function handleSwipeGesture() {
-                const isChatActive = document.getElementById('chat-tab').classList.contains('active');
-                
-                // Swipe Left
-                if (touchStartX - touchEndX > swipeThreshold) {
-                    if (isChatActive) {
-                        switchTab('knowledge');
-                    }
-                }
-
-                // Swipe Right
-                if (touchEndX - touchStartX > swipeThreshold) {
-                    if (!isChatActive) {
-                        switchTab('chat');
-                    }
-                }
-            }
+            }, { passive: true });
 
             // Обработчик ввода сообщения
             document.getElementById('user-input').addEventListener('keydown', function(e) {
@@ -1460,6 +1468,11 @@
                     // Очищаем input для возможности повторной загрузки того же файла
                     e.target.value = '';
                 }
+            });
+
+            // Обработчик клика по кнопке отправки
+            document.getElementById('send-button').addEventListener('click', function() {
+                sendMessage();
             });
 
             // Приветственное сообщение
@@ -1775,22 +1788,10 @@
                             <style>
                                 body { margin: 0; padding: 20px; background: #f0f0f0; text-align: center; }
                                 img { max-width: 100%; max-height: 90vh; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-                                .download-btn { 
-                                    display: inline-block; 
-                                    margin-top: 15px; 
-                                    padding: 10px 20px; 
-                                    background: #EA3B90; 
-                                    color: white; 
-                                    text-decoration: none; 
-                                    border-radius: 8px; 
-                                    font-weight: 600;
-                                }
                             </style>
                         </head>
                         <body>
                             <img src="${fileUrl}" alt="${fileName}">
-                            <br>
-                            <a href="${fileUrl}" download="${fileName}" class="download-btn">Скачать изображение</a>
                         </body>
                     </html>
                 `);
@@ -1804,16 +1805,6 @@
                             <style>
                                 body { margin: 0; padding: 20px; background: #000; text-align: center; }
                                 video { max-width: 100%; max-height: 90vh; }
-                                .download-btn { 
-                                    display: inline-block; 
-                                    margin-top: 15px; 
-                                    padding: 10px 20px; 
-                                    background: #EA3B90; 
-                                    color: white; 
-                                    text-decoration: none; 
-                                    border-radius: 8px; 
-                                    font-weight: 600;
-                                }
                             </style>
                         </head>
                         <body>
@@ -1821,8 +1812,6 @@
                                 <source src="${fileUrl}" type="${fileType}">
                                 Ваш браузер не поддерживает видео.
                             </video>
-                            <br>
-                            <a href="${fileUrl}" download="${fileName}" class="download-btn">Скачать видео</a>
                         </body>
                     </html>
                 `);
@@ -1830,8 +1819,8 @@
         }
 
         function downloadFile(fileName, fileType) {
-            // Для файлов, которые нельзя открыть в браузере, предлагаем скачать
-            alert(`Файл "${fileName}" будет скачан. Для просмотра используйте соответствующее приложение на вашем устройстве.`);
+            // Просто показываем информацию о файле
+            alert(`Файл "${fileName}" можно просмотреть в соответствующем приложении на вашем устройстве.`);
         }
 
         function formatFileSize(bytes) {
