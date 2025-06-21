@@ -427,58 +427,77 @@
         .knowledge-categories {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 16px 12px;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            grid-auto-rows: 1fr;
+            gap: 12px;
             background: #fafafa;
+            align-items: stretch;
+            justify-items: stretch;
         }
 
         .knowledge-category {
-            background: #fff;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--card-shadow);
+            background: #ffffff;
+            border-radius: 14px;
             overflow: hidden;
-            border: none;
             position: relative;
-            padding: 20px;
+            padding: 16px 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
             cursor: pointer;
-            aspect-ratio: 1 / 1;
-            transition: transform 0.2s var(--ease-out-quint), box-shadow 0.2s var(--ease-out-quint);
+            min-height: 120px;
+            margin: 0;
+            box-sizing: border-box;
+            width: 100%;
+            border: 1px solid rgba(234, 59, 144, 0.12);
+            box-shadow: 0 3px 8px rgba(234, 59, 144, 0.08);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
         }
         
         .knowledge-category:active {
-            transform: scale(0.97);
-            box-shadow: 0 4px 12px rgba(234, 59, 144, 0.12);
+            transform: scale(0.98);
+            box-shadow: 0 1px 4px rgba(234, 59, 144, 0.1);
+            background-color: rgba(234, 59, 144, 0.03);
         }
 
         .knowledge-category-title {
-            padding: 0;
+            padding: 0 6px;
             margin-top: 12px;
-            font-size: 1rem;
+            font-size: 0.88rem;
             font-weight: 600;
             color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-height: 2.6em;
+            line-height: 1.35;
+            width: 100%;
         }
 
         .knowledge-category-icon {
-            font-size: 1.8rem;
-            width: 56px;
-            height: 56px;
+            font-size: 1.3rem;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--primary-light);
-            color: var(--primary);
-            border-radius: 16px;
+            background: rgba(234, 59, 144, 0.1);
+            color: #EA3B90;
+            border-radius: 10px;
+            flex-shrink: 0;
+            margin-bottom: 10px;
+            border: 1px solid rgba(234, 59, 144, 0.15);
+        }
+
+        .knowledge-category:active .knowledge-category-icon {
+            background: rgba(234, 59, 144, 0.15);
+            transform: scale(0.95);
         }
 
         .knowledge-questions {
@@ -787,149 +806,6 @@
 
         /* Адаптация для маленьких экранов */
         @media (max-width: 360px) {
-            .knowledge-categories {
-                grid-template-columns: 1fr;
-                gap: 16px;
-                padding: 16px;
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .knowledge-category {
-                aspect-ratio: auto;
-                min-height: 70px;
-                padding: 16px;
-                flex-direction: row;
-                justify-content: flex-start;
-                align-items: center;
-                text-align: left;
-                margin-bottom: 0;
-                width: 100%;
-                box-sizing: border-box;
-            }
-            
-            .knowledge-category-title {
-                font-size: 1rem;
-                margin: 0 0 0 16px;
-                text-align: left;
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                font-weight: 600;
-                color: #333;
-                line-height: 1.3;
-            }
-            
-            .knowledge-category-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-                flex-shrink: 0;
-                margin: 0;
-            }
-        }
-        
-        /* Адаптация для средних экранов */
-        @media (min-width: 361px) and (max-width: 480px) {
-            .knowledge-categories {
-                grid-template-columns: 1fr;
-                gap: 16px;
-                padding: 16px;
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .knowledge-category {
-                aspect-ratio: auto;
-                min-height: 80px;
-                padding: 20px;
-                flex-direction: row;
-                justify-content: flex-start;
-                align-items: center;
-                text-align: left;
-                margin-bottom: 0;
-                width: 100%;
-                box-sizing: border-box;
-            }
-            
-            .knowledge-category-title {
-                font-size: 1.1rem;
-                margin: 0 0 0 20px;
-                text-align: left;
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                font-weight: 600;
-                color: #333;
-                line-height: 1.3;
-            }
-            
-            .knowledge-category-icon {
-                width: 48px;
-                height: 48px;
-                font-size: 1.4rem;
-                flex-shrink: 0;
-                margin: 0;
-            }
-        }
-
-        /* Стили для файлов в сообщениях */
-        .file-message {
-            max-width: 90%;
-            padding: 12px;
-            border-radius: 18px;
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            margin-bottom: 8px;
-            position: relative;
-        }
-
-        .file-preview {
-            max-width: 200px;
-            max-height: 150px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 8px;
-        }
-
-        .file-icon {
-            font-size: 1.2rem;
-            color: #EA3B90;
-        }
-
-        .file-name {
-            font-weight: 500;
-            color: #333;
-            word-break: break-all;
-        }
-
-        .file-size {
-            font-size: 0.8rem;
-            color: #999;
-        }
-
-        /* Время для файловых сообщений */
-        .user-message .file-message + .message-time {
-            float: right;
-            clear: both;
-            margin-left: 12px;
-            font-size: 0.7rem;
-            opacity: 0.8;
-            position: relative;
-            bottom: -5px;
-            white-space: nowrap;
-        }
-
-        /* Адаптация для маленьких экранов - общие стили */
-        @media (max-width: 360px) {
             .option-button {
                 font-size: 0.95rem;
                 padding: 12px 0;
@@ -991,6 +867,119 @@
         }
         
         /* Адаптация для маленьких экранов */
+
+        /* Стили для файлов в сообщениях */
+        .file-message {
+            max-width: 90%;
+            padding: 12px;
+            border-radius: 18px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .file-preview {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .file-icon {
+            font-size: 1.2rem;
+            color: #EA3B90;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: #333;
+            word-break: break-all;
+        }
+
+        .file-size {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        /* Время для файловых сообщений */
+        .user-message .file-message + .message-time {
+            float: right;
+            clear: both;
+            margin-left: 12px;
+            font-size: 0.7rem;
+            opacity: 0.8;
+            position: relative;
+            bottom: -5px;
+            white-space: nowrap;
+        }
+
+        /* Адаптация для маленьких экранов - общие стили */
+        @media (max-width: 360px) {
+            .knowledge-category-title {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Адаптация для разных размеров экранов */
+        @media (max-width: 400px) {
+            .knowledge-categories {
+                gap: 10px;
+                padding: 14px 10px;
+            }
+            
+            .knowledge-category {
+                min-height: 110px;
+                padding: 14px 6px;
+                border-radius: 12px;
+            }
+            
+            .knowledge-category-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .knowledge-category-title {
+                font-size: 0.82rem;
+            }
+        }
+
+        @media (max-width: 340px) {
+            .knowledge-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .knowledge-category {
+                min-height: 100px;
+                flex-direction: row;
+                justify-content: flex-start;
+                text-align: left;
+                padding: 12px 16px;
+            }
+            
+            .knowledge-category-icon {
+                margin-bottom: 0;
+                margin-right: 12px;
+            }
+            
+            .knowledge-category-title {
+                margin-top: 0;
+                -webkit-line-clamp: 3;
+                max-height: 3.9em;
+            }
+        }
+
+        /* Стили для файлов в сообщениях */
     </style>
 </head>
 <body>
@@ -2075,10 +2064,14 @@
             const container = document.getElementById('knowledge-categories');
             container.innerHTML = '';
             
-            // Reset styles for grid view
+            // Оптимизированные отступы для мобильного дизайна
             container.style.display = 'grid';
-            container.style.padding = '16px';
-            container.style.gap = '16px';
+            container.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            container.style.gridAutoRows = '1fr';
+            container.style.gap = '12px';
+            container.style.padding = '16px 12px';
+            container.style.alignItems = 'stretch';
+            container.style.justifyItems = 'stretch';
 
             document.getElementById('kb-title').textContent = '';
             document.getElementById('kb-subtitle').textContent = 'Ответы на частые вопросы';
