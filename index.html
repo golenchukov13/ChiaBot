@@ -320,7 +320,7 @@
         }
 
         .attach-label {
-            margin: 0 6px 4px 8px;
+            margin: 0 8px 0 8px;
             width: 24px;
             height: 24px;
             background: none;
@@ -332,6 +332,7 @@
             border-radius: 0;
             padding: 0;
             cursor: pointer;
+            align-self: center;
         }
 
         .typing-indicator {
@@ -427,11 +428,11 @@
         .knowledge-categories {
             flex: 1;
             overflow-y: auto;
-            padding: 16px 12px;
+            padding: 18px 14px;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             grid-auto-rows: 1fr;
-            gap: 12px;
+            gap: 14px;
             background: #fafafa;
             align-items: stretch;
             justify-items: stretch;
@@ -439,10 +440,10 @@
 
         .knowledge-category {
             background: #ffffff;
-            border-radius: 14px;
+            border-radius: 16px;
             overflow: hidden;
             position: relative;
-            padding: 16px 8px;
+            padding: 18px 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -453,23 +454,23 @@
             margin: 0;
             box-sizing: border-box;
             width: 100%;
-            border: 1px solid rgba(234, 59, 144, 0.12);
-            box-shadow: 0 3px 8px rgba(234, 59, 144, 0.08);
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            border: 1px solid rgba(234, 59, 144, 0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(234, 59, 144, 0.04);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
         
         .knowledge-category:active {
-            transform: scale(0.98);
-            box-shadow: 0 1px 4px rgba(234, 59, 144, 0.1);
-            background-color: rgba(234, 59, 144, 0.03);
+            transform: scale(0.96);
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(234, 59, 144, 0.06);
+            background-color: rgba(234, 59, 144, 0.02);
         }
 
         .knowledge-category-title {
-            padding: 0 6px;
+            padding: 0 8px;
             margin-top: 12px;
             font-size: 0.88rem;
             font-weight: 600;
-            color: #333;
+            color: #2c2c2c;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -482,22 +483,24 @@
 
         .knowledge-category-icon {
             font-size: 1.3rem;
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(234, 59, 144, 0.1);
+            background: linear-gradient(135deg, rgba(234, 59, 144, 0.12), rgba(234, 59, 144, 0.08));
             color: #EA3B90;
-            border-radius: 10px;
+            border-radius: 12px;
             flex-shrink: 0;
-            margin-bottom: 10px;
-            border: 1px solid rgba(234, 59, 144, 0.15);
+            margin-bottom: 12px;
+            border: 1px solid rgba(234, 59, 144, 0.12);
+            box-shadow: 0 2px 6px rgba(234, 59, 144, 0.08);
         }
 
         .knowledge-category:active .knowledge-category-icon {
-            background: rgba(234, 59, 144, 0.15);
-            transform: scale(0.95);
+            background: linear-gradient(135deg, rgba(234, 59, 144, 0.16), rgba(234, 59, 144, 0.12));
+            transform: scale(0.92);
+            box-shadow: 0 1px 4px rgba(234, 59, 144, 0.12);
         }
 
         .knowledge-questions {
@@ -773,6 +776,24 @@
             box-shadow: 0 4px 8px rgba(234, 59, 144, 0.15);
         }
 
+        /* Стили для сообщения об оценке */
+        .feedback-message {
+            animation: slideIn 0.3s ease-out;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Анимации */
         @keyframes slideIn {
             from { transform: translateY(20px); opacity: 0; }
@@ -884,6 +905,16 @@
             max-height: 150px;
             border-radius: 8px;
             margin-bottom: 8px;
+        }
+
+        /* Стили для видео-превью */
+        .file-preview[src*="data:video"] {
+            background: #000;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            max-width: 200px;
+            max-height: 150px;
+            object-fit: cover;
         }
 
         .file-info {
@@ -1107,7 +1138,7 @@
             },
             {
                 id: "payments",
-                title: "Выплаты и бонусы",
+                title: "Выплаты",
                 icon: "fa-wallet",
                 items: [
                     {
@@ -1139,7 +1170,7 @@
             },
             {
                 id: "technical",
-                title: "Технические вопросы",
+                title: "Приложение",
                 icon: "fa-tools",
                 items: [
                     {
@@ -1171,7 +1202,7 @@
             },
             {
                 id: "security",
-                title: "Безопасность и конфиденциальность",
+                title: "Безопасность",
                 icon: "fa-shield-alt",
                 items: [
                     {
@@ -1193,7 +1224,7 @@
             },
             {
                 id: "instructions",
-                title: "Инструкции по работе",
+                title: "Инструкции",
                 icon: "fa-play-circle",
                 items: [
                     {
@@ -1274,7 +1305,7 @@
             },
             {
                 id: "promotions",
-                title: "Акции и спецпредложения",
+                title: "Акции",
                 icon: "fa-tags",
                 items: [
                     {
@@ -1301,7 +1332,7 @@
             },
             {
                 id: "legal",
-                title: "Правовая информация",
+                title: "Информация",
                 icon: "fa-file-alt",
                 items: [
                     {
@@ -1687,20 +1718,45 @@
                     `;
                 };
                 reader.readAsDataURL(file);
-            } else {
-                // Для остальных файлов показываем только информацию
-                messageDiv.innerHTML = `
-                    <div class="file-message" onclick="downloadFile('${file.name}', '${file.type}')" style="cursor: pointer;">
-                        <div class="file-info">
-                            <i class="fas ${fileIcon} file-icon"></i>
-                            <div>
-                                <div class="file-name">${file.name}</div>
-                                <div class="file-size">${fileSize} • ${fileType}</div>
+            } else if (file.type.startsWith('video/')) {
+                // Для видео создаем превью и возможность просмотра
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    messageDiv.innerHTML = `
+                        <div class="file-message" onclick="openFile('${e.target.result}', '${file.name}', '${file.type}')" style="cursor: pointer;">
+                            <video src="${e.target.result}" class="file-preview" style="background: #000; border-radius: 8px;">
+                                <source src="${e.target.result}" type="${file.type}">
+                            </video>
+                            <div class="file-info">
+                                <i class="fas ${fileIcon} file-icon"></i>
+                                <div>
+                                    <div class="file-name">${file.name}</div>
+                                    <div class="file-size">${fileSize} • ${fileType}</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="message-time">${getCurrentTime()}</div>
-                `;
+                        <div class="message-time">${getCurrentTime()}</div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Для остальных файлов также создаем возможность просмотра
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    messageDiv.innerHTML = `
+                        <div class="file-message" onclick="openFile('${e.target.result}', '${file.name}', '${file.type}')" style="cursor: pointer;">
+                            <div class="file-info">
+                                <i class="fas ${fileIcon} file-icon"></i>
+                                <div>
+                                    <div class="file-name">${file.name}</div>
+                                    <div class="file-size">${fileSize} • ${fileType}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="message-time">${getCurrentTime()}</div>
+                    `;
+                };
+                reader.readAsDataURL(file);
             }
             
             chat.appendChild(messageDiv);
@@ -1801,6 +1857,92 @@
                                 <source src="${fileUrl}" type="${fileType}">
                                 Ваш браузер не поддерживает видео.
                             </video>
+                        </body>
+                    </html>
+                `);
+            } else if (fileType.startsWith('audio/')) {
+                // Открываем аудио в новом окне
+                const newWindow = window.open();
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>${fileName}</title>
+                            <style>
+                                body { margin: 0; padding: 20px; background: #f0f0f0; text-align: center; }
+                                audio { max-width: 100%; margin: 20px 0; }
+                            </style>
+                        </head>
+                        <body>
+                            <audio controls autoplay>
+                                <source src="${fileUrl}" type="${fileType}">
+                                Ваш браузер не поддерживает аудио.
+                            </audio>
+                        </body>
+                    </html>
+                `);
+            } else if (fileType.includes('pdf')) {
+                // Открываем PDF в новом окне
+                const newWindow = window.open();
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>${fileName}</title>
+                            <style>
+                                body { margin: 0; padding: 0; background: #f0f0f0; }
+                                iframe { width: 100%; height: 100vh; border: none; }
+                            </style>
+                        </head>
+                        <body>
+                            <iframe src="${fileUrl}" type="application/pdf"></iframe>
+                        </body>
+                    </html>
+                `);
+            } else if (fileType.startsWith('text/')) {
+                // Открываем текстовые файлы в новом окне
+                const newWindow = window.open();
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>${fileName}</title>
+                            <style>
+                                body { margin: 0; padding: 20px; background: #fff; font-family: monospace; }
+                                pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; }
+                            </style>
+                        </head>
+                        <body>
+                            <pre id="content">Загрузка...</pre>
+                        </body>
+                    </html>
+                `);
+                
+                // Загружаем содержимое текстового файла
+                fetch(fileUrl)
+                    .then(response => response.text())
+                    .then(text => {
+                        newWindow.document.getElementById('content').textContent = text;
+                    })
+                    .catch(error => {
+                        newWindow.document.getElementById('content').textContent = 'Ошибка загрузки файла';
+                    });
+            } else {
+                // Для остальных файлов предлагаем скачать
+                const newWindow = window.open();
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>${fileName}</title>
+                            <style>
+                                body { margin: 0; padding: 40px; background: #f0f0f0; text-align: center; font-family: Arial, sans-serif; }
+                                .download-container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+                                .download-btn { background: #EA3B90; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin: 20px 0; }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="download-container">
+                                <h2>${fileName}</h2>
+                                <p>Этот тип файла не может быть просмотрен в браузере.</p>
+                                <button class="download-btn" onclick="window.open('${fileUrl}', '_blank')">Скачать файл</button>
+                            </div>
                         </body>
                     </html>
                 `);
@@ -2064,12 +2206,12 @@
             const container = document.getElementById('knowledge-categories');
             container.innerHTML = '';
             
-            // Оптимизированные отступы для мобильного дизайна
+            // Улучшенные отступы для более симпатичного вида
             container.style.display = 'grid';
             container.style.gridTemplateColumns = 'repeat(2, 1fr)';
             container.style.gridAutoRows = '1fr';
-            container.style.gap = '12px';
-            container.style.padding = '16px 12px';
+            container.style.gap = '14px';
+            container.style.padding = '18px 14px';
             container.style.alignItems = 'stretch';
             container.style.justifyItems = 'stretch';
 
@@ -2173,7 +2315,7 @@
             
             container.appendChild(answerDiv);
             
-            // Обработчики для кнопок оценки
+             // Обработчики для кнопок оценки
             answerDiv.querySelectorAll('.feedback-button').forEach(button => {
                 button.addEventListener('click', function() {
                     const feedbackType = this.getAttribute('data-feedback');
@@ -2183,23 +2325,40 @@
                     answerDiv.querySelectorAll('.feedback-button').forEach(btn => {
                         btn.classList.remove('active');
                     });
-                    this.classList.add('active');
+                    // Убираем выделение кнопки - не добавляем класс 'active'
+                    
+                    // Показываем сообщение об оценке
+                    const message = feedbackType === 'like' 
+                        ? 'Спасибо за положительную оценку!'
+                        : 'Спасибо за отзыв! Мы учтём ваше мнение.';
+                    
+                    // Удаляем предыдущее сообщение, если оно есть
+                    const existingMsg = answerDiv.querySelector('.feedback-message');
+                    if (existingMsg) {
+                        existingMsg.remove();
+                    }
+                    
+                    const feedbackMsg = document.createElement('div');
+                    feedbackMsg.className = 'system-message feedback-message slide-in';
+                    feedbackMsg.style.marginTop = '16px';
+                    feedbackMsg.style.padding = '12px 16px';
+                    feedbackMsg.style.backgroundColor = 'rgba(234, 59, 144, 0.05)';
+                    feedbackMsg.style.borderRadius = '8px';
+                    feedbackMsg.style.border = '1px solid rgba(234, 59, 144, 0.1)';
+                    feedbackMsg.style.color = '#EA3B90';
+                    feedbackMsg.style.fontWeight = '500';
+                    feedbackMsg.textContent = message;
+                    
+                    // Добавляем сообщение после кнопок оценки
+                    const feedbackSection = answerDiv.querySelector('.feedback-section');
+                    feedbackSection.appendChild(feedbackMsg);
                 });
             });
         }
         
-        // Функция обработки оценки статьи
         function handleFeedback(categoryId, questionId, feedbackType) {
-            console.log(`Пользователь оценил статью: ${categoryId}/${questionId} - ${feedbackType}`);
             // Здесь можно добавить отправку оценки на сервер
-            // fetch('/api/feedback', { method: 'POST', body: JSON.stringify({...}) })
-            
-            // Визуальное подтверждение
-            const message = feedbackType === 'like' 
-                ? 'Спасибо за положительную оценку!'
-                : 'Спасибо за отзыв! Мы учтём ваше мнение.';
-            
-            alert(message);
+            console.log(`Пользователь оценил статью: ${categoryId}/${questionId} - ${feedbackType}`);
         }
     </script>
 </body>
