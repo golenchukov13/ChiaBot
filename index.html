@@ -361,39 +361,24 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(160deg, #fafafa 0%, #f5f5f7 100%);
+            background: #fafafa;
             overflow: hidden;
-            position: relative;
-        }
-
-        .knowledge-base-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 70% 30%, rgba(234, 59, 144, 0.03) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
         }
 
         .knowledge-base-header {
-            padding: 26px 20px 20px;
-            background: #ffffff;
-            z-index: 20;
+            padding: 20px 16px 16px;
+            background: #fff;
+            z-index: 1;
+            border-bottom: 1px solid rgba(234, 59, 144, 0.05);
             position: sticky;
             top: 0;
             flex-shrink: 0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 2px 8px rgba(234,59,144,0.05);
         }
 
         .knowledge-base-header.kb-header-scrolled {
-            padding: 18px 20px;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
-            backdrop-filter: blur(6px);
-            background: rgba(255, 255, 255, 0.92);
+            padding: 12px 16px;
+            box-shadow: var(--shadow-sm);
         }
 
         .knowledge-base-header h2 {
@@ -413,21 +398,12 @@
         }
 
         .knowledge-base-header p {
-            font-size: 1.08rem;
-            color: #666;
+            font-size: 1.1rem;
+            color: #333;
             text-align: center;
-            padding: 0;
-            margin: 8px 0 0 0;
-            font-weight: 500;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            letter-spacing: -0.1px;
-        }
-
-        .knowledge-base-header.kb-header-scrolled p {
-            opacity: 0;
-            height: 0;
+            padding: 0 20px;
             margin: 0;
-            overflow: hidden;
+            font-weight: 600;
         }
 
         .back-button {
@@ -452,122 +428,79 @@
         .knowledge-categories {
             flex: 1;
             overflow-y: auto;
+            padding: 18px 14px;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            padding: 24px 20px;
+            grid-auto-rows: 1fr;
+            gap: 14px;
             background: #fafafa;
+            align-items: stretch;
+            justify-items: stretch;
         }
 
         .knowledge-category {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            padding: 18px 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            text-align: center;
             cursor: pointer;
+            min-height: 120px;
+            margin: 0;
+            box-sizing: border-box;
             width: 100%;
-            transition: transform 0.15s ease;
-            animation: fadeSlide 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            opacity: 0;
-            transform: translateY(10px);
+            border: 1px solid rgba(234, 59, 144, 0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(234, 59, 144, 0.04);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
-
-        /* Задержка анимации для каждого элемента */
-        .knowledge-category:nth-child(1) { animation-delay: 0.05s; }
-        .knowledge-category:nth-child(2) { animation-delay: 0.1s; }
-        .knowledge-category:nth-child(3) { animation-delay: 0.15s; }
-        .knowledge-category:nth-child(4) { animation-delay: 0.2s; }
-        .knowledge-category:nth-child(5) { animation-delay: 0.25s; }
-        .knowledge-category:nth-child(6) { animation-delay: 0.3s; }
-        .knowledge-category:nth-child(7) { animation-delay: 0.35s; }
-        .knowledge-category:nth-child(8) { animation-delay: 0.4s; }
-
-        @keyframes fadeSlide {
-            0% { opacity: 0; transform: translateY(10px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .knowledge-category-square {
-            width: 88px;
-            height: 88px;
-            background: #ffffff;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05), 
-                        0 2px 8px rgba(234, 59, 144, 0.05);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-bottom: 12px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .knowledge-category-square::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(234, 59, 144, 0.05) 0%, rgba(234, 59, 144, 0) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .knowledge-category:active .knowledge-category-square {
-            transform: scale(0.95);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-        }
-
-        .knowledge-category:active .knowledge-category-square::before {
-            opacity: 1;
-        }
-
-        .knowledge-category-icon {
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(234, 59, 144, 0.12) 0%, rgba(234, 59, 144, 0.08) 100%);
-            color: #EA3B90;
-            border-radius: 12px;
-            font-size: 1.3rem;
-            position: relative;
-            z-index: 1;
-            transition: transform 0.3s ease;
-        }
-
-        .knowledge-category:active .knowledge-category-icon {
-            transform: scale(0.92);
-            background: linear-gradient(135deg, rgba(234, 59, 144, 0.16) 0%, rgba(234, 59, 144, 0.12) 100%);
+        
+        .knowledge-category:active {
+            transform: scale(0.96);
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(234, 59, 144, 0.06);
+            background-color: rgba(234, 59, 144, 0.02);
         }
 
         .knowledge-category-title {
-            font-size: 0.95rem;
+            padding: 0 8px;
+            margin-top: 12px;
+            font-size: 0.88rem;
             font-weight: 600;
             color: #2c2c2c;
-            line-height: 1.4;
-            text-align: center;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-height: 2.6em;
+            line-height: 1.35;
             width: 100%;
-            padding: 0 4px;
-            letter-spacing: -0.1px;
-            position: relative;
         }
 
-        .knowledge-category-title::after {
-            content: '';
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: var(--primary);
-            margin: 8px auto 0;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .knowledge-category-icon {
+            font-size: 1.3rem;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(234, 59, 144, 0.12), rgba(234, 59, 144, 0.08));
+            color: #EA3B90;
+            border-radius: 12px;
+            flex-shrink: 0;
+            margin-bottom: 12px;
+            border: 1px solid rgba(234, 59, 144, 0.12);
+            box-shadow: 0 2px 6px rgba(234, 59, 144, 0.08);
         }
 
-        .knowledge-category:active .knowledge-category-title::after {
-            opacity: 1;
+        .knowledge-category:active .knowledge-category-icon {
+            background: linear-gradient(135deg, rgba(234, 59, 144, 0.16), rgba(234, 59, 144, 0.12));
+            transform: scale(0.92);
+            box-shadow: 0 1px 4px rgba(234, 59, 144, 0.12);
         }
 
         .knowledge-questions {
@@ -578,75 +511,34 @@
         }
 
         .knowledge-question {
-            padding: 22px 20px;
+            padding: 20px 16px;
             background: white;
             cursor: pointer;
-            border-bottom: 1px solid rgba(234, 59, 144, 0.05);
+            border-bottom: 1px solid #f0f0f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: #333;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
         }
-
-        .knowledge-question::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, rgba(234, 59, 144, 0.1), rgba(234, 59, 144, 0.05));
-        }
-
-        .knowledge-question:active {
-            background: rgba(234, 59, 144, 0.02);
-            transform: translateX(6px);
-        }
-
-        .knowledge-question i {
-            color: #ddd;
-            font-size: 0.9rem;
-            transition: transform 0.3s ease;
-        }
-
-        .knowledge-question:active i {
-            transform: translateX(4px);
+        
+        .knowledge-question:first-child {
+            border-top: 1px solid #f0f0f0;
         }
 
         .knowledge-answer {
             display: block;
-            padding: 32px 20px;
+            padding: 24px 20px;
             background: white;
-            color: #555;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            position: relative;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-top: 0;
         }
 
         .knowledge-answer-content {
-            padding-bottom: 24px;
-            border-bottom: 1px solid rgba(234, 59, 144, 0.05);
-            position: relative;
-        }
-
-        .knowledge-answer-content::before {
-            content: '"';
-            position: absolute;
-            top: -20px;
-            left: -10px;
-            font-size: 4rem;
-            color: rgba(234, 59, 144, 0.05);
-            font-family: Georgia, serif;
-            line-height: 1;
+            margin-bottom: 24px;
+            padding-left: 0;
         }
 
         .knowledge-answer-actions {
@@ -834,70 +726,54 @@
         
         /* Стили для оценки статьи */
         .feedback-section {
-            padding: 24px 0 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(234, 59, 144, 0.08);
         }
 
         .feedback-title {
             font-weight: 600;
             color: #333;
-            font-size: 1.05rem;
-            margin-bottom: 16px;
-            text-align: center;
+            font-size: 0.95rem;
         }
 
         .feedback-buttons {
             display: flex;
-            gap: 16px;
-            justify-content: center;
+            gap: 12px;
         }
 
         .feedback-button {
-            padding: 16px 24px;
-            border-radius: 14px;
-            font-size: 1.05rem;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
             cursor: pointer;
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            font-weight: 600;
-            background: transparent;
-            border: 1px solid rgba(234, 59, 144, 0.1);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feedback-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: currentColor;
-            opacity: 0.08;
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.4s ease;
-            z-index: -1;
-        }
-
-        .feedback-button:active::before {
-            transform: scaleX(1);
-            transform-origin: left;
+            gap: 8px;
         }
 
         .feedback-like {
+            background: rgba(76, 175, 80, 0.08);
             color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
         }
 
         .feedback-dislike {
+            background: rgba(234, 59, 144, 0.08);
             color: #EA3B90;
+            border: 1px solid rgba(234, 59, 144, 0.3);
         }
 
-        .feedback-button:active {
-            transform: scale(0.96);
+        .feedback-button.active {
+            background: var(--primary);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 8px rgba(234, 59, 144, 0.15);
         }
 
         /* Стили для сообщения об оценке */
@@ -925,9 +801,7 @@
         }
 
         .slide-in {
-            animation: slideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            opacity: 0;
-            transform: translateY(10px);
+            animation: slideIn 0.5s var(--ease-out-quint) forwards;
         }
 
         /* Кастомный скроллбар */
@@ -1083,988 +957,67 @@
         /* Адаптация для маленьких экранов - общие стили */
         @media (max-width: 360px) {
             .knowledge-category-title {
-                font-size: 0.95rem;
+                font-size: 0.75rem;
             }
         }
 
         /* Адаптация для разных размеров экранов */
         @media (max-width: 400px) {
             .knowledge-categories {
-                gap: 12px;
-                padding: 16px 12px;
+                gap: 10px;
+                padding: 14px 10px;
             }
             
             .knowledge-category {
-                padding: 16px 18px;
-                min-height: 70px;
-            }
-            
-            .knowledge-category-icon {
-                width: 44px;
-                height: 44px;
-                font-size: 1.3rem;
-                margin-right: 14px;
-            }
-            
-            .knowledge-category-title {
-                font-size: 1rem;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .knowledge-category-title {
-                font-size: 0.95rem;
-            }
-            
-            .knowledge-category {
-                padding: 14px 16px;
-            }
-        }
-
-        /* Стили для файлов в сообщениях */
-        /* Адаптация для маленьких экранов */
-        @media (max-width: 360px) {
-            .knowledge-categories {
-                gap: 16px;
-                padding: 20px 16px;
-            }
-            
-            .knowledge-category-square {
-                width: 76px;
-                height: 76px;
-                border-radius: 18px;
+                min-height: 110px;
+                padding: 14px 6px;
+                border-radius: 12px;
             }
             
             .knowledge-category-icon {
                 width: 40px;
                 height: 40px;
                 font-size: 1.2rem;
-                border-radius: 11px;
             }
             
             .knowledge-category-title {
-                font-size: 0.88rem;
+                font-size: 0.82rem;
+            }
+        }
+
+        @media (max-width: 340px) {
+            .knowledge-categories {
+                grid-template-columns: 1fr;
             }
             
-            .knowledge-question {
-                padding: 20px 16px;
-                font-size: 1rem;
+            .knowledge-category {
+                min-height: 100px;
+                flex-direction: row;
+                justify-content: flex-start;
+                text-align: left;
+                padding: 12px 16px;
             }
             
-            .knowledge-answer {
-                padding: 28px 16px;
-                font-size: 1rem;
-            }
-        }
-
-        /* Модальное окно приветствия со слайдами */
-        .welcome-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
-            z-index: 9999;
-            padding: 20px;
-            overflow: hidden;
-        }
-
-        .slides-container {
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-            height: 85vh;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            background: white;
-        }
-
-        .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: transform 0.6s var(--ease-out-quint), opacity 0.4s ease;
-            pointer-events: none;
-        }
-
-        .slide.active {
-            opacity: 1;
-            transform: translateX(0);
-            pointer-events: all;
-        }
-
-        .slide.prev {
-            transform: translateX(-100%);
-        }
-
-        .slide.next {
-            transform: translateX(100%);
-        }
-
-        .slide-header {
-            padding: 30px 20px 20px;
-            text-align: center;
-            background: var(--primary-gradient);
-            color: white;
-            position: relative;
-            flex-shrink: 0;
-            z-index: 10;
-        }
-
-        .logo-badge {
-            width: 80px;
-            height: 80px;
-            background: white;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            border: 2px solid white;
-        }
-
-        .logo-badge img {
-            width: 70%;
-            height: 70%;
-            object-fit: contain;
-        }
-
-        .slide-header h2 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-
-        .slide-header p {
-            font-size: 1.05rem;
-            opacity: 0.9;
-            font-weight: 500;
-            max-width: 90%;
-            margin: 0 auto;
-            line-height: 1.4;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 10;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .close-btn.visible {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .close-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(90deg);
-        }
-
-        .close-btn i {
-            font-size: 1.1rem;
-            color: white;
-        }
-
-        /* Таймер обратного отсчета */
-        .timer-container {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 40px;
-            height: 40px;
-            z-index: 10;
-        }
-
-        .timer-circle {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(4px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .timer-circle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .timer-seconds {
-            font-size: 1rem;
-            font-weight: 700;
-            color: white;
-            position: relative;
-            z-index: 2;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-            font-family: 'Inter', sans-serif;
-            letter-spacing: -0.5px;
-            transition: all 0.2s ease;
-        }
-
-        .timer-circle:hover .timer-seconds {
-            transform: scale(1.1);
-        }
-
-        /* Анимация появления крестика */
-        .timer-close {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: white;
-            position: relative;
-            z-index: 2;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-            font-family: 'Inter', sans-serif;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.3s ease;
-        }
-
-        .timer-close.show {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* Анимация пульсации для привлечения внимания */
-        @keyframes timerPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .timer-circle.pulse {
-            animation: timerPulse 2s ease-in-out infinite;
-        }
-
-        .slide-body {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background: #f8f9fc;
-            position: relative;
-            padding-bottom: 80px;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: 18px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(234, 59, 144, 0.05);
-        }
-
-        .feature-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .feature-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, rgba(234, 59, 144, 0.1) 0%, rgba(234, 59, 144, 0.05) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-        }
-
-        .feature-icon i {
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .feature-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #2c2c2c;
-            margin-bottom: 5px;
-        }
-
-        .feature-content {
-            font-size: 1rem;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .benefit-list {
-            list-style: none;
-            padding-left: 0;
-            margin: 15px 0;
-        }
-
-        .benefit-list li {
-            padding: 8px 0 8px 30px;
-            position: relative;
-            font-size: 0.95rem;
-            color: #555;
-        }
-
-        .benefit-list li:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 12px;
-            width: 18px;
-            height: 18px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .benefit-list li:nth-child(1):before {
-            content: '1';
-        }
-        .benefit-list li:nth-child(2):before {
-            content: '2';
-        }
-        .benefit-list li:nth-child(3):before {
-            content: '3';
-        }
-
-        .data-preview {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .data-item {
-            flex: 1;
-            background: rgba(234, 59, 144, 0.05);
-            border-radius: 12px;
-            padding: 12px;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        .data-value {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 1.1rem;
-            margin-top: 5px;
-        }
-
-        .kb-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .kb-item {
-            background: white;
-            border-radius: 14px;
-            padding: 20px 15px;
-            text-align: center;
-            box-shadow: var(--card-shadow);
-            cursor: pointer;
-        }
-
-        .kb-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, rgba(234, 59, 144, 0.1) 0%, rgba(234, 59, 144, 0.05) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-        }
-
-        .kb-icon i {
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .kb-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #333;
-        }
-
-        .btn-primary {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 14px 32px;
-            font-weight: 700;
-            font-size: 1.05rem;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(234, 59, 144, 0.3);
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(234, 59, 144, 0.4);
-        }
-
-        .info-text {
-            font-size: 0.9rem;
-            color: #777;
-            text-align: center;
-            margin-top: 20px;
-            padding: 0 15px;
-            line-height: 1.5;
-        }
-
-        /* Навигация */
-        .nav-controls {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 20px;
-            background: white;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 5;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            align-items: center;
-        }
-
-        .nav-btn {
-            background: white;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .nav-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .nav-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .nav-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            flex: 1;
-        }
-
-        .indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(234, 59, 144, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .indicator.active {
-            background: var(--primary);
-            transform: scale(1.2);
-        }
-
-        /* Анимации */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        .delay-1 { animation-delay: 0.1s !important; }
-        .delay-2 { animation-delay: 0.2s !important; }
-        .delay-3 { animation-delay: 0.3s !important; }
-        .delay-4 { animation-delay: 0.4s !important; }
-        .delay-5 { animation-delay: 0.5s !important; }
-
-        /* Адаптация для десктопов */
-        @media (min-width: 768px) {
-            .slides-container {
-                max-width: 600px;
+            .knowledge-category-icon {
+                margin-bottom: 0;
+                margin-right: 12px;
             }
             
-            .slide-header h2 {
-                font-size: 1.8rem;
-            }
-            
-            .slide-header p {
-                font-size: 1.1rem;
-            }
-            
-            .feature-card {
-                padding: 25px;
-            }
-            
-            .feature-title {
-                font-size: 1.25rem;
-            }
-            
-            .feature-content {
-                font-size: 1.05rem;
-            }
-            
-            .benefit-list li {
-                font-size: 1rem;
-            }
-            
-            .kb-grid {
-                grid-template-columns: repeat(4, 1fr);
+            .knowledge-category-title {
+                margin-top: 0;
+                -webkit-line-clamp: 3;
+                max-height: 3.9em;
             }
         }
+
+        /* Стили для файлов в сообщениях */
     </style>
 </head>
 <body>
-    <!-- Модальное окно приветствия со слайдами -->
-    <div class="welcome-modal" id="welcome-modal">
-        <div class="slides-container">
-            <!-- Слайд 0: Приветствие -->
-            <div class="slide active" id="welcome-slide">
-                <div class="slide-header">
-                    <div class="timer-container">
-                        <div class="timer-circle">
-                            <span class="timer-seconds" id="timer-seconds">7</span>
-                            <span class="timer-close" id="timer-close">×</span>
-                        </div>
-                    </div>
-                    <div class="close-btn" id="close-btn">
-                        <i class="fas fa-times"></i>
-                    </div>
-                    <div class="logo-badge">
-                        <img src="chia.png" alt="Чеки из Аптеки">
-                    </div>
-                    <h2>Новый бот поддержки</h2>
-                    <p>Умный помощник для решения ваших вопросов</p>
-                </div>
-                
-                <div class="slide-body">
-                    <div class="feature-card fade-in">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div>
-                                <div class="feature-title">Добро пожаловать!</div>
-                                <div class="feature-content">Познакомьтесь с новыми возможностями бота поддержки</div>
-                            </div>
-                        </div>
-                        
-                        <div class="feature-content">
-                            Мы полностью переработали бота, чтобы сделать ваше взаимодействие с сервисом 
-                            максимально удобным и эффективным. Просто листайте вправо, чтобы узнать больше.
-                        </div>
-                    </div>
-                    
-                    <div class="feature-card fade-in delay-1">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <i class="fas fa-hand-point-right"></i>
-                            </div>
-                            <div>
-                                <div class="feature-title">Как пользоваться</div>
-                                <div class="feature-content">Интуитивно понятный интерфейс</div>
-                            </div>
-                        </div>
-                        
-                        <div class="feature-content">
-                            Используйте кнопки навигации или свайпайте влево/вправо, чтобы перемещаться 
-                            между разделами. В каждом разделе вы найдёте самую важную информацию.
-                        </div>
-                        
-                        <ul class="benefit-list">
-                            <li>Справочник - ответы на все вопросы</li>
-                            <li>Чеки - история ваших покупок</li>
-                            <li>Выплаты - управление кэшбэком</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="nav-controls">
-                    <button class="nav-btn" id="next-btn" title="Следующий раздел">
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                    <div class="nav-indicators">
-                        <div class="indicator active" data-slide="0"></div>
-                        <div class="indicator" data-slide="1"></div>
-                        <div class="indicator" data-slide="2"></div>
-                        <div class="indicator" data-slide="3"></div>
-                    </div>
-                    <div style="width: 50px;"></div>
-                </div>
-            </div>
-            
-            <!-- Слайд 1: Справочник -->
-            <div class="slide" id="guide-slide">
-                <div class="slide-header">
-                    <div class="close-btn visible" id="close-btn-2">
-                        <i class="fas fa-times"></i>
-                    </div>
-                    <div class="logo-badge">
-                        <img src="chia.png" alt="Справочник">
-                    </div>
-                    <h2>Справочник</h2>
-                    <p>Ответы на все ваши вопросы</p>
-                </div>
-                
-                <div class="slide-body">
-                    <div class="feature-card fade-in">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <i class="fas fa-book"></i>
-                            </div>
-                            <div>
-                                <div class="feature-title">База знаний 24/7</div>
-                                <div class="feature-content">Всегда доступная помощь</div>
-                            </div>
-                        </div>
-                        
-                        <div class="feature-content">
-                            Наш новый справочник содержит ответы на 200+ самых популярных вопросов. 
-                            Теперь помощь доступна в любое время дня и ночи.
-                        </div>
-                        
-                        <ul class="benefit-list">
-                            <li>Пошаговые инструкции по всем функциям</li>
-                            <li>Видео-руководства и скриншоты</li>
-                            <li>Частые проблемы и их решение</li>
-                            <li>Обновляемая база знаний</li>
-                            <li>Возможность предложить свой вопрос</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="feature-card fade-in delay-1">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <i class="fas fa-search"></i>
-                            </div>
-                            <div>
-                                <div class="feature-title">Умный поиск</div>
-                                <div class="feature-content">Найдите ответ за секунды</div>
-                            </div>
-                        </div>
-                        
-                        <div class="feature-content">
-                            Наш ИИ-ассистент понимает вопросы на естественном языке. 
-                            Просто опишите свою проблему, и мы найдем решение.
-                        </div>
-                    </div>
-                    
-                    <div class="kb-grid">
-                        <div class="kb-item fade-in delay-2">
-                            <div class="kb-icon">
-                                <i class="fas fa-question-circle"></i>
-                            </div>
-                            <div class="kb-title">Как фотографировать чеки</div>
-                        </div>
-                        
-                        <div class="kb-item fade-in delay-3">
-                            <div class="kb-icon">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                            <div class="kb-title">Выплаты и кэшбэк</div>
-                        </div>
-                        
-                        <div class="kb-item fade-in delay-4">
-                            <div class="kb-icon">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="kb-title">Аккаунт и профиль</div>
-                        </div>
-                        
-                        <div class="kb-item fade-in delay-5">
-                            <div class="kb-icon">
-                                <i class="fas fa-tags"></i>
-                            </div>
-                            <div class="kb-title">Акции и бонусы</div>
-                        </div>
-                    </div>
-                    
-                    <button class="btn-primary fade-in delay-5" onclick="closeModalAndGoToKnowledge()">
-                        <i class="fas fa-lightbulb"></i> Перейти в справочник
-                    </button>
-                    
-                    <div class="info-text fade-in delay-5">
-                        Если не нашли ответ, просто напишите в чат - менеджер подключится в течение 30 секунд.
-                    </div>
-                </div>
-                
-                <div class="nav-controls">
-                    <button class="nav-btn" id="prev-btn-1" title="Предыдущий раздел">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <div class="nav-indicators">
-                        <div class="indicator" data-slide="0"></div>
-                        <div class="indicator active" data-slide="1"></div>
-                        <div class="indicator" data-slide="2"></div>
-                        <div class="indicator" data-slide="3"></div>
-                    </div>
-                    <button class="nav-btn" id="next-btn-1" title="Следующий раздел">
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Слайд 2: Чеки -->
-            <div class="slide" id="checks-slide">
-                <div class="slide-header">
-                    <div class="close-btn visible" id="close-btn-3">
-                        <i class="fas fa-times"></i>
-                    </div>
-                    <div class="logo-badge">
-                        <img src="chia.png" alt="Чеки">
-                    </div>
-                    <h2>Ваши чеки</h2>
-                    <p>История покупок и кэшбэка</p>
-                </div>
-                
-                <div class="slide-body">
-                    <div class="feature-card fade-in">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <i class="fas fa-receipt"></i>
-                            </div>
-                            <div>
-                                <div class="feature-title">Все ваши чеки под рукой</div>
-                                <div class="feature-content">Мгновенный доступ к истории покупок</div>
-                            </div>
-                        </div>
-                        
-                        <div class="feature-content">
-                            Теперь вы видите все свои отсканированные чеки прямо в чате с ботом. 
-                            Больше не нужно искать информацию в разных разделах приложения.
-                        </div>
-                        
-                        <ul class="benefit-list">
-                            <li>Просматривайте статус каждого чека (принят, на проверке, отклонен)</li>
-                            <li>Видите сумму кэшбэка по каждому чеку</li>
-                            <li>Фильтруйте чеки по дате, аптеке или сумме</li>
-                            <li>Быстро находите нужный чек через поиск</li>
-                            <li>Архив чеков за весь период использования</li>
-                        </ul>
-                        
-                        <div class="data-preview">
-                            <div class="data-item">
-                                За последние 7 дней
-                                <div class="data-value">8 чеков</div>
-                            </div>
-                            <div class="data-item">
-                                Общая сумма
-                                <div class="data-value">5 430 ₽</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-card fade-in delay-1">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <i class="fas fa-camera"></i>
-                            </div>
-                            <div>
-                                <div class="feature-title">Сканируйте чеки за секунды</div>
-                                <div class="feature-content">Улучшенная система распознавания</div>
-                            </div>
-                        </div>
-                        
-                        <div class="feature-content">
-                            Наш новый алгоритм распознаёт чеки даже в сложных условиях. 
-                            Больше не нужно переживать о качестве фотографии.
-                        </div>
-                        
-                        <ul class="benefit-list">
-                            <li>Распознавание QR-кодов и штрих-кодов</li>
-                            <li>Автоматическая обрезка и улучшение качества</li>
-                            <li>Определение суммы, даты и аптеки</li>
-                            <li>Мгновенная проверка на соответствие требованиям</li>
-                            <li>Возможность загрузки электронных чеков</li>
-                        </ul>
-                    </div>
-                    
-                    <button class="btn-primary fade-in delay-2" onclick="closeModalAndGoToChat()">
-                        <i class="fas fa-history"></i> Посмотреть все чеки
-                    </button>
-                    
-                    <div class="info-text fade-in delay-2">
-                        Все ваши чеки надёжно хранятся в зашифрованном виде и доступны только вам.
-                    </div>
-                </div>
-                
-                <div class="nav-controls">
-                    <button class="nav-btn" id="prev-btn-2" title="Предыдущий раздел">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <div class="nav-indicators">
-                        <div class="indicator" data-slide="0"></div>
-                        <div class="indicator" data-slide="1"></div>
-                        <div class="indicator active" data-slide="2"></div>
-                        <div class="indicator" data-slide="3"></div>
-                    </div>
-                    <button class="nav-btn" id="next-btn-2" title="Следующий раздел">
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Слайд 3: Выплаты -->
-            <div class="slide" id="payments-slide">
-                <div class="slide-header">
-                    <div class="close-btn visible" id="close-btn-4">
-                        <i class="fas fa-times"></i>
-                    </div>
-                    <div class="logo-badge">
-                        <img src="chia.png" alt="Выплаты">
-                    </div>
-                    <h2>Выплаты</h2>
-                    <p>Управление вашим кэшбэком</p>
-                </div>
-                
-                <div class="slide-body">
-                    <div class="feature-card fade-in">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <i class="fas fa-wallet"></i>
-                            </div>
-                            <div>
-                                <div class="feature-title">Ваши выплаты онлайн</div>
-                                <div class="feature-content">Прозрачность и скорость выплат</div>
-                            </div>
-                        </div>
-                        
-                        <div class="feature-content">
-                            Теперь вы всегда видите статус своих выплат, ожидаемые суммы и историю операций. 
-                            Все в одном месте, без лишних движений.
-                        </div>
-                        
-                        <ul class="benefit-list">
-                            <li>Мгновенное уведомление о зачислении средств</li>
-                            <li>Детализация по каждой выплате</li>
-                            <li>История всех операций за любой период</li>
-                            <li>Экспорт данных для учета</li>
-                            <li>Графики и аналитика ваших выплат</li>
-                        </ul>
-                        
-                        <div class="data-preview">
-                            <div class="data-item">
-                                Последняя выплата
-                                <div class="data-value">1 200 ₽</div>
-                            </div>
-                            <div class="data-item">
-                                Ожидается
-                                <div class="data-value">850 ₽</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-card fade-in delay-1">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                            <div>
-                                <div class="feature-title">Мгновенные выплаты</div>
-                                <div class="feature-content">Получайте деньги в 3 раза быстрее</div>
-                            </div>
-                        </div>
-                        
-                        <div class="feature-content">
-                            Благодаря новой системе обработки платежей, вы получаете свои деньги 
-                            моментально на карту или телефон.
-                        </div>
-                        
-                        <ul class="benefit-list">
-                            <li>Вывод на карту любого банка</li>
-                            <li>Пополнение мобильного телефона</li>
-                            <li>Без скрытых комиссий и ограничений</li>
-                            <li>Минимальная сумма выплаты - всего 100 рублей</li>
-                            <li>Автоматические выплаты по расписанию</li>
-                        </ul>
-                    </div>
-                    
-                    <button class="btn-primary fade-in delay-2" onclick="closeModalAndGoToChat()">
-                        <i class="fas fa-arrow-right"></i> Запросить выплату
-                    </button>
-                    
-                    <div class="info-text fade-in delay-2">
-                        Среднее время зачисления средств - менее 5 минут. Максимум - 15 минут в пиковые часы.
-                    </div>
-                </div>
-                
-                <div class="nav-controls">
-                    <button class="nav-btn" id="prev-btn-3" title="Предыдущий раздел">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <div class="nav-indicators">
-                        <div class="indicator" data-slide="0"></div>
-                        <div class="indicator" data-slide="1"></div>
-                        <div class="indicator" data-slide="2"></div>
-                        <div class="indicator active" data-slide="3"></div>
-                    </div>
-                    <button class="nav-btn" id="close-last-btn" title="Закрыть">
-                        <i class="fas fa-check"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="app">
         <div class="tabs-container">
-            <div class="tab active" id="chat-tab">Чат</div>
-            <div class="tab" id="knowledge-tab">Справочник</div>
+            <div class="tab active" id="chat-tab">Чат с ботом</div>
+            <div class="tab" id="knowledge-tab">База знаний</div>
         </div>
         
         <!-- Раздел чата -->
@@ -2117,8 +1070,40 @@
         </div>
     </div>
     <script>
-        // Обновленные категории в стиле VK
+        // База знаний с улучшенной структурой
         const knowledgeBase = [
+            {
+                id: "general",
+                title: "Общие вопросы",
+                icon: "fa-lightbulb",
+                items: [
+                    {
+                        id: "how-cashback",
+                        question: "Как работает кэшбэк?",
+                        answer: "Кэшбэк начисляется за покупки в аптеках-партнерах. Размер кэшбэка зависит от аптеки и может составлять от 1% до 30% от суммы покупки. Для получения кэшбэка необходимо зарегистрироваться в приложении, совершить покупку в аптеке-партнере и загрузить чек в приложение."
+                    },
+                    {
+                        id: "which-pharmacies",
+                        question: "Какие аптеки участвуют в программе?",
+                        answer: "Список аптек-партнеров доступен в приложении в разделе 'Аптеки'. Мы постоянно расширяем сеть партнеров, поэтому рекомендуем проверять актуальный список перед покупкой."
+                    },
+                    {
+                        id: "how-register",
+                        question: "Как зарегистрироваться в приложении?",
+                        answer: "Для регистрации скачайте приложение 'Чеки из Аптеки', введите ваш номер телефона, подтвердите его с помощью SMS-кода и заполните необходимые данные. После этого вы сможете начать пользоваться всеми функциями приложения."
+                    },
+                    {
+                        id: "is-it-free",
+                        question: "Это бесплатно?",
+                        answer: "Да, использование приложения 'Чеки из Аптеки' полностью бесплатное. Мы зарабатываем на партнерских отчислениях от аптек, а вы получаете кэшбэк."
+                    },
+                    {
+                        id: "what-is-this",
+                        question: "Что такое 'Чеки из Аптеки'?",
+                        answer: "Это сервис, который позволяет вам получать кэшбэк за покупки в аптеках. Просто сканируйте чеки и получайте деньги."
+                    }
+                ]
+            },
             {
                 id: "receipts",
                 title: "Работа с чеками",
@@ -2184,14 +1169,14 @@
                 ]
             },
             {
-                id: "account",
-                title: "Аккаунт",
-                icon: "fa-user",
+                id: "technical",
+                title: "Приложение",
+                icon: "fa-tools",
                 items: [
                     {
-                        id: "how-register",
-                        question: "Как зарегистрироваться в приложении?",
-                        answer: "Для регистрации скачайте приложение 'Чеки из Аптеки', введите ваш номер телефона, подтвердите его с помощью SMS-кода и заполните необходимые данные. После этого вы сможете начать пользоваться всеми функциями приложения."
+                        id: "app-not-working",
+                        question: "Что делать, если приложение не работает?",
+                        answer: "Попробуйте следующие шаги: 1) Перезагрузите приложение 2) Проверьте интернет-соединение 3) Обновите приложение до последней версии 4) Переустановите приложение. Если проблема не решена, обратитесь в поддержку."
                     },
                     {
                         id: "edit-profile",
@@ -2204,14 +1189,14 @@
                         answer: "Если вы забыли пароль, нажмите 'Забыли пароль?' на экране входа и следуйте инструкциям. Если у вас нет доступа к номеру телефона, привязанному к аккаунту, обратитесь в поддержку с подтверждающими документами."
                     },
                     {
-                        id: "is-it-free",
-                        question: "Это бесплатно?",
-                        answer: "Да, использование приложения 'Чеки из Аптеки' полностью бесплатное. Мы зарабатываем на партнерских отчислениях от аптек, а вы получаете кэшбэк."
+                        id: "notifications-off",
+                        question: "Почему я не получаю уведомления?",
+                        answer: "Проверьте настройки уведомлений для нашего приложения в системных настройках вашего телефона. Убедитесь, что они включены. Также проверьте, не включен ли режим 'Не беспокоить'."
                     },
                     {
-                        id: "what-is-this",
-                        question: "Что такое 'Чеки из Аптеки'?",
-                        answer: "Это сервис, который позволяет вам получать кэшбэк за покупки в аптеках. Просто сканируйте чеки и получайте деньги."
+                        id: "phone-support",
+                        question: "Поддерживается ли мой телефон?",
+                        answer: "Наше приложение работает на большинстве современных смартфонов под управлением iOS (версия 13 и выше) и Android (версия 7.0 и выше)."
                     }
                 ]
             },
@@ -2238,46 +1223,83 @@
                 ]
             },
             {
-                id: "technical",
-                title: "Технические проблемы",
-                icon: "fa-tools",
+                id: "instructions",
+                title: "Инструкции",
+                icon: "fa-play-circle",
                 items: [
                     {
-                        id: "app-not-working",
-                        question: "Что делать, если приложение не работает?",
-                        answer: "Попробуйте следующие шаги: 1) Перезагрузите приложение 2) Проверьте интернет-соединение 3) Обновите приложение до последней версии 4) Переустановите приложение. Если проблема не решена, обратитесь в поддержку."
+                        id: "first-receipt",
+                        question: "Как загрузить первый чек?",
+                        answer: "1. Откройте приложение и войдите в аккаунт. 2. Нажмите кнопку '+' или 'Добавить чек'. 3. Сфотографируйте чек при хорошем освещении. 4. Убедитесь, что все данные читаемы. 5. Нажмите 'Отправить'. Чек будет проверен в течение 24 часов."
                     },
                     {
-                        id: "notifications-off",
-                        question: "Почему я не получаю уведомления?",
-                        answer: "Проверьте настройки уведомлений для нашего приложения в системных настройках вашего телефона. Убедитесь, что они включены. Также проверьте, не включен ли режим 'Не беспокоить'."
+                        id: "check-balance",
+                        question: "Как проверить баланс и историю?",
+                        answer: "В главном меню приложения найдите раздел 'Баланс' или 'Мои деньги'. Там вы увидите текущий баланс, историю всех операций, статус чеков и информацию о выплатах."
                     },
                     {
-                        id: "phone-support",
-                        question: "Поддерживается ли мой телефон?",
-                        answer: "Наше приложение работает на большинстве современных смартфонов под управлением iOS (версия 13 и выше) и Android (версия 7.0 и выше)."
+                        id: "find-pharmacies",
+                        question: "Как найти аптеки-партнеры рядом?",
+                        answer: "В приложении есть карта с отмеченными аптеками-партнерами. Откройте раздел 'Аптеки' или 'Карта', включите геолокацию, и вы увидите все ближайшие аптеки с указанием размера кэшбэка."
+                    },
+                    {
+                        id: "edit-profile",
+                        question: "Как изменить данные профиля?",
+                        answer: "Перейдите в 'Профиль' → 'Редактировать'. Здесь можно изменить имя, email, добавить фото. Для смены номера телефона обратитесь в поддержку."
                     }
                 ]
             },
             {
-                id: "privacy",
-                title: "Приватность",
-                icon: "fa-lock",
+                id: "common-errors",
+                title: "Частые ошибки",
+                icon: "fa-exclamation-triangle",
                 items: [
                     {
-                        id: "privacy-policy",
-                        question: "Как защищаются мои персональные данные?",
-                        answer: "Мы строго соблюдаем требования законодательства о защите персональных данных. Ваши данные хранятся в зашифрованном виде, не передаются третьим лицам без вашего согласия. Подробности в политике конфиденциальности."
+                        id: "blurry-photo",
+                        question: "Фото чека получилось размытым",
+                        answer: "Попробуйте еще раз: 1. Держите телефон неподвижно. 2. Убедитесь в хорошем освещении. 3. Расположите чек на ровной поверхности. 4. Сфотографируйте с расстояния 15-20 см. 5. Проверьте, что все цифры читаемы."
                     },
                     {
-                        id: "terms-of-service",
-                        question: "Где найти пользовательское соглашение?",
-                        answer: "Полный текст пользовательского соглашения доступен в разделе 'Правовая информация' в настройках приложения. Также вы можете найти его на нашем официальном сайте в разделе 'Документы'."
+                        id: "wrong-pharmacy",
+                        question: "Загрузил чек не из аптеки-партнера",
+                        answer: "К сожалению, кэшбэк начисляется только за покупки в аптеках-партнерах. Проверьте список партнеров в разделе 'Аптеки' перед покупкой. Чек из обычной аптеки будет отклонен."
                     },
                     {
-                        id: "tax-obligations",
-                        question: "Нужно ли платить налоги с кэшбэка?",
-                        answer: "Кэшбэк не является доходом в налоговом смысле, поэтому декларировать его не нужно. Это возврат части потраченных средств, аналогично скидке или бонусу от магазина."
+                        id: "old-receipt",
+                        question: "Чек старше 3 дней",
+                        answer: "Мы принимаем чеки только в течение 3 дней с момента покупки. Если чек старше, он будет отклонен. В будущем загружайте чеки сразу после покупки."
+                    },
+                    {
+                        id: "duplicate-receipt",
+                        question: "Система говорит, что чек уже загружен",
+                        answer: "Это означает, что такой чек уже был обработан. Проверьте историю в разделе 'Мои чеки'. Если вы уверены, что это ошибка, обратитесь в поддержку."
+                    }
+                ]
+            },
+            {
+                id: "tips-tricks",
+                title: "Советы и лайфхаки",
+                icon: "fa-magic",
+                items: [
+                    {
+                        id: "max-cashback",
+                        question: "Как получать больше кэшбэка?",
+                        answer: "1. Покупайте в аптеках с высоким процентом кэшбэка (до 30%). 2. Участвуйте в акциях и спецпредложениях. 3. Приглашайте друзей - получайте бонусы за каждого. 4. Загружайте чеки сразу после покупки."
+                    },
+                    {
+                        id: "best-time",
+                        question: "Когда лучше загружать чеки?",
+                        answer: "Загружайте чеки сразу после покупки, пока все данные свежие в памяти. Это поможет избежать ошибок и ускорит проверку. Также лучше делать это при хорошем освещении."
+                    },
+                    {
+                        id: "organize-receipts",
+                        question: "Как организовать чеки для быстрой загрузки?",
+                        answer: "Создайте папку 'Чеки для загрузки' в галерее телефона. Сразу после покупки фотографируйте чек и сохраняйте туда. Раз в день загружайте все накопленные чеки."
+                    },
+                    {
+                        id: "family-account",
+                        question: "Можно ли использовать один аккаунт для семьи?",
+                        answer: "Да, один аккаунт можно использовать для всей семьи. Просто загружайте чеки всех членов семьи в один аккаунт. Это удобно для накопления большей суммы кэшбэка."
                     }
                 ]
             },
@@ -2309,24 +1331,29 @@
                 ]
             },
             {
-                id: "community",
-                title: "Сообщества",
-                icon: "fa-users",
+                id: "legal",
+                title: "Информация",
+                icon: "fa-file-alt",
                 items: [
                     {
-                        id: "how-cashback",
-                        question: "Как работает кэшбэк?",
-                        answer: "Кэшбэк начисляется за покупки в аптеках-партнерах. Размер кэшбэка зависит от аптеки и может составлять от 1% до 30% от суммы покупки. Для получения кэшбэка необходимо зарегистрироваться в приложении, совершить покупку в аптеке-партнере и загрузить чек в приложение."
+                        id: "terms-of-service",
+                        question: "Где найти пользовательское соглашение?",
+                        answer: "Полный текст пользовательского соглашения доступен в разделе 'Правовая информация' в настройках приложения. Также вы можете найти его на нашем официальном сайте в разделе 'Документы'."
                     },
                     {
-                        id: "which-pharmacies",
-                        question: "Какие аптеки участвуют в программе?",
-                        answer: "Список аптек-партнеров доступен в приложении в разделе 'Аптеки'. Мы постоянно расширяем сеть партнеров, поэтому рекомендуем проверять актуальный список перед покупкой."
+                        id: "privacy-policy",
+                        question: "Как защищаются мои персональные данные?",
+                        answer: "Мы строго соблюдаем требования законодательства о защите персональных данных. Ваши данные хранятся в зашифрованном виде, не передаются третьим лицам без вашего согласия. Подробности в политике конфиденциальности."
                     },
                     {
-                        id: "find-pharmacies",
-                        question: "Как найти аптеки-партнеры рядом?",
-                        answer: "В приложении есть карта с отмеченными аптеками-партнерами. Откройте раздел 'Аптеки' или 'Карта', включите геолокацию, и вы увидите все ближайшие аптеки с указанием размера кэшбэка."
+                        id: "tax-obligations",
+                        question: "Нужно ли платить налоги с кэшбэка?",
+                        answer: "Кэшбэк не является доходом в налоговом смысле, поэтому декларировать его не нужно. Это возврат части потраченных средств, аналогично скидке или бонусу от магазина."
+                    },
+                    {
+                        id: "dispute-resolution",
+                        question: "Как решаются споры с сервисом?",
+                        answer: "Все споры решаются путем переговоров. Если соглашение не достигнуто, спор рассматривается в соответствии с законодательством РФ. Для решения вопросов обращайтесь в службу поддержки."
                     }
                 ]
             }
@@ -2365,25 +1392,8 @@
 
         // Инициализация чата
         document.addEventListener('DOMContentLoaded', function() {
-            // Инициализация модального окна приветствия
-            initWelcomeModal();
-            
             // Инициализация базы знаний
             initKnowledgeBaseModal();
-            
-            // Обработчик скролла для заголовка базы знаний
-            const kbHeader = document.querySelector('.knowledge-base-header');
-            const kbContent = document.getElementById('knowledge-categories');
-
-            if (kbContent) {
-                kbContent.addEventListener('scroll', function() {
-                    if (kbContent.scrollTop > 20) {
-                        kbHeader.classList.add('kb-header-scrolled');
-                    } else {
-                        kbHeader.classList.remove('kb-header-scrolled');
-                    }
-                });
-            }
             
             // Обработчики вкладок
             document.getElementById('chat-tab').addEventListener('click', function() {
@@ -3196,25 +2206,26 @@
             const container = document.getElementById('knowledge-categories');
             container.innerHTML = '';
             
-            // Устанавливаем стили для сетки 2x2
+            // Улучшенные отступы для более симпатичного вида
             container.style.display = 'grid';
             container.style.gridTemplateColumns = 'repeat(2, 1fr)';
-            container.style.gap = '20px';
-            container.style.padding = '24px 20px';
+            container.style.gridAutoRows = '1fr';
+            container.style.gap = '14px';
+            container.style.padding = '18px 14px';
+            container.style.alignItems = 'stretch';
+            container.style.justifyItems = 'stretch';
 
-            document.getElementById('kb-title').textContent = 'База знаний';
-            document.getElementById('kb-subtitle').textContent = 'Выберите категорию';
+            document.getElementById('kb-title').textContent = '';
+            document.getElementById('kb-subtitle').textContent = 'Ответы на частые вопросы';
             document.getElementById('back-to-categories').style.display = 'none';
             
             knowledgeBase.forEach((cat) => {
                 const catDiv = document.createElement('div');
-                catDiv.className = 'knowledge-category slide-in';
+                catDiv.className = 'knowledge-category';
                 catDiv.setAttribute('data-category', cat.id);
                 
                 catDiv.innerHTML = `
-                    <div class="knowledge-category-square">
-                        <div class="knowledge-category-icon"><i class="fas ${cat.icon}"></i></div>
-                    </div>
+                    <div class="knowledge-category-icon"><i class="fas ${cat.icon}"></i></div>
                     <div class="knowledge-category-title">${cat.title}</div>
                 `;
                 
@@ -3348,178 +2359,6 @@
         function handleFeedback(categoryId, questionId, feedbackType) {
             // Здесь можно добавить отправку оценки на сервер
             console.log(`Пользователь оценил статью: ${categoryId}/${questionId} - ${feedbackType}`);
-        }
-
-        // Функции для модального окна приветствия
-        function initWelcomeModal() {
-            const modalElement = document.getElementById('welcome-modal');
-            const appElement = document.getElementById('app');
-            
-            // Показываем модальное окно каждый раз
-            modalElement.style.display = 'flex';
-            appElement.style.display = 'none';
-            
-            // Инициализируем слайды
-            initSlides();
-        }
-
-        function initSlides() {
-            const slides = document.querySelectorAll('.slide');
-            const indicators = document.querySelectorAll('.indicator');
-            let currentSlide = 0;
-            let timerInterval;
-            let secondsLeft = 7;
-            const timerElement = document.getElementById('timer-seconds');
-            
-            // Функция запуска таймера
-            function startTimer() {
-                let secondsLeft = 7;
-                const timerElement = document.getElementById('timer-seconds');
-                const timerCloseElement = document.getElementById('timer-close');
-                
-                const timerInterval = setInterval(() => {
-                    secondsLeft--;
-                    timerElement.textContent = secondsLeft;
-                    
-                    if (secondsLeft <= 0) {
-                        clearInterval(timerInterval);
-                        
-                        // Скрываем цифру и показываем крестик
-                        timerElement.style.display = 'none';
-                        timerCloseElement.classList.add('show');
-                        
-                        // Показываем кнопку закрытия
-                        document.getElementById('close-btn').classList.add('visible');
-                    }
-                }, 1000);
-            }
-            
-            // Показать текущий слайд
-            function showSlide(index) {
-                // Скрыть все слайды
-                slides.forEach(slide => {
-                    slide.classList.remove('active', 'prev', 'next');
-                });
-                
-                // Обновить индикаторы
-                indicators.forEach((indicator, i) => {
-                    indicator.classList.toggle('active', i === index);
-                });
-                
-                // Показать текущий слайд
-                slides[index].classList.add('active');
-                
-                // Установить классы для соседних слайдов для анимации
-                if (index > 0) {
-                    slides[index - 1].classList.add('prev');
-                }
-                if (index < slides.length - 1) {
-                    slides[index + 1].classList.add('next');
-                }
-                
-                currentSlide = index;
-            }
-            
-            // Инициализация
-            showSlide(0);
-            startTimer(); // Запускаем таймер на первом слайде
-            
-            // Навигация по кнопкам
-            document.getElementById('next-btn').addEventListener('click', () => {
-                // Останавливаем таймер при переходе
-                const timerCircle = document.querySelector('.timer-circle');
-                if (timerCircle) {
-                    timerCircle.style.animationPlayState = 'paused';
-                }
-                showSlide(1);
-            });
-            document.getElementById('next-btn-1').addEventListener('click', () => showSlide(2));
-            document.getElementById('next-btn-2').addEventListener('click', () => showSlide(3));
-            document.getElementById('prev-btn-1').addEventListener('click', () => showSlide(0));
-            document.getElementById('prev-btn-2').addEventListener('click', () => showSlide(1));
-            document.getElementById('prev-btn-3').addEventListener('click', () => showSlide(2));
-            
-            // Навигация по индикаторам
-            indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', () => {
-                    if (index === 0) {
-                        // Останавливаем таймер при переходе на первый слайд
-                        const timerCircle = document.querySelector('.timer-circle');
-                        if (timerCircle) {
-                            timerCircle.style.animationPlayState = 'paused';
-                        }
-                    }
-                    showSlide(index);
-                });
-            });
-            
-            // Закрытие слайдов
-            function closeSlides() {
-                document.getElementById('welcome-modal').style.display = 'none';
-                document.getElementById('app').style.display = 'flex';
-            }
-            
-            // Назначение обработчиков закрытия
-            document.querySelectorAll('.close-btn').forEach(btn => {
-                btn.addEventListener('click', closeSlides);
-            });
-            document.getElementById('close-last-btn').addEventListener('click', closeSlides);
-            
-            // Обработка свайпов
-            let touchStartX = 0;
-            let touchEndX = 0;
-            
-            function handleSwipe() {
-                const diff = touchStartX - touchEndX;
-                
-                // Определение направления свайпа
-                if (diff > 50 && currentSlide < slides.length - 1) {
-                    // Свайп влево - следующий слайд
-                    if (currentSlide === 0) {
-                        // Останавливаем таймер при переходе
-                        const timerCircle = document.querySelector('.timer-circle');
-                        if (timerCircle) {
-                            timerCircle.style.animationPlayState = 'paused';
-                        }
-                    }
-                    showSlide(currentSlide + 1);
-                } else if (diff < -50 && currentSlide > 0) {
-                    // Свайп вправо - предыдущий слайд
-                    showSlide(currentSlide - 1);
-                }
-            }
-            
-            // Обработчики событий касания
-            document.querySelector('.slides-container').addEventListener('touchstart', e => {
-                touchStartX = e.changedTouches[0].screenX;
-            });
-            
-            document.querySelector('.slides-container').addEventListener('touchend', e => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            });
-            
-            // Обработчики событий мыши для десктопов
-            document.querySelector('.slides-container').addEventListener('mousedown', e => {
-                touchStartX = e.screenX;
-            });
-            
-            document.querySelector('.slides-container').addEventListener('mouseup', e => {
-                touchEndX = e.screenX;
-                handleSwipe();
-            });
-        }
-
-        function closeModalAndGoToChat() {
-            document.getElementById('welcome-modal').style.display = 'none';
-            document.getElementById('app').style.display = 'flex';
-            switchTab('chat');
-        }
-
-        function closeModalAndGoToKnowledge() {
-            document.getElementById('welcome-modal').style.display = 'none';
-            document.getElementById('app').style.display = 'flex';
-            switchTab('knowledge');
         }
     </script>
 </body>
