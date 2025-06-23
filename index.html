@@ -1226,7 +1226,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 9999;
+            z-index: 99999;
             pointer-events: none;
             display: flex;
             justify-content: center;
@@ -1237,8 +1237,8 @@
             width: 210px;
             height: 200px;
             background: repeating-linear-gradient(180deg, #f8f8f8 0 8px, #fff 8px 24px);
-            border-radius: 18px 18px 0 0;
-            box-shadow: 0 8px 32px 0 rgba(234,59,144,0.13), 0 2px 8px rgba(70,103,217,0.08);
+            border-radius: 22px 22px 0 0;
+            box-shadow: 0 12px 40px 0 rgba(234,59,144,0.16), 0 2px 8px rgba(70,103,217,0.10);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1246,6 +1246,19 @@
             overflow: visible;
             animation: checkFall 1.2s cubic-bezier(0.4,0,0.2,1) forwards;
             border-bottom: none;
+        }
+        @media (max-width: 500px) {
+            .falling-check-container {
+                align-items: flex-start;
+            }
+            .falling-check {
+                width: 92vw;
+                max-width: 340px;
+                height: 180px;
+                margin-top: 6vh;
+                border-radius: 24px 24px 0 0;
+                box-shadow: 0 14px 44px 0 rgba(234,59,144,0.18), 0 2px 8px rgba(70,103,217,0.12);
+            }
         }
         .falling-check-logo {
             width: 64px;
@@ -1414,6 +1427,7 @@
             -webkit-backdrop-filter: blur(16px);
             overflow: hidden;
             transition: box-shadow 0.2s, border 0.2s;
+            z-index: 1000;
         }
         .chat-outage-banner .outage-icon {
             display: flex;
@@ -1472,6 +1486,7 @@
                 font-size: 1.01rem;
                 padding: 1em 0.7em 1em 0.7em;
                 min-height: 44px;
+                margin-top: 12px;
             }
             .chat-outage-banner .outage-icon {
                 width: 22px;
