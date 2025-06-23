@@ -1609,24 +1609,20 @@
 
         // Улучшенная функция haptic feedback
         function triggerHaptic(intensity = 'medium') {
-            try {
-                if (window.navigator && window.navigator.vibrate) {
-                    switch (intensity) {
-                        case 'light':
-                            window.navigator.vibrate(20);
-                            break;
-                        case 'medium':
-                            window.navigator.vibrate(40);
-                            break;
-                        case 'strong':
-                            window.navigator.vibrate([40, 30, 40]);
-                            break;
-                        default:
-                            window.navigator.vibrate(40);
-                    }
+            if ('vibrate' in navigator) {
+                switch (intensity) {
+                    case 'light':
+                        navigator.vibrate(10);
+                        break;
+                    case 'medium':
+                        navigator.vibrate(15);
+                        break;
+                    case 'strong':
+                        navigator.vibrate([15, 10, 15]);
+                        break;
+                    default:
+                        navigator.vibrate(15);
                 }
-            } catch (e) {
-                console.log('Haptic feedback not supported');
             }
         }
 
@@ -1636,12 +1632,12 @@
             
             // Обработчики вкладок
             document.getElementById('chat-tab').addEventListener('click', function() {
-                triggerHaptic('light');
+                triggerHaptic('medium');
                 switchTab('chat');
             });
             
             document.getElementById('knowledge-tab').addEventListener('click', function() {
-                triggerHaptic('light');
+                triggerHaptic('medium');
                 switchTab('knowledge');
             });
             
@@ -1699,7 +1695,10 @@
             document.getElementById('user-input').addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
-                    if (this.value.trim().length > 0) sendMessage();
+                    if (this.value.trim().length > 0) {
+                        triggerHaptic('medium');
+                        sendMessage();
+                    }
                 }
             });
 
@@ -1725,21 +1724,18 @@
 
             // Обработчик загрузки файлов
             document.getElementById('file-attach').addEventListener('change', function(e) {
-                const files = e.target.files;
-                if (files.length > 0) {
-                    for (let i = 0; i < files.length; i++) {
-                        const file = files[i];
-                        addFileMessage(file);
-                    }
-                    // Очищаем input для возможности повторной загрузки того же файла
-                    e.target.value = '';
+                if (e.target.files.length > 0) {
+                    triggerHaptic('light');
                 }
             });
 
             // Обновляем обработчик отправки сообщения
             document.getElementById('send-button').addEventListener('click', function() {
-                triggerHaptic('medium');
-                sendMessage();
+                const input = document.getElementById('user-input');
+                if (input.value.trim().length > 0) {
+                    triggerHaptic('medium');
+                    sendMessage();
+                }
             });
 
             // Приветственное сообщение
@@ -1748,6 +1744,23 @@
                 showOptions(['Вопрос по чеку', 'Вопрос по выплате', 'Другой вопрос']);
                 isFirstMessage = false;
             }
+
+            // Добавляем вибрацию для всех кнопок
+            document.addEventListener('click', function(e) {
+                const target = e.target;
+                
+                // Проверяем, является ли элемент или его родитель кнопкой
+                if (target.closest('button') || 
+                    target.closest('.option-button') || 
+                    target.closest('.knowledge-category') || 
+                    target.closest('.knowledge-question') ||
+                    target.closest('.tab') ||
+                    target.closest('.feedback-button') ||
+                    target.closest('.answer-back-button') ||
+                    target.closest('.ask-button')) {
+                    triggerHaptic('light');
+                }
+            });
         });
 
         // Функция переключения вкладок
@@ -1886,7 +1899,10 @@
                 const button = document.createElement('button');
                 button.className = 'option-button micro-interaction slide-in';
                 button.textContent = option;
-                button.onclick = () => selectOption(option);
+                button.onclick = () => {
+                    triggerHaptic('medium');
+                    selectOption(option);
+                };
                 container.appendChild(button);
             });
         }
@@ -2477,6 +2493,7 @@
                 `;
                 
                 catDiv.addEventListener('click', () => {
+                    triggerHaptic('light');
                     currentCategory = cat.id;
                     showCategoryQuestions(cat.id);
                 });
@@ -2511,6 +2528,7 @@
                 `;
                 
                 questionDiv.addEventListener('click', () => {
+                    triggerHaptic('light');
                     currentQuestion = item.id;
                     showQuestionAnswer(categoryId, item.id);
                 });
