@@ -1577,37 +1577,71 @@
         // Swipe navigation for tabs
         let touchStartX = 0;
         let touchEndX = 0;
-        const swipeThreshold = 50; // Minimum distance for a swipe gesture
+        let touchStartY = 0;
+        let touchEndY = 0;
+        const swipeThreshold = 50;
 
         function handleSwipeGesture() {
-            const isChatActive = document.getElementById('chat-tab').classList.contains('active');
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
             
-            // Swipe Right (с чата на базу знаний)
-            if (touchEndX - touchStartX > swipeThreshold) {
-                if (isChatActive) {
-                    switchTab('knowledge');
+            // Проверяем, что свайп был больше по горизонтали, чем по вертикали
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                const isChatActive = document.getElementById('chat-tab').classList.contains('active');
+                
+                // Свайп вправо (с чата на базу знаний)
+                if (diffX > swipeThreshold) {
+                    if (isChatActive) {
+                        triggerHaptic();
+                        switchTab('knowledge');
+                    }
                 }
-            }
-
-            // Swipe Left (с базы знаний на чат)
-            if (touchStartX - touchEndX > swipeThreshold) {
-                if (!isChatActive) {
-                    switchTab('chat');
+                
+                // Свайп влево (с базы знаний на чат)
+                if (diffX < -swipeThreshold) {
+                    if (!isChatActive) {
+                        triggerHaptic();
+                        switchTab('chat');
+                    }
                 }
             }
         }
 
-        // Инициализация чата
+        // Улучшенная функция haptic feedback
+        function triggerHaptic(intensity = 'medium') {
+            try {
+                if (window.navigator && window.navigator.vibrate) {
+                    switch (intensity) {
+                        case 'light':
+                            window.navigator.vibrate(20);
+                            break;
+                        case 'medium':
+                            window.navigator.vibrate(40);
+                            break;
+                        case 'strong':
+                            window.navigator.vibrate([40, 30, 40]);
+                            break;
+                        default:
+                            window.navigator.vibrate(40);
+                    }
+                }
+            } catch (e) {
+                console.log('Haptic feedback not supported');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // Инициализация базы знаний
             initKnowledgeBaseModal();
             
             // Обработчики вкладок
             document.getElementById('chat-tab').addEventListener('click', function() {
+                triggerHaptic('light');
                 switchTab('chat');
             });
             
             document.getElementById('knowledge-tab').addEventListener('click', function() {
+                triggerHaptic('light');
                 switchTab('knowledge');
             });
             
@@ -1624,36 +1658,41 @@
                 }
             });
 
-            // Swipe navigation for tabs
+            // Улучшенная обработка свайпов
             const appElement = document.getElementById('app');
-
+            
             appElement.addEventListener('touchstart', (e) => {
-                // Ignore swipe if the touch starts on a scrollable element to avoid conflicts.
-                if (e.target.closest('.chat-messages, .knowledge-categories, .horizontal-scroll, .input-area, .options-container')) {
-                    touchStartX = 0; // Reset to indicate no swipe tracking
+                const target = e.target;
+                // Игнорируем свайп на скроллируемых элементах
+                if (target.closest('.chat-messages, .knowledge-categories, .horizontal-scroll, textarea, .input-area')) {
                     return;
                 }
-                touchStartX = e.changedTouches[0].screenX;
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
             }, { passive: true });
 
             appElement.addEventListener('touchmove', (e) => {
-                // Prevent default scrolling if we're tracking a swipe
-                if (touchStartX !== 0) {
+                if (touchStartX === 0 && touchStartY === 0) return;
+                
+                const target = e.target;
+                // Предотвращаем скролл только если это не скроллируемый элемент
+                if (!target.closest('.chat-messages, .knowledge-categories, .horizontal-scroll, textarea, .input-area')) {
                     e.preventDefault();
                 }
             }, { passive: false });
 
             appElement.addEventListener('touchend', (e) => {
-                // If touchStartX is 0, it means the touch started on a scrollable element, so we ignore it.
-                if (touchStartX === 0) {
-                    return;
-                }
+                if (touchStartX === 0 && touchStartY === 0) return;
                 
-                touchEndX = e.changedTouches[0].screenX;
+                touchEndX = e.changedTouches[0].clientX;
+                touchEndY = e.changedTouches[0].clientY;
                 handleSwipeGesture();
-
-                // Reset touchStartX for the next swipe
+                
+                // Сбрасываем значения
                 touchStartX = 0;
+                touchStartY = 0;
+                touchEndX = 0;
+                touchEndY = 0;
             }, { passive: true });
 
             // Обработчик ввода сообщения
@@ -1697,8 +1736,9 @@
                 }
             });
 
-            // Обработчик клика по кнопке отправки
+            // Обновляем обработчик отправки сообщения
             document.getElementById('send-button').addEventListener('click', function() {
+                triggerHaptic('medium');
                 sendMessage();
             });
 
@@ -1731,11 +1771,7 @@
             const input = document.getElementById('user-input');
             const message = input.value.trim();
             if (message) {
-                // Haptic feedback
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(50); // Light tap feedback
-                }
-                
+                triggerHaptic('medium');
                 addUserMessage(message);
                 input.value = '';
                 input.style.height = 'auto';
