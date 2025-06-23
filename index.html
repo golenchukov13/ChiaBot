@@ -1218,9 +1218,307 @@
                 transform: scale(0.98);
             }
         }
+
+        /* --- АНИМАЦИЯ ЧЕКА С ЛОГОТИПОМ --- */
+        .falling-check-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            animation: none;
+        }
+        .falling-check {
+            width: 210px;
+            height: 200px;
+            background: repeating-linear-gradient(180deg, #f8f8f8 0 8px, #fff 8px 24px);
+            border-radius: 18px 18px 0 0;
+            box-shadow: 0 8px 32px 0 rgba(234,59,144,0.13), 0 2px 8px rgba(70,103,217,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: visible;
+            animation: checkFall 1.2s cubic-bezier(0.4,0,0.2,1) forwards;
+            border-bottom: none;
+        }
+        .falling-check-logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            margin: 18px 0 10px 0;
+            box-shadow: 0 2px 12px rgba(234,59,144,0.10);
+            background: #fafafa;
+            object-fit: cover;
+        }
+        .falling-check-title {
+            font-size: 1.18rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2px;
+            letter-spacing: 0.01em;
+        }
+        .falling-check-desc {
+            font-size: 1.02rem;
+            color: #757575;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .falling-check-pseudo {
+            width: 90%;
+            margin: 0 auto 0 auto;
+            font-size: 0.82rem;
+            color: #b0b0b0;
+            font-family: monospace;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+            text-align: left;
+            background: none;
+            border-radius: 4px;
+            padding: 0 0 2px 0;
+            user-select: none;
+        }
+        .falling-check-sum {
+            font-size: 1.13rem;
+            color: #EA3B90;
+            font-weight: 700;
+            margin: 12px 0 0 0;
+            text-align: center;
+            width: 100%;
+            font-family: var(--font-primary);
+            letter-spacing: 0.01em;
+        }
+        .falling-check-qr {
+            width: 84px;
+            height: 84px;
+            margin: 14px 0 0 0;
+            align-self: center;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .falling-check-svg {
+            width: 100%;
+            height: 22px;
+            display: block;
+            position: absolute;
+            left: 0;
+            bottom: -18px;
+            z-index: 2;
+        }
+        .falling-check-tearline {
+            width: 100%;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, #EA3B90 0 8px, transparent 8px 16px);
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            z-index: 3;
+        }
+        @keyframes checkFall {
+            0% { transform: translateY(-160px) scale(1.1) rotate(-8deg); opacity: 0; }
+            60% { transform: translateY(40px) scale(1.04) rotate(2deg); opacity: 1; }
+            80% { transform: translateY(0) scale(1) rotate(0deg); }
+            100% { transform: translateY(0) scale(1) rotate(0deg); }
+        }
+        .falling-check.falling-check-tear-anim {
+            animation: checkTear 1.2s cubic-bezier(0.4,0,0.2,1) forwards;
+        }
+        @keyframes checkTear {
+            0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+            60% { opacity: 1; transform: translateY(24px) scale(0.98) rotate(-2deg); }
+            100% { opacity: 0; transform: translateY(80px) scale(0.95) rotate(-6deg); }
+        }
+
+        /* Sticky Outage Banner */
+        #outage-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            z-index: 10001;
+            background: linear-gradient(90deg, #FFD600 0%, #FF6F00 100%);
+            color: #222;
+            font-family: var(--font-primary);
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.95em 1.2em 0.95em 0.9em;
+            box-shadow: 0 2px 12px rgba(255, 111, 0, 0.10);
+            gap: 0.7em;
+            transition: top 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
+            border-bottom: 2px solid #FF6F00;
+            min-height: 48px;
+            user-select: none;
+        }
+        .outage-icon {
+            font-size: 1.3em;
+            margin-right: 0.2em;
+        }
+        .outage-close {
+            background: none;
+            border: none;
+            color: #222;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-left: 1em;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            line-height: 1;
+        }
+        .outage-close:active, .outage-close:focus {
+            opacity: 1;
+        }
+        @media (max-width: 500px) {
+            #outage-banner {
+                font-size: 0.98rem;
+                min-height: 44px;
+                padding: 0.7em 0.7em 0.7em 0.6em;
+            }
+            .outage-close {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Chat Outage Banner */
+        .chat-outage-banner {
+            display: flex;
+            align-items: center;
+            gap: 0.7em;
+            background: rgba(255,255,255,0.85);
+            color: #2c2c2c;
+            font-family: var(--font-primary);
+            font-size: 1.13rem;
+            font-weight: 600;
+            border-radius: 22px;
+            box-shadow: 0 8px 32px 0 rgba(234,59,144,0.07), 0 2px 12px rgba(255, 193, 7, 0.10);
+            padding: 1.2em 1.1em 1.2em 1.1em;
+            margin: 18px 0 0 0;
+            position: relative;
+            min-height: 52px;
+            user-select: none;
+            animation: slideIn 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+            border: 1.5px solid rgba(255, 193, 7, 0.22);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            overflow: hidden;
+            transition: box-shadow 0.2s, border 0.2s;
+        }
+        .chat-outage-banner .outage-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            min-width: 26px;
+            min-height: 26px;
+            border-radius: 50%;
+            background: none;
+            margin-right: 0.2em;
+        }
+        .chat-outage-banner .outage-icon svg {
+            width: 22px;
+            height: 22px;
+            display: block;
+        }
+        .chat-outage-banner .outage-text {
+            flex: 1;
+            text-align: left;
+            font-size: 1.13rem;
+            font-weight: 600;
+            line-height: 1.6;
+            letter-spacing: -0.01em;
+            word-break: break-word;
+            padding-right: 3.2em;
+        }
+        .chat-outage-banner .outage-close {
+            background: none;
+            border: none;
+            color: #b88a00;
+            font-size: 1.45em;
+            font-weight: 400;
+            cursor: pointer;
+            opacity: 0.55;
+            transition: opacity 0.18s, background 0.18s;
+            line-height: 1;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0.7em;
+            right: 0.9em;
+            transform: none;
+        }
+        .chat-outage-banner .outage-close:active, .chat-outage-banner .outage-close:focus {
+            opacity: 0.95;
+            background: #fffbe6;
+        }
+        @media (max-width: 600px) {
+            .chat-outage-banner {
+                font-size: 1.01rem;
+                padding: 1em 0.7em 1em 0.7em;
+                min-height: 44px;
+            }
+            .chat-outage-banner .outage-icon {
+                width: 22px;
+                height: 22px;
+                min-width: 22px;
+                min-height: 22px;
+            }
+            .chat-outage-banner .outage-text {
+                font-size: 0.98rem;
+                text-align: center;
+                padding-right: 2.2em;
+            }
+            .chat-outage-banner .outage-close {
+                font-size: 1.2em;
+                width: 28px;
+                height: 28px;
+                top: 0.5em;
+                right: 0.5em;
+            }
+        }
+        @media (max-width: 400px) {
+            .chat-outage-banner {
+                font-size: 0.93rem;
+                padding: 0.7em 0.4em 0.7em 0.4em;
+            }
+            .chat-outage-banner .outage-text {
+                font-size: 0.91rem;
+                padding-right: 1.1em;
+            }
+            .chat-outage-banner .outage-close {
+                width: 24px;
+                height: 24px;
+                font-size: 1em;
+                top: 0.3em;
+                right: 0.3em;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Sticky Banner for Outage Notification -->
+    <div id="outage-banner" style="display:none;">
+        <span class="outage-icon">⚠️</span>
+        <span id="outage-text"></span>
+        <button class="outage-close" id="outage-close-btn" aria-label="Закрыть">&times;</button>
+    </div>
+    <div id="falling-check-root"></div>
     <div id="app">
         <div class="tabs-container">
             <div class="tab active" id="chat-tab">Чат</div>
@@ -1627,6 +1925,108 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            // --- АНИМАЦИЯ ЧЕКА С ЛОГОТИПОМ ---
+            if (!window._checkAnimationShown) {
+                window._checkAnimationShown = true;
+                const checkRoot = document.getElementById('falling-check-root');
+                const checkDiv = document.createElement('div');
+                checkDiv.className = 'falling-check-container';
+                checkDiv.innerHTML = `
+                  <div class="falling-check" id="falling-check-anim">
+                    <img src="chia.png" class="falling-check-logo" alt="Чеки из Аптеки">
+                    <div class="falling-check-title">Чеки из Аптеки</div>
+                    <div class="falling-check-desc">AI-помощник по кэшбэку и аптекам</div>
+                    <div class="falling-check-pseudo">
+                        Служба поддержки: <strong>Чеки из Аптеки</strong><br>
+                        Дата обращения: <span id="check-real-date"></span><br>
+                        Помощник: <strong>AI-бот</strong><br>
+                        Чек поддержки № <span style='font-family:inherit;'>26037231</span><br>
+                        ----------------------<br>
+                        Вопрос: <strong>Кэшбэк и акции</strong><br>
+                        Вопрос: <strong>Выплаты и баланс</strong><br>
+                        Вопрос: <strong>Работа приложения</strong><br>
+                        Контакты: <strong>support@cheki.ru</strong><br>
+                        Спасибо, что обратились!<br>
+                    </div>
+                    <div class="falling-check-sum">Ваш помощник всегда на связи</div>
+                    <div class="falling-check-qr">
+                        <svg width="76" height="76" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="76" height="76" rx="8" fill="#fff"/>
+                            <!-- Угловые квадраты -->
+                            <rect x="6" y="6" width="16" height="16" rx="2" fill="#000"/>
+                            <rect x="54" y="6" width="16" height="16" rx="2" fill="#000"/>
+                            <rect x="6" y="54" width="16" height="16" rx="2" fill="#000"/>
+                            <!-- Внутренние квадраты "глаз" -->
+                            <rect x="10" y="10" width="8" height="8" rx="1" fill="#fff"/>
+                            <rect x="58" y="10" width="8" height="8" rx="1" fill="#fff"/>
+                            <rect x="10" y="58" width="8" height="8" rx="1" fill="#fff"/>
+                            <!-- Плотная сетка "шум" -->
+                            <g>
+                                <rect x="24" y="6" width="2" height="2" fill="#000"/>
+                                <rect x="28" y="6" width="2" height="2" fill="#000"/>
+                                <rect x="32" y="6" width="2" height="2" fill="#000"/>
+                                <rect x="36" y="6" width="2" height="2" fill="#000"/>
+                                <rect x="40" y="6" width="2" height="2" fill="#000"/>
+                                <rect x="44" y="6" width="2" height="2" fill="#000"/>
+                                <rect x="24" y="10" width="2" height="2" fill="#000"/>
+                                <rect x="28" y="10" width="2" height="2" fill="#000"/>
+                                <rect x="32" y="10" width="2" height="2" fill="#000"/>
+                                <rect x="36" y="10" width="2" height="2" fill="#000"/>
+                                <rect x="40" y="10" width="2" height="2" fill="#000"/>
+                                <rect x="44" y="10" width="2" height="2" fill="#000"/>
+                                <rect x="24" y="14" width="2" height="2" fill="#000"/>
+                                <rect x="28" y="14" width="2" height="2" fill="#000"/>
+                                <rect x="32" y="14" width="2" height="2" fill="#000"/>
+                                <rect x="36" y="14" width="2" height="2" fill="#000"/>
+                                <rect x="40" y="14" width="2" height="2" fill="#000"/>
+                                <rect x="44" y="14" width="2" height="2" fill="#000"/>
+                                <!-- ... (можно добавить ещё больше для плотности) ... -->
+                                <rect x="24" y="18" width="2" height="2" fill="#000"/>
+                                <rect x="28" y="18" width="2" height="2" fill="#000"/>
+                                <rect x="32" y="18" width="2" height="2" fill="#000"/>
+                                <rect x="36" y="18" width="2" height="2" fill="#000"/>
+                                <rect x="40" y="18" width="2" height="2" fill="#000"/>
+                                <rect x="44" y="18" width="2" height="2" fill="#000"/>
+                                <!-- Нижняя часть -->
+                                <rect x="24" y="54" width="2" height="2" fill="#000"/>
+                                <rect x="28" y="54" width="2" height="2" fill="#000"/>
+                                <rect x="32" y="54" width="2" height="2" fill="#000"/>
+                                <rect x="36" y="54" width="2" height="2" fill="#000"/>
+                                <rect x="40" y="54" width="2" height="2" fill="#000"/>
+                                <rect x="44" y="54" width="2" height="2" fill="#000"/>
+                                <rect x="24" y="58" width="2" height="2" fill="#000"/>
+                                <rect x="28" y="58" width="2" height="2" fill="#000"/>
+                                <rect x="32" y="58" width="2" height="2" fill="#000"/>
+                                <rect x="36" y="58" width="2" height="2" fill="#000"/>
+                                <rect x="40" y="58" width="2" height="2" fill="#000"/>
+                                <rect x="44" y="58" width="2" height="2" fill="#000"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <svg class="falling-check-svg" viewBox="0 0 210 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0 Q 9 18 18 0 Q 27 18 36 0 Q 45 18 54 0 Q 63 18 72 0 Q 81 18 90 0 Q 99 18 108 0 Q 117 18 126 0 Q 135 18 144 0 Q 153 18 162 0 Q 171 18 180 0 Q 189 18 198 0 Q 207 18 210 0" stroke="#e0e0e0" stroke-width="2" fill="#fff"/>
+                    </svg>
+                    <div class="falling-check-tearline"></div>
+                  </div>
+                `;
+                checkRoot.appendChild(checkDiv);
+                // Подставить реальную дату обращения сразу после добавления в DOM
+                const dateSpan = checkDiv.querySelector('#check-real-date');
+                if (dateSpan) {
+                    const now = new Date();
+                    const d = now.getDate().toString().padStart(2, '0');
+                    const m = (now.getMonth()+1).toString().padStart(2, '0');
+                    const y = now.getFullYear();
+                    dateSpan.textContent = `${d}.${m}.${y}`;
+                }
+                setTimeout(() => {
+                    const check = document.getElementById('falling-check-anim');
+                    if (check) check.classList.add('falling-check-tear-anim');
+                    setTimeout(() => {
+                        checkDiv.remove();
+                    }, 1200);
+                }, 2200);
+            }
             // Инициализация базы знаний
             initKnowledgeBaseModal();
             
@@ -1761,6 +2161,58 @@
                     triggerHaptic('light');
                 }
             });
+
+            // --- OUTAGE BANNER CONTROL ---
+            // Редактируй этот текст для сообщения о сбое:
+            const OUTAGE_MESSAGE = 'Внимание! Ведутся технические работы. Некоторые функции могут быть недоступны.';
+            // true = показать баннер, false = скрыть
+            const SHOW_OUTAGE_BANNER = true; // Поставь true чтобы показать
+
+            function addChatOutageBanner(text) {
+                const chat = document.getElementById('chat-messages');
+                if (!chat) return;
+                // Проверка: не добавлять повторно
+                if (chat.querySelector('.chat-outage-banner')) return;
+                const banner = document.createElement('div');
+                banner.className = 'chat-outage-banner slide-in';
+                banner.innerHTML = `
+                    <span class="outage-icon">
+                      <svg viewBox="0 0 32 32" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16" cy="16" r="15" fill="#fff" stroke="url(#gold-gradient)" stroke-width="2"/>
+                        <defs>
+                          <linearGradient id="gold-gradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#FFD700"/>
+                            <stop offset="1" stop-color="#FFB300"/>
+                          </linearGradient>
+                        </defs>
+                        <rect x="14.2" y="8" width="3.6" height="11" rx="1.8" fill="url(#gold-gradient)"/>
+                        <rect x="14.2" y="22" width="3.6" height="3.6" rx="1.8" fill="url(#gold-gradient)"/>
+                      </svg>
+                    </span>
+                    <span class="outage-text">${text}</span>
+                    <button class="outage-close" aria-label="Закрыть">&times;</button>
+                `;
+                banner.querySelector('.outage-close').onclick = function() {
+                    banner.remove();
+                };
+                // Вставить баннер после первого приветственного сообщения бота, если оно есть
+                const firstBotMsg = chat.querySelector('.bot-message-row');
+                if (firstBotMsg && firstBotMsg.nextSibling) {
+                    chat.insertBefore(banner, firstBotMsg.nextSibling);
+                } else {
+                    chat.appendChild(banner);
+                }
+            }
+
+            // Баннер сбоя в чате показываем только после анимации чека (3.3 сек)
+            if (SHOW_OUTAGE_BANNER) {
+                setTimeout(() => {
+                    addChatOutageBanner(OUTAGE_MESSAGE);
+                }, 3300);
+            }
+            document.getElementById('outage-close-btn').onclick = function() {
+                showOutageBanner(false);
+            };
         });
 
         // Функция переключения вкладок
