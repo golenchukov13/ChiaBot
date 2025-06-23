@@ -1892,6 +1892,14 @@
             // Функция отключена - бот не отвечает на файлы автоматически
         }
 
+        // --- ВИБРАЦИЯ ---
+        function doVibrate() {
+            if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                navigator.vibrate(20);
+            }
+        }
+
+        // Обновляем функцию показа опций
         function showOptions(options) {
             const container = document.getElementById('options-container');
             container.innerHTML = '';
@@ -1900,7 +1908,7 @@
                 button.className = 'option-button micro-interaction slide-in';
                 button.textContent = option;
                 button.onclick = () => {
-                    triggerHaptic('medium');
+                    doVibrate();
                     selectOption(option);
                 };
                 container.appendChild(button);
@@ -2583,6 +2591,7 @@
              // Обработчики для кнопок оценки
             answerDiv.querySelectorAll('.feedback-button').forEach(button => {
                 button.addEventListener('click', function() {
+                    doVibrate();
                     const feedbackType = this.getAttribute('data-feedback');
                     handleFeedback(categoryId, questionId, feedbackType);
                     
@@ -2617,6 +2626,23 @@
                     // Добавляем сообщение после кнопок оценки
                     const feedbackSection = answerDiv.querySelector('.feedback-section');
                     feedbackSection.appendChild(feedbackMsg);
+                    // Если "Нет" — добавить кнопку "Спросить в чате"
+                    if (feedbackType === 'dislike') {
+                        let askBtn = document.createElement('button');
+                        askBtn.className = 'option-button micro-interaction slide-in';
+                        askBtn.innerHTML = '<i class="fas fa-comment"></i> Спросить в чате';
+                        askBtn.style.marginTop = '14px';
+                        askBtn.onclick = function() {
+                            doVibrate();
+                            document.getElementById('chat-tab').click();
+                            setTimeout(() => {
+                                const input = document.getElementById('user-input');
+                                input.focus();
+                                input.scrollIntoView({behavior: 'smooth', block: 'center'});
+                            }, 200);
+                        };
+                        feedbackSection.appendChild(askBtn);
+                    }
                 });
             });
         }
