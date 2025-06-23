@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AI-консультант Чеки из Аптеки</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=SF+Pro+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
          :root {
+            --font-primary: 'SF Pro Display', 'Inter', system-ui, -apple-system, sans-serif;
+            --font-secondary: 'Inter', system-ui, -apple-system, sans-serif;
             --primary: #EA3B90;
             --primary-light: rgba(234, 59, 144, 0.1);
             --primary-gradient: linear-gradient(38.98deg, #4667D9 -2.6%, #EA3B90 52.19%, #F4AB68 102.6%);
@@ -37,7 +39,7 @@
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: var(--font-secondary);
             background: var(--background);
             color: var(--text-primary);
             line-height: 1.4;
@@ -64,33 +66,69 @@
             z-index: 10;
             box-shadow: var(--shadow-sm);
             flex-shrink: 0;
+            padding: 4px;
+            gap: 4px;
         }
 
         .tab {
             flex: 1;
             text-align: center;
-            padding: 16px 0;
+            padding: 14px 0;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #757575;
             cursor: pointer;
             position: relative;
+            border-radius: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+            overflow: hidden;
+            font-family: var(--font-primary);
         }
 
         .tab.active {
             color: var(--primary);
+            background: rgba(234, 59, 144, 0.04);
         }
 
-        .tab.active::after {
+        .tab::before {
             content: '';
             position: absolute;
             bottom: 0;
             left: 50%;
-            transform: translateX(-50%);
-            width: 40%;
+            width: 0;
             height: 3px;
-            background: var(--primary);
-            border-radius: 3px 3px 0 0;
+            background: var(--primary-gradient);
+            transform: translateX(-50%);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 4px 4px 0 0;
+            opacity: 0;
+        }
+
+        .tab.active::before {
+            width: 40%;
+            opacity: 1;
+        }
+
+        .tab::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            padding: 1px;
+            background: var(--primary-gradient);
+            mask: linear-gradient(#fff 0 0) content-box, 
+                  linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                         linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tab.active::after {
+            opacity: 0.1;
         }
 
         .tab-content {
@@ -99,10 +137,16 @@
             height: 100%;
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .tab-content.active {
             display: flex;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* ЧАТ С БОТОМ */
@@ -129,54 +173,87 @@
         }
 
        .message {
-    max-width: 90%;
-    padding: 10px 15px;
-    border-radius: 18px;
-    line-height: 1.5;
-    font-size: 0.95rem;
-    box-shadow: var(--shadow-sm);
-    position: relative;
-    display: inline-block;
-    word-wrap: break-word;
-    overflow-wrap: anywhere;
-    text-align: left; /* Всегда выравниваем по левому краю для корректной работы с float */
-  }
+            max-width: 90%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            position: relative;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            display: inline-block;
+            width: fit-content;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-family: var(--font-secondary);
+            letter-spacing: -0.01em;
+        }
+
+        .message-content {
+            color: inherit;
+            white-space: pre-wrap;
+            display: inline;
+            margin-right: 4em;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            white-space: nowrap;
+            color: inherit;
+            position: absolute;
+            right: 12px;
+            bottom: 8px;
+        }
+
+        .bot-message {
+            background: var(--primary) !important;
+            color: #fff !important;
+            border-radius: 20px 20px 20px 4px;
+            margin-right: auto;
+            align-self: flex-start;
+            box-shadow: 0 2px 8px rgba(234, 59, 144, 0.15);
+        }
+
+        .user-message {
+            background: var(--primary) !important;
+            color: #fff !important;
+            border-radius: 20px 20px 4px 20px;
+            margin-left: auto;
+            align-self: flex-end;
+            box-shadow: 0 2px 8px rgba(234, 59, 144, 0.15);
+        }
+
+        .message::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                         linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, 
+                  linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .message:active {
+            transform: scale(0.98);
+        }
 
         @keyframes fadeIn {
             to { opacity: 1; transform: translateY(0); }
         }
-
-         .bot-message {
-    background: var(--primary) !important;
-    color: #fff !important;
-    border-radius: 18px 18px 18px 4px; /* Сглаженные углы */
-    margin-right: auto;
-    text-align: left;
-  }
-
-  .user-message {
-    background: var(--primary) !important;
-    color: #fff !important;
-    border-radius: 18px 18px 4px 18px; /* Сглаженные углы */
-    margin-left: auto;
-    /* text-align: left; - уже задано в .message */
-  }
 
         /* Контент сообщения - занимает основное пространство */
         .message-content {
     /* Больше не нужен отдельный стиль, все управляется через .message */
   }
 
-  .message-time {
-    float: right;
-    clear: both;
-    margin-left: 12px;
-    font-size: 0.7rem;
-    opacity: 0.8;
-    position: relative;
-    bottom: -5px;
-    white-space: nowrap;
-  }
   /* Для сообщений пользователя выравниваем время ближе к тексту */
   .user-message .message-time {
     /* Больше не нужны специфичные стили */
@@ -374,6 +451,7 @@
             top: 0;
             flex-shrink: 0;
             box-shadow: 0 2px 8px rgba(234,59,144,0.05);
+            font-family: var(--font-primary);
         }
 
         .knowledge-base-header.kb-header-scrolled {
@@ -436,39 +514,67 @@
             background: #fafafa;
             align-items: stretch;
             justify-items: stretch;
+            -webkit-overflow-scrolling: touch;
         }
 
         .knowledge-category {
             background: #ffffff;
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
             position: relative;
-            padding: 18px 12px;
+            padding: 20px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
             cursor: pointer;
-            min-height: 120px;
+            min-height: 140px;
             margin: 0;
             box-sizing: border-box;
             width: 100%;
             border: 1px solid rgba(234, 59, 144, 0.08);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(234, 59, 144, 0.04);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03), 
+                       0 1px 4px rgba(234, 59, 144, 0.02);
+            transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), 
+                      box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1), 
+                      background-color 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+            -webkit-tap-highlight-color: transparent;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
         
         .knowledge-category:active {
             transform: scale(0.96);
-            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(234, 59, 144, 0.06);
-            background-color: rgba(234, 59, 144, 0.02);
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05), 
+                       0 1px 3px rgba(234, 59, 144, 0.03);
+            background-color: rgba(234, 59, 144, 0.01);
+        }
+
+        .knowledge-category::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(
+                135deg, 
+                rgba(234, 59, 144, 0.12), 
+                rgba(234, 59, 144, 0.03)
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                         linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, 
+                  linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
 
         .knowledge-category-title {
             padding: 0 8px;
-            margin-top: 12px;
-            font-size: 0.88rem;
+            margin-top: 16px;
+            font-size: 0.9rem;
             font-weight: 600;
             color: #2c2c2c;
             display: -webkit-box;
@@ -476,31 +582,61 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-height: 2.6em;
+            max-height: 2.7em;
             line-height: 1.35;
             width: 100%;
+            letter-spacing: -0.01em;
+            font-family: var(--font-primary);
         }
 
         .knowledge-category-icon {
-            font-size: 1.3rem;
-            width: 48px;
-            height: 48px;
+            font-size: 1.4rem;
+            width: 52px;
+            height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, rgba(234, 59, 144, 0.12), rgba(234, 59, 144, 0.08));
+            background: linear-gradient(
+                135deg, 
+                rgba(234, 59, 144, 0.12), 
+                rgba(234, 59, 144, 0.06)
+            );
             color: #EA3B90;
-            border-radius: 12px;
+            border-radius: 16px;
             flex-shrink: 0;
-            margin-bottom: 12px;
-            border: 1px solid rgba(234, 59, 144, 0.12);
-            box-shadow: 0 2px 6px rgba(234, 59, 144, 0.08);
+            margin-bottom: 0;
+            position: relative;
+            transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+                      background 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .knowledge-category-icon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(
+                135deg, 
+                rgba(234, 59, 144, 0.2), 
+                rgba(234, 59, 144, 0.1)
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                         linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, 
+                  linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
 
         .knowledge-category:active .knowledge-category-icon {
-            background: linear-gradient(135deg, rgba(234, 59, 144, 0.16), rgba(234, 59, 144, 0.12));
             transform: scale(0.92);
-            box-shadow: 0 1px 4px rgba(234, 59, 144, 0.12);
+            background: linear-gradient(
+                135deg, 
+                rgba(234, 59, 144, 0.15), 
+                rgba(234, 59, 144, 0.08)
+            );
         }
 
         .knowledge-questions {
@@ -520,10 +656,16 @@
             align-items: center;
             font-size: 1rem;
             color: #333;
+            transition: background-color 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .knowledge-question:first-child {
             border-top: 1px solid #f0f0f0;
+        }
+
+        .knowledge-question:active {
+            background-color: rgba(234, 59, 144, 0.02);
         }
 
         .knowledge-answer {
@@ -539,6 +681,7 @@
         .knowledge-answer-content {
             margin-bottom: 24px;
             padding-left: 0;
+            word-break: break-word;
         }
 
         .knowledge-answer-actions {
@@ -755,6 +898,8 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            transition: transform 0.15s ease, background-color 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .feedback-like {
@@ -781,6 +926,15 @@
             animation: slideIn 0.3s ease-out;
             opacity: 0;
             animation-fill-mode: forwards;
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background-color: rgba(234, 59, 144, 0.05);
+            border: 1px solid rgba(234, 59, 144, 0.1);
+            color: #EA3B90;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
         }
 
         @keyframes slideIn {
@@ -834,7 +988,7 @@
             
             .message {
                 max-width: 92%;
-                padding: 6px 10px;
+                padding: 8px 12px;
                 font-size: 0.9rem;
             }
             
@@ -853,8 +1007,14 @@
                 font-size: 1.1rem;
             }
 
+            .message-content {
+                margin-right: 3.5em;
+            }
+            
             .message-time {
                 font-size: 0.65rem;
+                right: 10px;
+                bottom: 6px;
             }
         }
         
@@ -896,8 +1056,9 @@
             border-radius: 18px;
             background: #f8f9fa;
             border: 1px solid #e9ecef;
-            margin-bottom: 8px;
+            margin-bottom: 0;
             position: relative;
+            padding-bottom: 24px;
         }
 
         .file-preview {
@@ -964,59 +1125,105 @@
         /* Адаптация для разных размеров экранов */
         @media (max-width: 400px) {
             .knowledge-categories {
-                gap: 10px;
-                padding: 14px 10px;
+                gap: 12px;
+                padding: 16px 12px;
             }
             
             .knowledge-category {
-                min-height: 110px;
-                padding: 14px 6px;
-                border-radius: 12px;
+                min-height: 130px;
+                padding: 16px 12px;
+                border-radius: 16px;
+            }
+            
+            .knowledge-category::before {
+                border-radius: 16px;
             }
             
             .knowledge-category-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
+                width: 48px;
+                height: 48px;
+                font-size: 1.3rem;
+                border-radius: 14px;
+            }
+            
+            .knowledge-category-icon::before {
+                border-radius: 14px;
             }
             
             .knowledge-category-title {
-                font-size: 0.82rem;
+                font-size: 0.85rem;
+                margin-top: 14px;
+                padding: 0 4px;
             }
         }
 
         @media (max-width: 340px) {
             .knowledge-categories {
-                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 14px 10px;
             }
             
             .knowledge-category {
-                min-height: 100px;
-                flex-direction: row;
-                justify-content: flex-start;
-                text-align: left;
-                padding: 12px 16px;
+                min-height: 120px;
+                padding: 14px 10px;
             }
             
             .knowledge-category-icon {
-                margin-bottom: 0;
-                margin-right: 12px;
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+                border-radius: 12px;
+            }
+            
+            .knowledge-category-icon::before {
+                border-radius: 12px;
             }
             
             .knowledge-category-title {
-                margin-top: 0;
-                -webkit-line-clamp: 3;
-                max-height: 3.9em;
+                font-size: 0.8rem;
+                margin-top: 12px;
             }
         }
 
-        /* Стили для файлов в сообщениях */
+        /* Улучшенные эффекты для устройств с поддержкой hover */
+        @media (hover: hover) {
+            .knowledge-category:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 
+                           0 2px 6px rgba(234, 59, 144, 0.04);
+            }
+            
+            .knowledge-category:hover .knowledge-category-icon {
+                transform: scale(1.05);
+                background: linear-gradient(
+                    135deg, 
+                    rgba(234, 59, 144, 0.15), 
+                    rgba(234, 59, 144, 0.08)
+                );
+            }
+        }
+
+        /* Улучшенные тактильные отклики */
+        @media (hover: none) and (pointer: coarse) {
+            .knowledge-category:active {
+                transform: scale(0.98);
+                background-color: rgba(234, 59, 144, 0.02);
+            }
+
+            .knowledge-question:active {
+                background-color: rgba(234, 59, 144, 0.02);
+            }
+
+            .feedback-button:active {
+                transform: scale(0.98);
+            }
+        }
     </style>
 </head>
 <body>
     <div id="app">
         <div class="tabs-container">
-            <div class="tab active" id="chat-tab">Чат с ботом</div>
+            <div class="tab active" id="chat-tab">Чат</div>
             <div class="tab" id="knowledge-tab">База знаний</div>
         </div>
         
@@ -1278,7 +1485,7 @@
             },
             {
                 id: "tips-tricks",
-                title: "Советы и лайфхаки",
+                title: "Советы",
                 icon: "fa-magic",
                 items: [
                     {
@@ -1524,11 +1731,15 @@
             const input = document.getElementById('user-input');
             const message = input.value.trim();
             if (message) {
+                // Haptic feedback
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(50); // Light tap feedback
+                }
+                
                 addUserMessage(message);
                 input.value = '';
-                input.style.height = 'auto'; // Возвращаем высоту к исходной
+                input.style.height = 'auto';
 
-                // Скрываем кнопку отправки
                 const sendBtn = document.getElementById('send-button');
                 sendBtn.classList.remove('show');
                 setTimeout(() => {
