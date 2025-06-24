@@ -1520,6 +1520,42 @@
     </style>
 </head>
 <body>
+    <!-- Краткая анимация заботы -->
+    <div id="promo-animation" style="position:fixed;z-index:999999;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(120deg,#4667D9 0%,#EA3B90 60%,#F4AB68 100%);transition:opacity 0.7s;">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100vw;height:100vh;">
+            <div style="position:relative;display:flex;align-items:center;justify-content:center;">
+                <img src="chia.png" alt="Бот" id="promo-logo" style="width:90px;height:90px;border-radius:50%;box-shadow:0 8px 32px rgba(234,59,144,0.18);background:#fff;animation:logo-glow 1.2s ease-in-out;">
+                <span id="promo-hands" style="position:absolute;bottom:-18px;left:50%;transform:translateX(-50%) scale(0.7);font-size:3.2rem;opacity:0;animation:hand-in 0.7s 0.5s forwards;pointer-events:none;">🫶</span>
+            </div>
+            <div id="promo-text" style="color:#fff;font-size:1.18rem;font-weight:600;text-align:center;margin-top:24px;opacity:0;animation:text-in 0.6s 0.9s forwards;letter-spacing:0.01em;">Мы всегда рядом, чтобы помочь вам!</div>
+        </div>
+    </div>
+    <style>
+        @media (max-width: 600px) {
+            #promo-logo { width: 64px !important; height: 64px !important; }
+            #promo-hands { font-size: 2.1rem !important; }
+            #promo-text { font-size: 1rem !important; }
+        }
+        @media (max-width: 400px) {
+            #promo-logo { width: 48px !important; height: 48px !important; }
+            #promo-hands { font-size: 1.3rem !important; }
+            #promo-text { font-size: 0.89rem !important; }
+        }
+        @keyframes logo-glow {
+            0% { box-shadow:0 0 0 rgba(234,59,144,0.0); }
+            60% { box-shadow:0 0 32px 8px rgba(234,59,144,0.18); }
+            100% { box-shadow:0 8px 32px rgba(234,59,144,0.18); }
+        }
+        @keyframes hand-in {
+            0% { opacity:0; transform:translateX(-50%) scale(0.4) translateY(30px); }
+            80% { opacity:1; transform:translateX(-50%) scale(1.05) translateY(-4px); }
+            100% { opacity:1; transform:translateX(-50%) scale(1) translateY(0); }
+        }
+        @keyframes text-in {
+            0% { opacity:0; transform:translateY(18px); }
+            100% { opacity:1; transform:translateY(0); }
+        }
+    </style>
     <!-- Sticky Banner for Outage Notification -->
     <div id="outage-banner" style="display:none;">
         <span class="outage-icon">⚠️</span>
@@ -2076,6 +2112,15 @@
             document.getElementById('outage-close-btn').onclick = function() {
                 showOutageBanner(false);
             };
+
+            // Скрыть рекламную анимацию через 2.5 секунды
+            setTimeout(function() {
+                const promo = document.getElementById('promo-animation');
+                if (promo) {
+                    promo.style.opacity = '0';
+                    setTimeout(() => { promo.style.display = 'none'; }, 700);
+                }
+            }, 2500);
         });
 
         // Функция переключения вкладок
@@ -2893,6 +2938,19 @@
             const banner = chat.querySelector('.chat-outage-banner');
             if (banner) banner.remove();
         }
+    </script>
+    <script>
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            var promo = document.getElementById('promo-animation');
+            if (promo) {
+                promo.style.opacity = '0';
+                setTimeout(function() {
+                    promo.style.display = 'none';
+                }, 700);
+            }
+        }, 2700);
+    });
     </script>
 </body>
 </html>
