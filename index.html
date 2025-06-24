@@ -1454,6 +1454,69 @@
                 font-size: 0.89rem;
             }
         }
+
+        #file-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(44,44,44,0.32);
+            z-index: 99999;
+            display: none;
+            transition: opacity 0.2s;
+        }
+        #file-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100000;
+            background: none;
+            pointer-events: none;
+        }
+        #file-modal .modal-content {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(44,44,44,0.18);
+            max-width: 96vw;
+            max-height: 90vh;
+            padding: 0;
+            overflow: auto;
+            position: relative;
+            pointer-events: all;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #file-modal .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 16px;
+            font-size: 2em;
+            color: #EA3B90;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 2;
+            opacity: 0.7;
+        }
+        #file-modal .modal-close:active { opacity: 1; }
+        #file-modal img, #file-modal video, #file-modal audio, #file-modal iframe, #file-modal pre {
+            max-width: 90vw;
+            max-height: 80vh;
+            border-radius: 10px;
+            margin: 0 auto;
+            display: block;
+        }
+        #file-modal pre {
+            background: #f8f8f8;
+            padding: 18px 16px;
+            font-size: 1.02em;
+            color: #222;
+            border-radius: 10px;
+            max-width: 80vw;
+            max-height: 70vh;
+            overflow: auto;
+        }
     </style>
 </head>
 <body>
@@ -1461,9 +1524,7 @@
     <div id="outage-banner" style="display:none;">
         <span class="outage-icon">⚠️</span>
         <span id="outage-text"></span>
-        <button class="outage-close" id="outage-close-btn" aria-label="Закрыть">&times;</button>
     </div>
-    <div id="falling-check-root"></div>
     <div id="app">
         <div class="tabs-container">
             <div class="tab active" id="chat-tab">Чат</div>
@@ -1485,14 +1546,14 @@
                 
                 <div class="input-area">
                     <div class="input-wrapper">
-                        <label for="file-attach" class="attach-label micro-interaction" title="Прикрепить файл">
+                        <label for="file-attach" class="attach-label" title="Прикрепить файл">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M17.5 13.5V7.75C17.5 5.12665 15.3734 3 12.75 3C10.1266 3 8 5.12665 8 7.75V16.25C8 18.0449 9.45507 19.5 11.25 19.5C13.0449 19.5 14.5 18.0449 14.5 16.25V8.5" stroke="#EA3B90" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                             <input type="file" id="file-attach" class="file-input" multiple accept="image/*,video/*,application/pdf,.doc,.docx,.xls,.xlsx,.txt" style="display: none;">
                         </label>
-                        <textarea id="user-input" placeholder="Напишите сообщение..." class="micro-interaction" rows="1" style="resize:none;"></textarea>
-                        <button id="send-button" class="micro-interaction">
+                        <textarea id="user-input" placeholder="Напишите сообщение..." rows="1" style="resize:none;"></textarea>
+                        <button id="send-button">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1519,6 +1580,8 @@
             </div>
         </div>
     </div>
+    <div id="file-modal-overlay" style="display:none;"></div>
+    <div id="file-modal" style="display:none;"></div>
     <script>
         // База знаний с улучшенной структурой
         const knowledgeBase = [
@@ -1944,6 +2007,8 @@
             // Обработчик загрузки файлов
             document.getElementById('file-attach').addEventListener('change', function(e) {
                 if (e.target.files.length > 0) {
+                    Array.from(e.target.files).forEach(file => addFileMessage(file));
+                    e.target.value = '';
                 }
             });
 
@@ -2051,6 +2116,7 @@
         }
 
         function selectOption(option = '') {
+            removeChatOutageBanner();
             addUserMessage(option);
             processUserMessage(option);
         }
@@ -2180,6 +2246,7 @@
   }
 
   function addUserMessage(text) {
+    removeChatOutageBanner();
     const chat = document.getElementById('chat-messages');
     const messageDiv = document.createElement('div');
     messageDiv.className = 'message user-message';
@@ -2203,20 +2270,18 @@
         }
 
         function addFileMessage(file) {
+            removeChatOutageBanner();
             const chat = document.getElementById('chat-messages');
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message user-message';
-            
             const fileSize = formatFileSize(file.size);
             const fileType = getFileType(file.type);
             const fileIcon = getFileIcon(file.type);
-            
             if (file.type.startsWith('image/')) {
-                // Для изображений показываем превью
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     messageDiv.innerHTML = `
-                        <div class="file-message" onclick="openFile('${e.target.result}', '${file.name}', '${file.type}')" style="cursor: pointer;">
+                        <div class="file-message" style="cursor: pointer;" onclick="openFileModal({type:'image',src:'${e.target.result}',name:'${file.name}'})">
                             <img src="${e.target.result}" alt="${file.name}" class="file-preview">
                             <div class="file-info">
                                 <i class="fas ${fileIcon} file-icon"></i>
@@ -2231,14 +2296,11 @@
                 };
                 reader.readAsDataURL(file);
             } else if (file.type.startsWith('video/')) {
-                // Для видео создаем превью и возможность просмотра
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     messageDiv.innerHTML = `
-                        <div class="file-message" onclick="openFile('${e.target.result}', '${file.name}', '${file.type}')" style="cursor: pointer;">
-                            <video src="${e.target.result}" class="file-preview" style="background: #000; border-radius: 8px;">
-                                <source src="${e.target.result}" type="${file.type}">
-                            </video>
+                        <div class="file-message" style="cursor: pointer;" onclick="openFileModal({type:'video',src:'${e.target.result}',name:'${file.name}'})">
+                            <video src="${e.target.result}" class="file-preview" controls style="background: #000; border-radius: 8px; max-width:100%;"></video>
                             <div class="file-info">
                                 <i class="fas ${fileIcon} file-icon"></i>
                                 <div>
@@ -2251,12 +2313,11 @@
                     `;
                 };
                 reader.readAsDataURL(file);
-            } else {
-                // Для остальных файлов также создаем возможность просмотра
+            } else if (file.type.includes('pdf')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     messageDiv.innerHTML = `
-                        <div class="file-message" onclick="openFile('${e.target.result}', '${file.name}', '${file.type}')" style="cursor: pointer;">
+                        <div class="file-message" style="cursor: pointer;" onclick="openFileModal({type:'pdf',src:'${e.target.result}',name:'${file.name}'})">
                             <div class="file-info">
                                 <i class="fas ${fileIcon} file-icon"></i>
                                 <div>
@@ -2264,17 +2325,53 @@
                                     <div class="file-size">${fileSize} • ${fileType}</div>
                                 </div>
                             </div>
+                            <div style='margin-top:8px;'><span style='color:#EA3B90;font-weight:600;'>PDF</span> — нажмите для просмотра</div>
+                        </div>
+                        <div class="message-time">${getCurrentTime()}</div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            } else if (file.type.startsWith('text/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    let textContent = e.target.result.replace(/`/g,'&#96;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g, "&#39;").replace(/"/g, '&quot;');
+                    messageDiv.innerHTML = `
+                        <div class="file-message" style="cursor: pointer;" onclick="openFileModal({type:'text',src:'',name:'${file.name}',textContent: '${textContent}'})">
+                            <div class="file-info">
+                                <i class="fas ${fileIcon} file-icon"></i>
+                                <div>
+                                    <div class="file-name">${file.name}</div>
+                                    <div class="file-size">${fileSize} • ${fileType}</div>
+                                </div>
+                            </div>
+                            <div style='margin-top:8px;'><span style='color:#EA3B90;font-weight:600;'>TXT</span> — нажмите для просмотра</div>
+                        </div>
+                        <div class="message-time">${getCurrentTime()}</div>
+                    `;
+                };
+                reader.readAsText(file);
+            } else {
+                // Для остальных файлов — иконка и кнопка скачать
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    messageDiv.innerHTML = `
+                        <div class="file-message">
+                            <div class="file-info">
+                                <i class="fas ${fileIcon} file-icon"></i>
+                                <div>
+                                    <div class="file-name">${file.name}</div>
+                                    <div class="file-size">${fileSize} • ${fileType}</div>
+                                </div>
+                            </div>
+                            <a href='${e.target.result}' download='${file.name}' class='story-btn' style='margin-top:10px;'>Скачать</a>
                         </div>
                         <div class="message-time">${getCurrentTime()}</div>
                     `;
                 };
                 reader.readAsDataURL(file);
             }
-            
             chat.appendChild(messageDiv);
             scrollToBottom();
-            
-            // Обрабатываем файл как сообщение в сценариях
             processFileInScenario(file);
         }
 
@@ -2334,132 +2431,34 @@
             }, 800);
         }
 
-        function openFile(fileUrl, fileName, fileType) {
-            if (fileType.startsWith('image/')) {
-                // Открываем изображение в новом окне
-                const newWindow = window.open();
-                newWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>${fileName}</title>
-                            <style>
-                                body { margin: 0; padding: 20px; background: #f0f0f0; text-align: center; }
-                                img { max-width: 100%; max-height: 90vh; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-                            </style>
-                        </head>
-                        <body>
-                            <img src="${fileUrl}" alt="${fileName}">
-                        </body>
-                    </html>
-                `);
-            } else if (fileType.startsWith('video/')) {
-                // Открываем видео в новом окне
-                const newWindow = window.open();
-                newWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>${fileName}</title>
-                            <style>
-                                body { margin: 0; padding: 20px; background: #000; text-align: center; }
-                                video { max-width: 100%; max-height: 90vh; }
-                            </style>
-                        </head>
-                        <body>
-                            <video controls autoplay>
-                                <source src="${fileUrl}" type="${fileType}">
-                                Ваш браузер не поддерживает видео.
-                            </video>
-                        </body>
-                    </html>
-                `);
-            } else if (fileType.startsWith('audio/')) {
-                // Открываем аудио в новом окне
-                const newWindow = window.open();
-                newWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>${fileName}</title>
-                            <style>
-                                body { margin: 0; padding: 20px; background: #f0f0f0; text-align: center; }
-                                audio { max-width: 100%; margin: 20px 0; }
-                            </style>
-                        </head>
-                        <body>
-                            <audio controls autoplay>
-                                <source src="${fileUrl}" type="${fileType}">
-                                Ваш браузер не поддерживает аудио.
-                            </audio>
-                        </body>
-                    </html>
-                `);
-            } else if (fileType.includes('pdf')) {
-                // Открываем PDF в новом окне
-                const newWindow = window.open();
-                newWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>${fileName}</title>
-                            <style>
-                                body { margin: 0; padding: 0; background: #f0f0f0; }
-                                iframe { width: 100%; height: 100vh; border: none; }
-                            </style>
-                        </head>
-                        <body>
-                            <iframe src="${fileUrl}" type="application/pdf"></iframe>
-                        </body>
-                    </html>
-                `);
-            } else if (fileType.startsWith('text/')) {
-                // Открываем текстовые файлы в новом окне
-                const newWindow = window.open();
-                newWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>${fileName}</title>
-                            <style>
-                                body { margin: 0; padding: 20px; background: #fff; font-family: monospace; }
-                                pre { white-space: pre-wrap; word-wrap: break-word; max-width: 100%; }
-                            </style>
-                        </head>
-                        <body>
-                            <pre id="content">Загрузка...</pre>
-                        </body>
-                    </html>
-                `);
-                
-                // Загружаем содержимое текстового файла
-                fetch(fileUrl)
-                    .then(response => response.text())
-                    .then(text => {
-                        newWindow.document.getElementById('content').textContent = text;
-                    })
-                    .catch(error => {
-                        newWindow.document.getElementById('content').textContent = 'Ошибка загрузки файла';
-                    });
+        function openFileModal({type, src, name, fileType, textContent}) {
+            const overlay = document.getElementById('file-modal-overlay');
+            const modal = document.getElementById('file-modal');
+            let html = `<button class='modal-close' onclick='closeFileModal()'>&times;</button><div style='margin-top:32px;'></div>`;
+            if (type === 'image') {
+                html += `<img src='${src}' alt='${name}' style='max-width:90vw;max-height:80vh;'>`;
+            } else if (type === 'video') {
+                html += `<video src='${src}' controls autoplay style='max-width:90vw;max-height:80vh;'></video>`;
+            } else if (type === 'audio') {
+                html += `<audio src='${src}' controls autoplay style='width:90vw;'></audio>`;
+            } else if (type === 'pdf') {
+                html += `<iframe src='${src}' type='application/pdf' style='width:90vw;height:80vh;'></iframe>`;
+            } else if (type === 'text') {
+                html += `<pre>${textContent ? textContent : 'Загрузка...'}</pre>`;
             } else {
-                // Для остальных файлов предлагаем скачать
-                const newWindow = window.open();
-                newWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>${fileName}</title>
-                            <style>
-                                body { margin: 0; padding: 40px; background: #f0f0f0; text-align: center; font-family: Arial, sans-serif; }
-                                .download-container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-                                .download-btn { background: #EA3B90; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin: 20px 0; }
-                            </style>
-                        </head>
-                        <body>
-                            <div class="download-container">
-                                <h2>${fileName}</h2>
-                                <p>Этот тип файла не может быть просмотрен в браузере.</p>
-                                <button class="download-btn" onclick="window.open('${fileUrl}', '_blank')">Скачать файл</button>
-                            </div>
-                        </body>
-                    </html>
-                `);
+                html += `<div style='padding:32px;text-align:center;'>Файл: ${name}</div>`;
             }
+            modal.innerHTML = `<div class='modal-content'>${html}</div>`;
+            overlay.style.display = 'block';
+            modal.style.display = 'flex';
+            setTimeout(() => { overlay.style.opacity = '1'; }, 10);
         }
+        function closeFileModal() {
+            document.getElementById('file-modal-overlay').style.display = 'none';
+            document.getElementById('file-modal').style.display = 'none';
+            document.getElementById('file-modal').innerHTML = '';
+        }
+        document.getElementById('file-modal-overlay').onclick = closeFileModal;
 
         function downloadFile(fileName, fileType) {
             // Просто показываем информацию о файле
@@ -2887,6 +2886,12 @@
         function handleFeedback(categoryId, questionId, feedbackType) {
             // Здесь можно добавить отправку оценки на сервер
             console.log(`Пользователь оценил статью: ${categoryId}/${questionId} - ${feedbackType}`);
+        }
+
+        function removeChatOutageBanner() {
+            const chat = document.getElementById('chat-messages');
+            const banner = chat.querySelector('.chat-outage-banner');
+            if (banner) banner.remove();
         }
     </script>
 </body>
