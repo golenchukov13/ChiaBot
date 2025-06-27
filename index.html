@@ -1563,12 +1563,28 @@
     </div>
     <div id="app">
         <div class="tabs-container">
-            <div class="tab active" id="chat-tab">Чат</div>
-            <div class="tab" id="knowledge-tab">База знаний</div>
+            <div class="tab active" id="knowledge-tab">База знаний</div>
+            <div class="tab" id="chat-tab">Чат</div>
+        </div>
+        
+        <!-- Раздел базы знаний -->
+        <div class="tab-content active" id="knowledge-section">
+            <div class="knowledge-base-container">
+                <div class="knowledge-base-header">
+                    <button class="back-button" id="back-to-categories" style="display: none;">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 id="kb-title">База знаний</h2>
+                    <p id="kb-subtitle">Ответы на частые вопросы</p>
+                </div>
+                <div class="knowledge-categories" id="knowledge-categories">
+                    <!-- Категории будут добавляться здесь -->
+                </div>
+            </div>
         </div>
         
         <!-- Раздел чата -->
-        <div class="tab-content active" id="chat-section">
+        <div class="tab-content" id="chat-section">
             <div class="chat-container">
                 <!-- Шапка удалена -->
                 
@@ -1596,22 +1612,6 @@
                             </svg>
                         </button>
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Раздел базы знаний -->
-        <div class="tab-content" id="knowledge-section">
-            <div class="knowledge-base-container">
-                <div class="knowledge-base-header">
-                    <button class="back-button" id="back-to-categories" style="display: none;">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <h2 id="kb-title">База знаний</h2>
-                    <p id="kb-subtitle">Ответы на частые вопросы</p>
-                </div>
-                <div class="knowledge-categories" id="knowledge-categories">
-                    <!-- Категории будут добавляться здесь -->
                 </div>
             </div>
         </div>
@@ -1952,12 +1952,18 @@
             initKnowledgeBaseModal();
             
             // Обработчики вкладок
-            document.getElementById('chat-tab').addEventListener('click', function() {
-                switchTab('chat');
-            });
-            
             document.getElementById('knowledge-tab').addEventListener('click', function() {
                 switchTab('knowledge');
+            });
+            
+            document.getElementById('chat-tab').addEventListener('click', function() {
+                switchTab('chat');
+                // Показываем приветствие и опции только при первом открытии чата
+                if (isFirstMessage) {
+                    addBotMessage('Здравствуйте! Я ваш виртуальный помощник сервиса "Чеки из Аптеки". Чем могу помочь?');
+                    showOptions(['Вопрос по чеку', 'Вопрос по выплате', 'Другой вопрос']);
+                    isFirstMessage = false;
+                }
             });
             
             // Кнопка "Назад" в базе знаний
