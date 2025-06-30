@@ -2974,9 +2974,10 @@
                 });
             });
 
-            document.getElementById('kb-title').textContent = 'Результаты поиска';
-            document.getElementById('kb-subtitle').textContent = results.length > 0 ? 'Найдено: ' + results.length : 'Ничего не найдено';
+            document.getElementById('kb-title-main').textContent = 'Результаты поиска';
+            document.getElementById('kb-subtitle-main').textContent = results.length > 0 ? 'Найдено: ' + results.length : 'Ничего не найдено';
             document.getElementById('back-to-categories').style.display = 'block';
+            document.getElementById('kb-main-header').style.display = 'block';
             document.getElementById('kb-question-input-row').style.display = 'flex';
 
             if (results.length === 0) {
@@ -2989,10 +2990,19 @@
                 return;
             }
 
+            // Подсветка совпадений
+            function highlight(text, query) {
+                if (!query) return text;
+                // Экранируем спецсимволы
+                const esc = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const re = new RegExp(esc, 'gi');
+                return text.replace(re, match => `<mark style="background:#FFF3B0;color:#EA3B90;">${match}</mark>`);
+            }
+
             results.forEach(res => {
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'knowledge-question';
-                questionDiv.innerHTML = `<span>${res.question}</span><i class="fas fa-chevron-right" style="color: #ccc;"></i>`;
+                questionDiv.innerHTML = `<span>${highlight(res.question, query)}</span><i class="fas fa-chevron-right" style="color: #ccc;"></i>`;
                 questionDiv.onclick = function() {
                     currentCategory = res.categoryId;
                     currentQuestion = res.questionId;
