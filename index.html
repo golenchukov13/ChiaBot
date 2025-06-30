@@ -231,7 +231,8 @@
             pointer-events: none;
         }
 
-        
+        /* Удалены все эффекты нажатия, анимации, micro-interaction, falling-check, slide-in, transition, transform: scale, animation: slideIn, checkFall, checkTear, и связанные keyframes */
+        /* ... остальные стили без анимаций ... */
 
         .options-container {
             display: flex;
@@ -410,146 +411,233 @@
             background: #fafafa;
             overflow: hidden;
         }
-        #kb-dynamic-header {
+
+        .knowledge-base-header {
+            padding: 20px 16px 16px;
+            background: #fff;
+            z-index: 1;
+            border-bottom: 1px solid rgba(234, 59, 144, 0.05);
             position: sticky;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 48px;
-            background: #fafafa;
-            z-index: 10;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 1px solid #eee;
-            box-shadow: 0 2px 8px rgba(234,59,144,0.03);
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(234,59,144,0.05);
             font-family: var(--font-primary);
-            font-weight: 600;
-            font-size: 1.08rem;
         }
-        #kb-back-btn {
+
+        .knowledge-base-header.kb-header-scrolled {
+            padding: 12px 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .knowledge-base-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #EA3B90;
+            margin-bottom: 6px;
+            text-align: center;
+            padding: 0 40px;
+            display: none;
+        }
+        
+        .knowledge-base-header.kb-header-scrolled h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: none;
+        }
+
+        .knowledge-base-header p {
+            font-size: 1.1rem;
+            color: #333;
+            text-align: center;
+            padding: 0 20px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 16px;
+            left: 16px;
             background: none;
             border: none;
-            outline: none;
-            cursor: pointer;
-            font-size: 1.5rem;
             color: #EA3B90;
-            position: absolute;
-            left: 12px;
-            top: 0;
-            height: 48px;
-            width: 48px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 2;
         }
-        #kb-dynamic-title {
-            margin: 0 auto;
-            text-align: center;
-            width: 100%;
-        }
-        #kb-intro {
-            padding: 24px 12px 10px 12px;
-            text-align: center;
-            font-size: 1.13rem;
-            font-weight: 600;
-            color: #EA3B90;
-            background: none;
-            margin-bottom: 15px;
-        }
-        #kb-search {
-            width: 100%;
-            max-width: 500px;
-            margin: 0 auto;
-            display: block;
-            border-radius: 10px;
-            border: 1.5px solid #e0e0e0;
-            padding: 9px 12px;
-            font-size: 0.98rem;
-            background: #fff;
-            color: #2c2c2c;
-            box-shadow: none;
-            outline: none;
-            transition: border 0.2s;
-            height: auto;
-        }
-        #kb-search:focus {
-            border: 1.5px solid #bdbdbd;
-        }
+
         .knowledge-categories {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px 14px;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             grid-auto-rows: 1fr;
-            gap: 14px 10px;
-            padding: 18px 8px;
-            overflow-y: auto;
-            max-height: 100%;
+            gap: 14px;
+            background: #fafafa;
+            align-items: stretch;
+            justify-items: stretch;
+            -webkit-overflow-scrolling: touch;
         }
+
         .knowledge-category {
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            padding: 20px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            padding: 10px 2px;
-            border-radius: 16px;
-            background: none;
-            min-height: 120px;
-            box-sizing: border-box;
-        }
-        .knowledge-category-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 1.7rem;
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(234,59,144,0.10);
-            margin: 0;
-        }
-        .knowledge-category-title {
-            margin-top: 8px;
-            margin-bottom: 0;
-            padding: 0;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #333;
             text-align: center;
+            cursor: pointer;
+            min-height: 140px;
+            margin: 0;
+            box-sizing: border-box;
             width: 100%;
-            line-height: 1.25;
-            word-break: break-word;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            border: 1px solid rgba(234, 59, 144, 0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03), 
+                       0 1px 4px rgba(234, 59, 144, 0.02);
+            transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), 
+                      box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1), 
+                      background-color 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+            -webkit-tap-highlight-color: transparent;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        
+        .knowledge-category:active {
+            transform: scale(0.96);
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05), 
+                       0 1px 3px rgba(234, 59, 144, 0.03);
+            background-color: rgba(234, 59, 144, 0.01);
+        }
+
+        .knowledge-category::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(
+                135deg, 
+                rgba(234, 59, 144, 0.12), 
+                rgba(234, 59, 144, 0.03)
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                         linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, 
+                  linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .knowledge-category-title {
+            padding: 0 8px;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c2c2c;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
-            max-height: 2.5em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-height: 2.7em;
+            line-height: 1.35;
+            width: 100%;
+            letter-spacing: -0.01em;
+            font-family: var(--font-primary);
         }
-        /* Цвета иконок и фоны для каждой категории */
-        #category-general .knowledge-category-icon { background: linear-gradient(135deg, #4667D9 0%, #00BCD4 100%); }
-        #category-receipts .knowledge-category-icon { background: linear-gradient(135deg, #EA3B90 0%, #9C27B0 100%); }
-        #category-payments .knowledge-category-icon { background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); }
-        #category-technical .knowledge-category-icon { background: linear-gradient(135deg, #FF9800 0%, #F4AB68 100%); }
-        #category-security .knowledge-category-icon { background: linear-gradient(135deg, #9C27B0 0%, #673AB7 100%); }
-        #category-instructions .knowledge-category-icon { background: linear-gradient(135deg, #00BCD4 0%, #009688 100%); }
-        #category-common-errors .knowledge-category-icon { background: linear-gradient(135deg, #F44336 0%, #FF9800 100%); }
-        #category-tips-tricks .knowledge-category-icon { background: linear-gradient(135deg, #F4AB68 0%, #EA3B90 100%); }
-        #category-promotions .knowledge-category-icon { background: linear-gradient(135deg, #FF5722 0%, #E91E63 100%); }
-        #category-legal .knowledge-category-icon { background: linear-gradient(135deg, #757575 0%, #9E9E9E 100%); }
-        .knowledge-question {
-            padding: 16px 12px;
-            background: #fafafa;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            font-size: 1rem;
-            font-weight: 500;
-            color: #333;
-            box-shadow: 0 1px 4px rgba(234,59,144,0.04);
+
+        .knowledge-category-icon {
+            font-size: 1.4rem;
+            width: 52px;
+            height: 52px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            background: linear-gradient(
+                135deg, 
+                rgba(234, 59, 144, 0.12), 
+                rgba(234, 59, 144, 0.06)
+            );
+            color: #EA3B90;
+            border-radius: 16px;
+            flex-shrink: 0;
+            margin-bottom: 0;
+            position: relative;
+            transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+                      background 0.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
+
+        .knowledge-category-icon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(
+                135deg, 
+                rgba(234, 59, 144, 0.2), 
+                rgba(234, 59, 144, 0.1)
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                         linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, 
+                  linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .knowledge-category:active .knowledge-category-icon {
+            transform: scale(0.92);
+            background: linear-gradient(
+                135deg, 
+                rgba(234, 59, 144, 0.15), 
+                rgba(234, 59, 144, 0.08)
+            );
+        }
+
+        .knowledge-questions {
+            display: none;
+            flex-direction: column;
+            gap: 0;
+            padding: 0;
+        }
+
+        .knowledge-question {
+            padding: 20px 16px;
+            background: white;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+            color: #333;
+            transition: background-color 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .knowledge-question:first-child {
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .knowledge-question:active {
+            background-color: rgba(234, 59, 144, 0.02);
+        }
+
         .knowledge-answer {
             display: block;
             padding: 24px 20px;
@@ -559,28 +647,27 @@
             line-height: 1.6;
             margin-top: 0;
         }
-        /* Стили для оценки статьи */
-        .feedback-section {
+
+        .knowledge-answer-content {
+            margin-bottom: 24px;
+            padding-left: 0;
+            word-break: break-word;
+        }
+
+        .knowledge-answer-actions {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            justify-content: space-between;
             margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(234, 59, 144, 0.08);
+            gap: 10px;
         }
-        .feedback-title {
-            font-weight: 600;
-            color: #333;
-            font-size: 0.95rem;
-        }
-        .feedback-buttons {
-            display: flex;
-            gap: 12px;
-        }
-        .feedback-button {
+
+        .answer-back-button {
+            background: #fff;
+            border: 1px solid #EA3B90;
+            color: #EA3B90;
+            border-radius: var(--radius-sm);
             padding: 10px 16px;
-            border-radius: var(--radius-md);
-            font-size: 0.95rem;
+            font-weight: 600;
             cursor: pointer;
             flex: 1;
             display: flex;
@@ -588,20 +675,21 @@
             justify-content: center;
             gap: 8px;
         }
-        .feedback-like {
-            background: rgba(76, 175, 80, 0.08);
-            color: #4CAF50;
-            border: 1px solid rgba(76, 175, 80, 0.3);
-        }
-        .feedback-dislike {
-            background: rgba(234, 59, 144, 0.08);
-            color: #EA3B90;
-            border: 1px solid rgba(234, 59, 144, 0.3);
-        }
-        .feedback-button.active {
+
+        .ask-button {
             background: var(--primary);
             color: white;
-            border-color: transparent;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 10px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(234, 59, 144, 0.2);
         }
 
         /* Системное сообщение */
@@ -1070,27 +1158,19 @@
         /* Улучшенные эффекты для устройств с поддержкой hover */
         @media (hover: hover) {
             .knowledge-category:hover {
-                /* УБРАНО: transform: translateY(-1px); box-shadow: ... */
-                transform: none !important;
-                box-shadow: none !important;
-                background: none !important;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 
+                           0 2px 6px rgba(234, 59, 144, 0.04);
             }
+            
             .knowledge-category:hover .knowledge-category-icon {
-                /* УБРАНО: transform: scale(1.05); background: ... */
-                transform: none !important;
-                /* background не трогаем! */
+                transform: scale(1.05);
+                background: linear-gradient(
+                    135deg, 
+                    rgba(234, 59, 144, 0.15), 
+                    rgba(234, 59, 144, 0.08)
+                );
             }
-        }
-        /* Явно убираем любые эффекты для hover/active на иконках и карточках */
-        .knowledge-category:hover,
-        .knowledge-category:active,
-        .knowledge-category-icon:hover,
-        .knowledge-category-icon:active {
-            /* Не меняем фон! */
-            box-shadow: inherit !important;
-            color: #fff !important;
-            transform: none !important;
-            filter: none !important;
         }
 
         /* Улучшенные тактильные отклики */
@@ -1437,69 +1517,10 @@
             max-height: 70vh;
             overflow: auto;
         }
-        /* Новые стили для выпадающего списка */
-        #kb-search-results {
-            position: absolute;
-            top: calc(100% + 5px);
-            left: 0;
-            right: 0;
-            max-height: 300px;
-            overflow-y: auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            z-index: 1000;
-            display: none;
-            margin-top: 4px;
-            border: 1px solid #eee;
-        }
-        .search-result-item {
-            padding: 12px 16px;
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-            font-size: 0.95rem;
-            color: #333;
-        }
-        .search-result-item:last-child {
-            border-bottom: none;
-        }
-        .search-result-item:hover {
-            background: #f9f9f9;
-        }
-        .search-result-item .highlight {
-            background: rgba(234, 59, 144, 0.2);
-            font-weight: 500;
-            color: #EA3B90;
-        }
-        .no-results {
-            padding: 12px 16px;
-            color: #757575;
-            text-align: center;
-        }
-        /* Скрываем категории при активном поиске */
-        .search-active .knowledge-categories {
-            display: none !important;
-        }
-        /* Добавим адаптивные стили для уведомления */
-        @media (max-width: 500px) {
-          #suggest-question-success {
-            font-size: 0.97rem !important;
-            padding: 12px 6px !important;
-            border-radius: 6px !important;
-            margin-top: 10px !important;
-          }
-        }
-        @media (max-width: 350px) {
-          #suggest-question-success {
-            font-size: 0.89rem !important;
-            padding: 8px 2px !important;
-            border-radius: 4px !important;
-            margin-top: 6px !important;
-          }
-        }
     </style>
 </head>
 <body>
+    
     <!-- Sticky Banner for Outage Notification -->
     <div id="outage-banner" style="display:none;">
         <span class="outage-icon">⚠️</span>
@@ -1513,20 +1534,27 @@
         
         <!-- Раздел базы знаний -->
         <div class="tab-content active" id="knowledge-section">
-            <div class="knowledge-base-container" style="background: #fafafa; min-height: 100%;">
-                <div id="kb-dynamic-header" style="display:none;">
-                  <button id="kb-back-btn">
-                    <i class="fas fa-arrow-left"></i>
-                  </button>
-                  <span id="kb-dynamic-title"></span>
+            <div class="knowledge-base-container">
+                <div id="kb-main-header" style="display: block; text-align: center; margin-top: 6px;">
+                    <h2 id="kb-title-main" style="font-size:1.3rem;font-weight:700;color:#EA3B90;margin-bottom:16px;">База знаний</h2>
+                    <p id="kb-subtitle-main" style="font-size:1.1rem;color:#333;text-align:center;padding:0 20px;margin:0 0 22px 0;font-weight:600;">Ответы на частые вопросы</p>
                 </div>
-                <div id="kb-intro">Здесь вы можете задать любой вопрос о "Чеки из Аптеки"</div>
-                <div style="padding: 0 12px 10px 12px; background: none; position: relative;">
-                  <input id="kb-search" type="text" placeholder="Введите ваш вопрос">
-                  <!-- Контейнер для результатов поиска -->
-                  <div id="kb-search-results"></div>
+                <div id="kb-question-input-row" style="display:flex;justify-content:center;align-items:center;width:100%;padding:0 0 0 0;">
+                    <div style="position:relative;width:100%;max-width:320px;display:flex;align-items:center;">
+                        <input id="kb-question-input" type="text" placeholder="Задайте ваш вопрос" style="width:100%;padding:7px 34px 7px 10px;font-size:1rem;border-radius:8px;border:1px solid #EA3B90;outline:none;box-shadow:none;font-family:inherit;background:#fafafa;">
+                        <i class="fas fa-search" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#EA3B90;font-size:1.1em;"></i>
+                    </div>
                 </div>
-                <div class="knowledge-categories" id="knowledge-categories"></div>
+                <div class="knowledge-base-header" id="kb-header" style="display:none;">
+                    <button class="back-button" id="back-to-categories" style="display: none;">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 id="kb-title">База знаний</h2>
+                    <p id="kb-subtitle">Ответы на частые вопросы</p>
+                </div>
+                <div class="knowledge-categories" id="knowledge-categories">
+                    <!-- Категории будут добавляться здесь -->
+                </div>
             </div>
         </div>
         
@@ -1895,71 +1923,193 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            try {
-                // Инициализация базы знаний
-                initKnowledgeBaseModal();
-                // Обработчики вкладок
-                document.getElementById('knowledge-tab').addEventListener('click', function() {
-                    switchTab('knowledge');
-                });
-                document.getElementById('chat-tab').addEventListener('click', function() {
-                    switchTab('chat');
-                    if (isFirstMessage) {
-                        addBotMessage('Здравствуйте! Я ваш виртуальный помощник сервиса "Чеки из Аптеки". Чем могу помочь?');
-                        showOptions(['Вопрос по чеку', 'Вопрос по выплате', 'Другой вопрос']);
-                        isFirstMessage = false;
-                    }
-                });
-                // Обработчик ввода сообщения
-                document.getElementById('user-input').addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        if (this.value.trim().length > 0) {
-                            sendMessage();
-                        }
-                    }
-                });
-                // Авто-рост textarea и показ кнопки отправки
-                document.getElementById('user-input').addEventListener('input', function(e) {
-                    this.style.height = 'auto';
-                    this.style.height = (this.scrollHeight) + 'px';
-                    const sendBtn = document.getElementById('send-button');
-                    const hasText = this.value.trim().length > 0;
-                    if (hasText) {
-                        sendBtn.style.display = 'flex';
-                        setTimeout(() => sendBtn.classList.add('show'), 10);
-                    } else {
-                        sendBtn.classList.remove('show');
-                        setTimeout(() => {
-                            if (!sendBtn.classList.contains('show')) {
-                                sendBtn.style.display = 'none';
-                            }
-                        }, 200);
-                    }
-                });
-                // Обработчик отправки сообщения
-                document.getElementById('send-button').addEventListener('click', function() {
-                    const input = document.getElementById('user-input');
-                    if (input.value.trim().length > 0) {
+            // Инициализация базы знаний
+            initKnowledgeBaseModal();
+            
+            // Обработчики вкладок
+            document.getElementById('knowledge-tab').addEventListener('click', function() {
+                switchTab('knowledge');
+            });
+            
+            document.getElementById('chat-tab').addEventListener('click', function() {
+                switchTab('chat');
+                // Показываем приветствие и опции только при первом открытии чата
+                if (isFirstMessage) {
+                    addBotMessage('Здравствуйте! Я ваш виртуальный помощник сервиса "Чеки из Аптеки". Чем могу помочь?');
+                    showOptions(['Вопрос по чеку', 'Вопрос по выплате', 'Другой вопрос']);
+                    isFirstMessage = false;
+                }
+            });
+            
+            // Кнопка "Назад" в базе знаний
+            document.getElementById('back-to-categories').addEventListener('click', function() {
+                if (currentQuestion) {
+                    // Возврат к вопросам категории
+                    currentQuestion = null;
+                    showCategoryQuestions(currentCategory);
+                } else if (currentCategory) {
+                    // Возврат к списку категорий
+                    currentCategory = null;
+                    showKnowledgeCategories();
+                }
+            });
+
+            // Улучшенная обработка свайпов
+            const appElement = document.getElementById('app');
+            
+            appElement.addEventListener('touchstart', (e) => {
+                const target = e.target;
+                // Игнорируем свайп на скроллируемых элементах
+                if (target.closest('.chat-messages, .knowledge-categories, .horizontal-scroll, textarea, .input-area')) {
+                    return;
+                }
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            appElement.addEventListener('touchmove', (e) => {
+                if (touchStartX === 0 && touchStartY === 0) return;
+                
+                const target = e.target;
+                // Предотвращаем скролл только если это не скроллируемый элемент
+                if (!target.closest('.chat-messages, .knowledge-categories, .horizontal-scroll, textarea, .input-area')) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            appElement.addEventListener('touchend', (e) => {
+                if (touchStartX === 0 && touchStartY === 0) return;
+                
+                touchEndX = e.changedTouches[0].clientX;
+                touchEndY = e.changedTouches[0].clientY;
+                handleSwipeGesture();
+                
+                // Сбрасываем значения
+                touchStartX = 0;
+                touchStartY = 0;
+                touchEndX = 0;
+                touchEndY = 0;
+            }, { passive: true });
+
+            // Обработчик ввода сообщения
+            document.getElementById('user-input').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    if (this.value.trim().length > 0) {
                         sendMessage();
                     }
-                });
-                // ... остальные обработчики ...
-                // Обработчик загрузки файлов
-                document.getElementById('file-attach').addEventListener('change', function(e) {
-                    try {
-                        if (e.target.files.length > 0) {
-                            Array.from(e.target.files).forEach(file => addFileMessage(file));
-                            e.target.value = '';
+                }
+            });
+
+            // Авто-рост textarea
+            document.getElementById('user-input').addEventListener('input', function(e) {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+
+                const sendBtn = document.getElementById('send-button');
+                const hasText = this.value.trim().length > 0;
+                if (hasText) {
+                    sendBtn.style.display = 'flex';
+                    setTimeout(() => sendBtn.classList.add('show'), 10);
+                } else {
+                    sendBtn.classList.remove('show');
+                    setTimeout(() => {
+                        if (!sendBtn.classList.contains('show')) {
+                            sendBtn.style.display = 'none';
                         }
-                    } catch (err) {
-                        console.error('Ошибка при обработке файлов:', err);
+                    }, 200);
+                }
+            });
+
+            // Обработчик загрузки файлов
+            document.getElementById('file-attach').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    Array.from(e.target.files).forEach(file => addFileMessage(file));
+                    e.target.value = '';
+                }
+            });
+
+            // Обновляем обработчик отправки сообщения
+            document.getElementById('send-button').addEventListener('click', function() {
+                const input = document.getElementById('user-input');
+                if (input.value.trim().length > 0) {
+                    sendMessage();
+                }
+            });
+
+            // Приветственное сообщение
+            if (isFirstMessage) {
+                addBotMessage('Здравствуйте! Я ваш виртуальный помощник сервиса "Чеки из Аптеки". Чем могу помочь?');
+                showOptions(['Вопрос по чеку', 'Вопрос по выплате', 'Другой вопрос']);
+                isFirstMessage = false;
+            }
+
+            // Добавляем вибрацию для всех кнопок
+            document.addEventListener('click', function(e) {
+                const target = e.target;
+                
+                // Проверяем, является ли элемент или его родитель кнопкой
+                if (target.closest('button') || 
+                    target.closest('.option-button') || 
+                    target.closest('.knowledge-category') || 
+                    target.closest('.knowledge-question') ||
+                    target.closest('.tab') ||
+                    target.closest('.feedback-button') ||
+                    target.closest('.answer-back-button') ||
+                    target.closest('.ask-button')) {
+                }
+            });
+
+            // --- OUTAGE BANNER CONTROL ---
+            // Редактируй этот текст для сообщения о сбое:
+            const OUTAGE_MESSAGE = 'На стороне ФНС ведутся технические работы. В связи с этим проверка чеков может проходить дольше, чем обычно.';
+            // true = показать баннер, false = скрыть
+            const SHOW_OUTAGE_BANNER = true; // Поставь true чтобы показать
+
+            function addChatOutageBanner(text) {
+                const chat = document.getElementById('chat-messages');
+                if (!chat) return;
+                // Проверка: не добавлять повторно
+                if (chat.querySelector('.chat-outage-banner')) return;
+                const banner = document.createElement('div');
+                banner.className = 'chat-outage-banner';
+                banner.innerHTML = `
+                    <span class="outage-icon">⚠️</span>
+                    <span class="outage-text">${text}</span>
+                `;
+                // Вставить баннер после первого приветственного сообщения бота, если оно есть
+                const firstBotMsg = chat.querySelector('.bot-message-row');
+                if (firstBotMsg && firstBotMsg.nextSibling) {
+                    chat.insertBefore(banner, firstBotMsg.nextSibling);
+                } else {
+                    chat.appendChild(banner);
+                }
+            }
+
+            // Баннер сбоя в чате показываем сразу после приветствия
+            if (SHOW_OUTAGE_BANNER) {
+                addChatOutageBanner(OUTAGE_MESSAGE);
+            }
+            document.getElementById('outage-close-btn').onclick = function() {
+                showOutageBanner(false);
+            };
+
+            // Добавляю обработчик поиска по вопросам
+            const kbInput = document.getElementById('kb-question-input');
+            if (kbInput) {
+                kbInput.addEventListener('input', function() {
+                    const query = this.value.trim().toLowerCase();
+                    if (query.length === 0) {
+                        showKnowledgeCategories();
+                        return;
                     }
+                    showSearchResults(query);
                 });
-            } catch (e) {
-                console.error('Ошибка инициализации чата:', e);
             }
         });
+
+            
+        
 
         // Функция переключения вкладок
         function switchTab(tabName) {
@@ -2596,63 +2746,117 @@
             showKnowledgeCategories();
         }
 
-        function showKnowledgeCategories(filteredList) {
+        function showKnowledgeCategories() {
             const container = document.getElementById('knowledge-categories');
             container.innerHTML = '';
+            document.getElementById('kb-header').style.display = 'none';
+            document.getElementById('kb-main-header').style.display = 'block';
+            document.getElementById('kb-question-input-row').style.display = 'flex';
+            
+            // Улучшенные отступы для более симпатичного вида
             container.style.display = 'grid';
             container.style.gridTemplateColumns = 'repeat(2, 1fr)';
-            container.style.gap = '14px 10px';
-            container.style.padding = '18px 8px';
-            const list = filteredList || knowledgeBase;
-            list.forEach((cat) => {
+            container.style.gridAutoRows = '1fr';
+            container.style.gap = '14px';
+            container.style.padding = '18px 14px';
+            container.style.alignItems = 'stretch';
+            container.style.justifyItems = 'stretch';
+
+            document.getElementById('kb-title-main').textContent = '';
+            document.getElementById('kb-subtitle-main').textContent = 'Ответы на частые вопросы';
+            document.getElementById('back-to-categories').style.display = 'none';
+            
+            document.getElementById('kb-question-input-row').style.display = 'flex';
+            
+            knowledgeBase.forEach((cat) => {
                 const catDiv = document.createElement('div');
                 catDiv.className = 'knowledge-category';
-                catDiv.id = `category-${cat.id}`;
+                catDiv.setAttribute('data-category', cat.id);
+                
                 catDiv.innerHTML = `
-                  <div class="knowledge-category-icon">
-                    <i class="fas ${cat.icon}"></i>
-                  </div>
-                  <div class="knowledge-category-title">${cat.title}</div>
+                    <div class="knowledge-category-icon"><i class="fas ${cat.icon}"></i></div>
+                    <div class="knowledge-category-title">${cat.title}</div>
                 `;
+                
                 catDiv.addEventListener('click', () => {
-                  currentCategory = cat.id;
-                  showCategoryQuestions(cat.id);
+                    currentCategory = cat.id;
+                    showCategoryQuestions(cat.id);
                 });
+                
                 container.appendChild(catDiv);
             });
-            hideDynamicHeader();
+            // Повторно добавляем обработчик поиска при каждом показе категорий
+            const kbInput = document.getElementById('kb-question-input');
+            if (kbInput && !kbInput.hasAttribute('data-search-initialized')) {
+                kbInput.addEventListener('input', function() {
+                    const query = this.value.trim().toLowerCase();
+                    if (query.length === 0) {
+                        showKnowledgeCategories();
+                        return;
+                    }
+                    showSearchResults(query);
+                });
+                kbInput.setAttribute('data-search-initialized', 'true');
+            }
         }
+
         function showCategoryQuestions(categoryId) {
             const container = document.getElementById('knowledge-categories');
             container.innerHTML = '';
+            
+            // Set styles for list view
             container.style.display = 'block';
             container.style.padding = '0';
+            container.style.gap = '0';
+
             const category = knowledgeBase.find(cat => cat.id === categoryId);
             if (!category) return;
+            
+            document.getElementById('kb-title').textContent = category.title;
+            document.getElementById('kb-subtitle').textContent = 'Выберите вопрос';
+            document.getElementById('back-to-categories').style.display = 'block';
+            
+            document.getElementById('kb-question-input-row').style.display = 'none';
+            document.getElementById('kb-header').style.display = 'block';
+            document.getElementById('kb-main-header').style.display = 'none';
+            
             category.items.forEach((item) => {
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'knowledge-question';
+                questionDiv.setAttribute('data-question', item.id);
                 questionDiv.innerHTML = `
                     <span>${item.question}</span>
                     <i class="fas fa-chevron-right" style="color: #ccc;"></i>
                 `;
+                
                 questionDiv.addEventListener('click', () => {
                     currentQuestion = item.id;
                     showQuestionAnswer(categoryId, item.id);
                 });
+                
                 container.appendChild(questionDiv);
             });
-            showDynamicHeader('Выберите вопрос');
         }
+
         function showQuestionAnswer(categoryId, questionId) {
             const container = document.getElementById('knowledge-categories');
             container.innerHTML = '';
+            
+            // Set styles for single answer view
             container.style.display = 'block';
             container.style.padding = '0';
+            container.style.gap = '0';
+
             const category = knowledgeBase.find(cat => cat.id === categoryId);
             if (!category) return;
+            
             const question = category.items.find(q => q.id === questionId);
             if (!question) return;
+            
+            document.getElementById('kb-title').textContent = question.question;
+            document.getElementById('kb-subtitle').textContent = category.title;
+            document.getElementById('back-to-categories').style.display = 'block';
+            
             const answerDiv = document.createElement('div');
             answerDiv.className = 'slide-in';
             answerDiv.innerHTML = `
@@ -2660,6 +2864,7 @@
                     <div class="knowledge-answer-content">
                         ${question.answer}
                     </div>
+                    
                     <div class="feedback-section">
                         <div class="feedback-title">Эта статья была полезной?</div>
                         <div class="feedback-buttons">
@@ -2673,21 +2878,32 @@
                     </div>
                 </div>
             `;
+            
             container.appendChild(answerDiv);
+            
+             // Обработчики для кнопок оценки
             answerDiv.querySelectorAll('.feedback-button').forEach(button => {
                 button.addEventListener('click', function() {
                     const feedbackType = this.getAttribute('data-feedback');
                     handleFeedback(categoryId, questionId, feedbackType);
+                    
+                    // Обновляем состояние кнопок
                     answerDiv.querySelectorAll('.feedback-button').forEach(btn => {
                         btn.classList.remove('active');
                     });
-                    const message = feedbackType === 'like'
+                    // Убираем выделение кнопки - не добавляем класс 'active'
+                    
+                    // Показываем сообщение об оценке
+                    const message = feedbackType === 'like' 
                         ? 'Спасибо за положительную оценку!'
                         : 'Спасибо за отзыв! Мы учтём ваше мнение.';
+                    
+                    // Удаляем предыдущее сообщение, если оно есть
                     const existingMsg = answerDiv.querySelector('.feedback-message');
                     if (existingMsg) {
                         existingMsg.remove();
                     }
+                    
                     const feedbackMsg = document.createElement('div');
                     feedbackMsg.className = 'system-message feedback-message';
                     feedbackMsg.style.marginTop = '16px';
@@ -2698,8 +2914,11 @@
                     feedbackMsg.style.color = '#EA3B90';
                     feedbackMsg.style.fontWeight = '500';
                     feedbackMsg.textContent = message;
+                    
+                    // Добавляем сообщение после кнопок оценки
                     const feedbackSection = answerDiv.querySelector('.feedback-section');
                     feedbackSection.appendChild(feedbackMsg);
+                    // Если "Нет" — добавить кнопку "Спросить в чате"
                     if (feedbackType === 'dislike') {
                         let askBtn = document.createElement('button');
                         askBtn.className = 'option-button';
@@ -2707,54 +2926,21 @@
                         askBtn.style.marginTop = '14px';
                         askBtn.onclick = function() {
                             document.getElementById('chat-tab').click();
+                            setTimeout(() => {
+                                const input = document.getElementById('user-input');
+                                input.focus();
+                                input.scrollIntoView({behavior: 'smooth', block: 'center'});
+                            }, 200);
                         };
                         feedbackSection.appendChild(askBtn);
                     }
                 });
             });
-            showDynamicHeader('Ответ', question.question);
+            
+            document.getElementById('kb-question-input-row').style.display = 'none';
+            document.getElementById('kb-header').style.display = 'block';
+            document.getElementById('kb-main-header').style.display = 'none';
         }
-        function showDynamicHeader(title) {
-            const header = document.getElementById('kb-dynamic-header');
-            const titleSpan = document.getElementById('kb-dynamic-title');
-            if (header && titleSpan) {
-                header.style.display = 'flex';
-                titleSpan.textContent = title;
-            }
-            document.getElementById('kb-intro').style.display = 'none';
-            document.getElementById('kb-search').parentElement.style.display = 'none';
-        }
-        function hideDynamicHeader() {
-            const header = document.getElementById('kb-dynamic-header');
-            if (header) header.style.display = 'none';
-            document.getElementById('kb-intro').style.display = '';
-            document.getElementById('kb-search').parentElement.style.display = '';
-        }
-        // Поиск по базе знаний
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('kb-search').addEventListener('input', function() {
-                const query = this.value.trim().toLowerCase();
-                if (!query) {
-                    showKnowledgeCategories();
-                    return;
-                }
-                const filtered = knowledgeBase.filter(cat => {
-                    if (cat.title.toLowerCase().includes(query)) return true;
-                    if (cat.items && cat.items.some(item => item.question.toLowerCase().includes(query))) return true;
-                    return false;
-                });
-                showKnowledgeCategories(filtered);
-            });
-            document.getElementById('kb-back-btn').addEventListener('click', function() {
-                if (currentQuestion) {
-                    showCategoryQuestions(currentCategory);
-                    currentQuestion = null;
-                } else if (currentCategory) {
-                    showKnowledgeCategories();
-                    currentCategory = null;
-                }
-            });
-        });
         
         function handleFeedback(categoryId, questionId, feedbackType) {
             // Здесь можно добавить отправку оценки на сервер
@@ -2767,118 +2953,55 @@
             if (banner) banner.remove();
         }
 
-        // Функция для поиска по всем вопросам
-        function performSearch(query) {
-            if (!query) return [];
-            const results = [];
-            knowledgeBase.forEach(category => {
-                category.items.forEach(item => {
-                    const question = item.question.toLowerCase();
-                    if (question.includes(query.toLowerCase())) {
+        function showSearchResults(query) {
+            const container = document.getElementById('knowledge-categories');
+            container.innerHTML = '';
+            container.style.display = 'block';
+            container.style.padding = '0';
+            container.style.gap = '0';
+
+            let results = [];
+            knowledgeBase.forEach(cat => {
+                cat.items.forEach(item => {
+                    if (item.question.toLowerCase().includes(query)) {
                         results.push({
-                            categoryId: category.id,
+                            categoryId: cat.id,
                             questionId: item.id,
                             question: item.question,
-                            categoryTitle: category.title
+                            categoryTitle: cat.title
                         });
                     }
                 });
             });
-            return results;
-        }
-        // Функция для подсветки совпадений
-        function highlightMatch(text, query) {
-            if (!query) return text;
-            const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
-            return text.replace(regex, '<span class="highlight">$1</span>');
-        }
-        function escapeRegExp(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        }
-        // Функция отображения результатов поиска
-        function renderSearchResults(results, query) {
-            const container = document.getElementById('kb-search-results');
-            container.innerHTML = '';
+
+            document.getElementById('kb-title').textContent = 'Результаты поиска';
+            document.getElementById('kb-subtitle').textContent = results.length > 0 ? 'Найдено: ' + results.length : 'Ничего не найдено';
+            document.getElementById('back-to-categories').style.display = 'block';
+            document.getElementById('kb-question-input-row').style.display = 'flex';
+
             if (results.length === 0) {
-                container.innerHTML = `
-                  <div class="no-results">Ничего не найдено</div>
-                  <form id="suggest-question-form" style="padding: 12px 16px; border-top: 1px solid #f0f0f0; background: #fafafa; border-radius: 0 0 12px 12px;">
-                    <div style="margin-bottom: 8px; color: #333; font-size: 0.97rem; font-weight: 500;">Не нашли ответа? Предложите свой вопрос:</div>
-                    <textarea id="suggest-question-input" rows="2" style="width: 100%; border-radius: 8px; border: 1px solid #e0e0e0; padding: 8px; font-size: 0.97rem; resize: vertical; margin-bottom: 8px;"></textarea>
-                    <button type="submit" style="background: linear-gradient(38.98deg, #4667D9 -2.6%, #EA3B90 52.19%, #F4AB68 102.6%); color: #fff; border: none; border-radius: 8px; padding: 10px 0; width: 100%; font-weight: 600; font-size: 1rem; cursor: pointer;">Отправить вопрос</button>
-                  </form>
-                  <div id="suggest-question-success" style="display:none; opacity:0; transition: opacity 0.4s; background: #e8fbe6; color: #219150; font-weight: 600; margin-top: 16px; text-align: center; border-radius: 8px; padding: 16px 12px; font-size: 1.05rem; box-shadow: 0 2px 8px rgba(76,175,80,0.07); max-width: 100vw; box-sizing: border-box; word-break: break-word; margin-left:auto; margin-right:auto;">
-                    <span style='font-size:1.3em;vertical-align:middle;margin-right:7px;'>✅</span>Спасибо! Обязательно добавим ваш вопрос в базу знаний
-                  </div>
-                `;
-                container.style.display = 'block';
-                // Навешиваем обработчик на форму
-                const form = document.getElementById('suggest-question-form');
-                if (form) {
-                  form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const input = document.getElementById('suggest-question-input');
-                    const value = input.value.trim();
-                    if (value.length === 0) return;
-                    input.value = '';
-                    const successDiv = document.getElementById('suggest-question-success');
-                    successDiv.style.display = 'block';
-                    setTimeout(() => { successDiv.style.opacity = 1; }, 10);
-                    setTimeout(() => {
-                      successDiv.style.opacity = 0;
-                      setTimeout(() => { successDiv.style.display = 'none'; }, 400);
-                    }, 3000);
-                  });
-                }
+                const emptyDiv = document.createElement('div');
+                emptyDiv.style.padding = '32px 0';
+                emptyDiv.style.textAlign = 'center';
+                emptyDiv.style.color = '#b0b0b0';
+                emptyDiv.textContent = 'Нет совпадений';
+                container.appendChild(emptyDiv);
                 return;
             }
-            results.forEach(result => {
-                const item = document.createElement('div');
-                item.className = 'search-result-item';
-                item.innerHTML = highlightMatch(result.question, query);
-                item.dataset.categoryId = result.categoryId;
-                item.dataset.questionId = result.questionId;
-                item.addEventListener('click', () => {
-                    currentCategory = result.categoryId;
-                    currentQuestion = result.questionId;
-                    showQuestionAnswer(result.categoryId, result.questionId);
-                    document.getElementById('kb-search').value = '';
-                    container.style.display = 'none';
-                    document.getElementById('knowledge-section').classList.remove('search-active');
-                });
-                container.appendChild(item);
+
+            results.forEach(res => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'knowledge-question';
+                questionDiv.innerHTML = `<span>${res.question}</span><i class="fas fa-chevron-right" style="color: #ccc;"></i>`;
+                questionDiv.onclick = function() {
+                    currentCategory = res.categoryId;
+                    currentQuestion = res.questionId;
+                    showQuestionAnswer(res.categoryId, res.questionId);
+                };
+                container.appendChild(questionDiv);
             });
-            container.style.display = 'block';
         }
-        // Инициализация поиска
-        // ... existing code ...
-        document.addEventListener('DOMContentLoaded', function() {
-            // ... существующий код ...
-            const searchInput = document.getElementById('kb-search');
-            const resultsContainer = document.getElementById('kb-search-results');
-            // Обработка ввода в поиске
-            searchInput.addEventListener('input', function() {
-                const query = this.value.trim();
-                const section = document.getElementById('knowledge-section');
-                if (query) {
-                    section.classList.add('search-active');
-                    const results = performSearch(query);
-                    renderSearchResults(results, query);
-                } else {
-                    section.classList.remove('search-active');
-                    resultsContainer.style.display = 'none';
-                }
-            });
-            // Скрытие результатов при клике вне области
-            document.addEventListener('click', function(e) {
-                if (!searchInput.contains(e.target) && !resultsContainer.contains(e.target)) {
-                    resultsContainer.style.display = 'none';
-                    document.getElementById('knowledge-section').classList.remove('search-active');
-                }
-            });
-            // ... существующий код ...
-        });
-        // ... existing code ...
     </script>
+   
 </body>
 </html>
