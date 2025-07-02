@@ -1579,6 +1579,9 @@
             color: #fff;
             font-size: 1.15em;
         }
+        #clear-user-input:hover, #clear-user-input { display:none !important; }
+        #clear-kb-search:hover { color: #EA3B90; opacity: 0.85; }
+        #clear-kb-search { transition: color 0.15s, opacity 0.15s; }
     </style>
 </head>
 <body>
@@ -1604,7 +1607,15 @@
                 </div>
                 <div id="kb-intro">Здесь вы можете задать любой вопрос о "Чеки из Аптеки"</div>
                 <div style="padding: 0 12px 10px 12px; background: none; position: relative;">
-                  <input id="kb-search" type="text" placeholder="Введите ваш вопрос">
+                  <div style="position:relative;max-width:500px;margin:0 auto;">
+                    <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#bdbdbd;font-size:1.1em;pointer-events:none;z-index:2;">
+                      <i class="fas fa-search"></i>
+                    </span>
+                    <input id="kb-search" type="text" placeholder="Введите ваш вопрос" style="padding-left:38px;padding-right:38px;">
+                    <span id="clear-kb-search" style="display:none;position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:#bdbdbd;font-size:1.15em;z-index:2;transition:opacity 0.15s;line-height:1;">
+                      <i class="fas fa-times-circle"></i>
+                    </span>
+                  </div>
                   <!-- Контейнер для результатов поиска -->
                   <div id="kb-search-results"></div>
                 </div>
@@ -1626,7 +1637,7 @@
                 </div>
                 
                 <div class="input-area">
-                    <div class="input-wrapper">
+                    <div class="input-wrapper" style="position:relative;">
                         <label for="file-attach" class="attach-label" title="Прикрепить файл">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M17.5 13.5V7.75C17.5 5.12665 15.3734 3 12.75 3C10.1266 3 8 5.12665 8 7.75V16.25C8 18.0449 9.45507 19.5 11.25 19.5C13.0449 19.5 14.5 18.0449 14.5 16.25V8.5" stroke="#EA3B90" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2961,6 +2972,52 @@
             // ... существующий код ...
         });
         // ... existing code ...
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // ... существующий код ...
+            const userInput = document.getElementById('user-input');
+            const clearBtn = document.getElementById('clear-user-input');
+            function updateClearBtn() {
+                if (userInput.value.length > 0) {
+                    clearBtn.style.display = 'block';
+                    clearBtn.style.opacity = '1';
+                } else {
+                    clearBtn.style.opacity = '0';
+                    setTimeout(()=>{clearBtn.style.display = 'none';}, 150);
+                }
+            }
+            userInput.addEventListener('input', updateClearBtn);
+            clearBtn.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+                userInput.value = '';
+                userInput.dispatchEvent(new Event('input'));
+                userInput.focus();
+            });
+            // при инициализации скрываем крестик
+            updateClearBtn();
+            // ... существующий код ...
+        });
+        // ... существующий код ...
+        const kbSearch = document.getElementById('kb-search');
+        const clearKbBtn = document.getElementById('clear-kb-search');
+        function updateClearKbBtn() {
+          if (kbSearch.value.length > 0) {
+            clearKbBtn.style.display = 'block';
+            clearKbBtn.style.opacity = '1';
+          } else {
+            clearKbBtn.style.opacity = '0';
+            setTimeout(()=>{clearKbBtn.style.display = 'none';}, 150);
+          }
+        }
+        kbSearch.addEventListener('input', updateClearKbBtn);
+        clearKbBtn.addEventListener('mousedown', function(e) {
+          e.preventDefault();
+          kbSearch.value = '';
+          kbSearch.dispatchEvent(new Event('input'));
+          kbSearch.focus();
+        });
+        updateClearKbBtn();
+        // ... существующий код ...
     </script>
 </body>
 </html>
